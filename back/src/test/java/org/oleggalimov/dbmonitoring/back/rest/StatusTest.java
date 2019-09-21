@@ -1,9 +1,10 @@
-package rest;
+package org.oleggalimov.dbmonitoring.back.rest;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.oleggalimov.dbmonitoring.back.configuration.MainConfiguration;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mock.web.MockServletContext;
 import org.springframework.test.context.ContextConfiguration;
@@ -42,7 +43,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 /*
     to load the context configuration and bootstrap the context that the test will use.
  */
-@ContextConfiguration(locations = {"file:src/main/webapp/WEB-INF/dispatcher-servlet.xml"})
+@ContextConfiguration(classes = MainConfiguration.class)
 public class StatusTest {
     /*
         MockMvc provides support for Spring MVC testing.
