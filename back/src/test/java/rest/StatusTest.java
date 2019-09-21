@@ -42,26 +42,24 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 /*
     to load the context configuration and bootstrap the context that the test will use.
  */
-@ContextConfiguration(locations = {"/dispatcher-servlet.xml"})
+@ContextConfiguration(locations = {"file:src/main/webapp/WEB-INF/dispatcher-servlet.xml"})
 public class StatusTest {
-
-    private MockMvc mockMvc;
-
     /*
         MockMvc provides support for Spring MVC testing.
         It encapsulates all web application beans and make them available for testing.
      */
-    @BeforeEach
-    public void setup() throws Exception {
-        this.mockMvc = MockMvcBuilders.webAppContextSetup(this.wac).build();
-    }
-
+    private MockMvc mockMvc;
     /*
         WebApplicationContext (wac) provides the web application configuration.
         It loads all the application beans and controllers into the context.
      */
     @Autowired
     private WebApplicationContext wac;
+
+    @BeforeEach
+    public void setup() throws Exception {
+        this.mockMvc = MockMvcBuilders.webAppContextSetup(this.wac).build();
+    }
 
     @Test
     public void getStatus() {
