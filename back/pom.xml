@@ -15,14 +15,21 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.8.1</version>
                 <configuration>
                     <source>8</source>
                     <target>8</target>
                 </configuration>
             </plugin>
+            <!-- Under version 2.22.0- tests are not running on test goal -->
+            <plugin>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>3.0.0-M3</version>
+            </plugin>
         </plugins>
     </build>
     <dependencies>
+        <!--        Спринг-->
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-core</artifactId>
@@ -38,6 +45,20 @@
             <artifactId>spring-test</artifactId>
             <version>${spring.version}</version>
         </dependency>
+
+        <!--Json-->
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>2.9.10</version>
+        </dependency>
+        <dependency>
+            <groupId>com.github.java-json-tools</groupId>
+            <artifactId>json-schema-validator</artifactId>
+            <version>2.2.11</version>
+            <scope>test</scope>
+        </dependency>
+
         <!--    Тесты-->
         <dependency>
             <groupId>javax.servlet</groupId>
@@ -55,6 +76,12 @@
             <groupId>org.hamcrest</groupId>
             <artifactId>hamcrest-core</artifactId>
             <version>2.2-rc1</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-core</artifactId>
+            <version>3.0.0</version>
             <scope>test</scope>
         </dependency>
 
