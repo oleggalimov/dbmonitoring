@@ -31,7 +31,7 @@
                 <artifactId>maven-ear-plugin</artifactId>
                 <version>3.0.1</version>
                 <configuration>
-                    <finalName>dbmoitoring</finalName>
+                    <finalName>dbmonitoring</finalName>
                     <modules>
                         <webModule>
                             <groupId>${project.groupId}</groupId>
