@@ -43,7 +43,7 @@ public class MessageImpl implements CommonMessage, Serializable {
     }
 
     @Override
-    public String geTitle() {
+    public String getTitle() {
         return title;
     }
 

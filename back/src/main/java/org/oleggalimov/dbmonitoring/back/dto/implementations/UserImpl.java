@@ -1,34 +1,34 @@
 package org.oleggalimov.dbmonitoring.back.dto.implementations;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import org.oleggalimov.dbmonitoring.back.dto.interfaces.CommonUser;
 
 import java.io.Serializable;
 
 public class UserImpl implements CommonUser, Serializable {
-    private String name;
-    @JsonIgnore
+    private String login;
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private transient String password;
 
     public UserImpl() {
     }
 
-    public UserImpl(String name, String password) {
-        this.name = name;
+    public UserImpl(String login, String password) {
+        this.login = login;
         this.password = password;
     }
 
-    @Override
-    public void setName(String name) {
-        this.name = name;
+
+    public void setLogin(String name) {
+        this.login = name;
     }
 
     @Override
-    public String getName() {
-        return this.name;
+    public String getLogin() {
+        return this.login;
     }
 
-    @Override
+
     public void setPassword(String password) {
         this.password = password;
     }

@@ -10,7 +10,9 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.oleggalimov.dbmonitoring.back.configuration.MainConfiguration;
+import org.oleggalimov.dbmonitoring.back.dto.interfaces.CommonDbInstance;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockServletContext;
 import org.springframework.test.context.junit.jupiter.web.SpringJUnitWebConfig;
 import org.springframework.test.web.servlet.MockMvc;
@@ -20,11 +22,15 @@ import org.springframework.web.context.WebApplicationContext;
 
 import javax.servlet.ServletContext;
 import java.io.File;
+import java.util.concurrent.CopyOnWriteArraySet;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -51,7 +57,7 @@ class RestControllersTest {
         ServletContext servletContext = wac.getServletContext();
         assertNotNull(servletContext);
         assertTrue(servletContext instanceof MockServletContext);
-        assertNotNull(wac.getBean("status"));
+        assertNotNull(wac.getBean("checkStatus"));
         assertNotNull(wac.getBean("listInstances"));
     }
 
@@ -81,6 +87,32 @@ class RestControllersTest {
         assertTrue(jsonNode.get("success").asBoolean());
         assertFalse(jsonNode.get("body").get("INSTANCES").isNull());
     }
+
+    @Tag("Rest")
+    @Test
+    void addInstance() throws Exception {
+        String body = "{\"id\":\"test_id\",\"host\":\"test_host\",\"port\":1251,\"sid\":\"sid\",\"user\":{\"login\":\"login\", \"password\":\"pass\"}}";
+        System.out.println(body);
+        String response = this.mockMvc
+                .perform(
+                        post("/createinstance")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(body))
+                .andExpect(status().is2xxSuccessful())
+                .andReturn()
+                .getResponse()
+                .getContentAsString();
+
+        final JsonNode jsonNode = mapper.readTree(response);
+        assertTrue(jsonNode.get("success").asBoolean());
+        assertNull(jsonNode.get("body"));
+        assertEquals(1, jsonNode.get("messages").size());
+        assertEquals(0, jsonNode.get("errors").size());
+        CopyOnWriteArraySet<CommonDbInstance> instanceHashSet = (CopyOnWriteArraySet<CommonDbInstance>) wac.getBean("instanceHashSet");
+        assertTrue(instanceHashSet.size() > 1);
+        validateJsonFromString(jsonNode);
+    }
+
 
     private boolean validateJsonFromString(JsonNode json) throws ProcessingException {
         final JsonSchemaFactory factory = JsonSchemaFactory.byDefault();

@@ -1,5 +1,5 @@
 package org.oleggalimov.dbmonitoring.back;
 
-public interface CommonResponceBuilder {
+public interface CommonResponseBuilder {
     //Интерфейс - маркер, обозначающий принадлежность к фабрикам-строителям
 }

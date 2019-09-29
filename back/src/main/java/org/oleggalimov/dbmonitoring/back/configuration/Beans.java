@@ -1,7 +1,7 @@
 package org.oleggalimov.dbmonitoring.back.configuration;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.oleggalimov.dbmonitoring.back.builders.ResponceBuilder;
+import org.oleggalimov.dbmonitoring.back.builders.ResponseBuilder;
 import org.oleggalimov.dbmonitoring.back.dto.implementations.DbInstanceImpl;
 import org.oleggalimov.dbmonitoring.back.dto.implementations.UserImpl;
 import org.oleggalimov.dbmonitoring.back.dto.interfaces.CommonDbInstance;
@@ -21,7 +21,7 @@ public class Beans {
     }
 
     @Bean
-    public ResponceBuilder getResponceBuilder() {
-        return new ResponceBuilder(new ObjectMapper());
+    public ResponseBuilder getResponseBuilder() {
+        return new ResponseBuilder(new ObjectMapper());
     }
 }
