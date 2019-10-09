@@ -34,7 +34,12 @@ public class ResponseBuilder implements CommonResponseBuilder {
     }
 
     public String buildExceptionResponse(Throwable ex) throws JsonProcessingException {
-        ErrorImpl error = new ErrorImpl(ErrorsCode.REST_EXCEPTION.name(), "Critical error", ex.getCause().toString());
+        String msg;
+        msg = String.valueOf(ex.getCause());
+        if (msg.equals("null")) {
+            msg = String.valueOf(ex.getMessage());
+        }
+        ErrorImpl error = new ErrorImpl(ErrorsCode.REST_EXCEPTION.name(), "Critical error", msg);
         RestResponse response = new RestResponse(false, null, Collections.singletonList(error), Collections.singletonList(Messages.SERVICE_EXCEPTION.getMessageObject()));
         return mapper.writeValueAsString(response);
     }

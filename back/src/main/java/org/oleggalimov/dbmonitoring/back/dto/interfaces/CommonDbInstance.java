@@ -5,9 +5,12 @@ public interface CommonDbInstance {
 
     String getHost();
 
-    int getPort();
+    Integer getPort();
 
     String getSid();
 
     CommonUser getUser();
+
+    boolean deepEquals(CommonDbInstance otherInstance);
+
 }

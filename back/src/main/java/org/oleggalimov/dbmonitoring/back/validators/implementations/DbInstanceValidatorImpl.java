@@ -16,9 +16,10 @@ public class DbInstanceValidatorImpl implements DBInstanceValidator {
         String id = instance.getId();
         String host = instance.getHost();
         String sid = instance.getSid();
+        Integer port = instance.getPort();
         CommonUser user = instance.getUser();
 
-        if (id == null || host == null || sid == null) {
+        if (id == null || host == null || sid == null || port == null) {
             errors.add(Messages.DBINSTANCE_VALIDATION_ERROR.getMessageObject());
         } else if (id.equals("") || host.equals("") || sid.equals("")) {
             errors.add(Messages.DBINSTANCE_VALIDATION_ERROR.getMessageObject());

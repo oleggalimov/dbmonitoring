@@ -9,14 +9,14 @@ public class DbInstanceImpl implements CommonDbInstance, Serializable {
 
     private String id;
     private String host;
-    private int port;
+    private Integer port;
     private String sid;
     private UserImpl user;
 
     public DbInstanceImpl() {
     }
 
-    public DbInstanceImpl(String id, String host, int port, String sid, UserImpl user) {
+    public DbInstanceImpl(String id, String host, Integer port, String sid, UserImpl user) {
         this.id = id;
         this.host = host;
         this.port = port;
@@ -43,11 +43,11 @@ public class DbInstanceImpl implements CommonDbInstance, Serializable {
     }
 
     @Override
-    public int getPort() {
+    public Integer getPort() {
         return port;
     }
 
-    public void setPort(int port) {
+    public void setPort(Integer port) {
         this.port = port;
     }
 
@@ -67,5 +67,34 @@ public class DbInstanceImpl implements CommonDbInstance, Serializable {
     @Override
     public CommonUser getUser() {
         return user;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        } else if (!(obj instanceof CommonDbInstance)) {
+            return false;
+        } else if (this.id == null) {
+            return false;
+        } else {
+            CommonDbInstance otherInstance = (CommonDbInstance) obj;
+            String otherInstanceId = otherInstance.getId();
+            return this.id.equals(otherInstanceId);
+        }
+
+    }
+
+    @Override
+    public boolean deepEquals(CommonDbInstance otherInstance) {
+        if (!this.id.equals(otherInstance.getId())) {
+            return false;
+        } else if (!this.host.equals(otherInstance.getHost())) {
+            return false;
+        } else if (!this.port.equals(otherInstance.getPort())) {
+            return false;
+        } else if (!this.sid.equals(otherInstance.getSid())) {
+            return false;
+        } else return this.user.equals(otherInstance.getUser());
     }
 }
