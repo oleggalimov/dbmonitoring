@@ -2,6 +2,7 @@ package org.oleggalimov.dbmonitoring.back.configuration;
 
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.web.WebApplicationInitializer;
 import org.springframework.web.context.ContextLoaderListener;
 import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
@@ -13,6 +14,7 @@ import javax.servlet.ServletRegistration;
 
 @Configuration
 @ComponentScan(basePackages = {"org.oleggalimov.dbmonitoring.back"})
+@EnableAspectJAutoProxy
 @EnableWebMvc
 public class MainConfiguration implements WebApplicationInitializer {
 

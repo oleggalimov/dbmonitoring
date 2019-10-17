@@ -28,6 +28,7 @@ public class CreateInstance {
         this.responseBuilder = builder;
     }
 
+    @SuppressWarnings("SpellCheckingInspection")
     @PostMapping(value = "/createinstance", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public String createInstance(@RequestBody(required = true) DbInstanceImpl instance) throws JsonProcessingException {
         try {

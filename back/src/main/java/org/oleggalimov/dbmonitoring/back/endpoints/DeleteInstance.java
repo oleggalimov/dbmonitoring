@@ -23,6 +23,7 @@ public class DeleteInstance {
         this.responseBuilder = builder;
     }
 
+    @SuppressWarnings("SpellCheckingInspection")
     @DeleteMapping("deleteinstance/{id}")
     public String getInstance(@PathVariable String id) throws JsonProcessingException {
         try {

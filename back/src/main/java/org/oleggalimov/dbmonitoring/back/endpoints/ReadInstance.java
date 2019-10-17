@@ -1,10 +1,12 @@
 package org.oleggalimov.dbmonitoring.back.endpoints;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import org.oleggalimov.dbmonitoring.back.annotations.LogEvent;
 import org.oleggalimov.dbmonitoring.back.builders.ResponseBuilder;
 import org.oleggalimov.dbmonitoring.back.dto.implementations.RestResponceBody;
 import org.oleggalimov.dbmonitoring.back.dto.interfaces.CommonDbInstance;
 import org.oleggalimov.dbmonitoring.back.enumerations.BodyItemKeys;
+import org.oleggalimov.dbmonitoring.back.enumerations.EventTypes;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -26,6 +28,7 @@ public class ReadInstance {
         this.responseBuilder = builder;
     }
 
+    @LogEvent(eventType = EventTypes.GET_REQUEST, message = "Вызов readinstance/{id}")
     @GetMapping("readinstance/{id}")
     public String getInstance(@PathVariable String id) throws JsonProcessingException {
         try {

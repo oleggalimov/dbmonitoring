@@ -187,7 +187,7 @@ class RestControllersTest {
         assertEquals(0, jsonNode.get("errors").size());
         CopyOnWriteArraySet<CommonDbInstance> instanceHashSet = (CopyOnWriteArraySet<CommonDbInstance>) wac.getBean("instanceHashSet");
         assertFalse(instanceHashSet.size() > 1);
-        assertTrue(instanceHashSet.stream().anyMatch(instance -> instance.getUser().getPassword().equals("pass1 ")));
+        assertTrue(instanceHashSet.stream().anyMatch(instance -> instance.getUser().getPassword().equals("pass1")));
     }
 
     @Tag("Rest")
@@ -205,7 +205,7 @@ class RestControllersTest {
         final JsonNode jsonNode = mapper.readTree(response);
         assertTrue(jsonNode.get("success").asBoolean());
         assertNotNull(jsonNode.get("body"));
-        assertEquals(1, jsonNode.get("messages").size());
+        assertEquals(0, jsonNode.get("messages").size());
         assertEquals(0, jsonNode.get("errors").size());
     }
 
