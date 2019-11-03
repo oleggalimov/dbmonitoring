@@ -1,7 +1,7 @@
 package org.oleggalimov.dbmonitoring.back.dto.implementations;
 
 import org.oleggalimov.dbmonitoring.back.dto.interfaces.CommonDbInstance;
-import org.oleggalimov.dbmonitoring.back.dto.interfaces.CommonUser;
+import org.oleggalimov.dbmonitoring.back.dto.interfaces.CommonDbUser;
 
 import java.io.Serializable;
 
@@ -11,12 +11,12 @@ public class DbInstanceImpl implements CommonDbInstance, Serializable {
     private String host;
     private Integer port;
     private String sid;
-    private UserImpl user;
+    private DbUserImpl user;
 
     public DbInstanceImpl() {
     }
 
-    public DbInstanceImpl(String id, String host, Integer port, String sid, UserImpl user) {
+    public DbInstanceImpl(String id, String host, Integer port, String sid, DbUserImpl user) {
         this.id = id;
         this.host = host;
         this.port = port;
@@ -60,12 +60,12 @@ public class DbInstanceImpl implements CommonDbInstance, Serializable {
         this.sid = sid;
     }
 
-    public void setUser(UserImpl user) {
+    public void setUser(DbUserImpl user) {
         this.user = user;
     }
 
     @Override
-    public CommonUser getUser() {
+    public CommonDbUser getUser() {
         return user;
     }
 

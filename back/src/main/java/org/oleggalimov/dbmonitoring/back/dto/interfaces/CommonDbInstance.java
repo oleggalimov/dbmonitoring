@@ -9,7 +9,7 @@ public interface CommonDbInstance {
 
     String getSid();
 
-    CommonUser getUser();
+    CommonDbUser getUser();
 
     boolean deepEquals(CommonDbInstance otherInstance);
 

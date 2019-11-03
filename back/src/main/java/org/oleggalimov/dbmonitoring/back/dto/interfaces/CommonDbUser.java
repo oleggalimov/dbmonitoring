@@ -1,6 +1,6 @@
 package org.oleggalimov.dbmonitoring.back.dto.interfaces;
 
-public interface CommonUser {
+public interface CommonDbUser {
     String getLogin();
     String getPassword();
 }

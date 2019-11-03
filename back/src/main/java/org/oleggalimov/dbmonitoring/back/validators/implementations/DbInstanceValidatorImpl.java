@@ -1,7 +1,7 @@
 package org.oleggalimov.dbmonitoring.back.validators.implementations;
 
 import org.oleggalimov.dbmonitoring.back.dto.interfaces.CommonDbInstance;
-import org.oleggalimov.dbmonitoring.back.dto.interfaces.CommonUser;
+import org.oleggalimov.dbmonitoring.back.dto.interfaces.CommonDbUser;
 import org.oleggalimov.dbmonitoring.back.enumerations.Messages;
 import org.oleggalimov.dbmonitoring.back.validators.interfaces.DBInstanceValidator;
 
@@ -17,14 +17,14 @@ public class DbInstanceValidatorImpl implements DBInstanceValidator {
         String host = instance.getHost();
         String sid = instance.getSid();
         Integer port = instance.getPort();
-        CommonUser user = instance.getUser();
+        CommonDbUser user = instance.getUser();
 
         if (id == null || host == null || sid == null || port == null) {
             errors.add(Messages.DBINSTANCE_VALIDATION_ERROR.getMessageObject());
         } else if (id.equals("") || host.equals("") || sid.equals("")) {
             errors.add(Messages.DBINSTANCE_VALIDATION_ERROR.getMessageObject());
         }
-        errors.addAll(new UserValidatorImpl().validate(user));
+        errors.addAll(new UserDbValidatorImpl().validate(user));
         return errors;
     }
 }

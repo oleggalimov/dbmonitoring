@@ -2,7 +2,6 @@ package org.oleggalimov.dbmonitoring.back.builders;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.oleggalimov.dbmonitoring.back.CommonResponseBuilder;
 import org.oleggalimov.dbmonitoring.back.dto.implementations.ErrorImpl;
 import org.oleggalimov.dbmonitoring.back.dto.implementations.RestResponse;
 import org.oleggalimov.dbmonitoring.back.dto.interfaces.CommonBody;
@@ -39,7 +38,12 @@ public class ResponseBuilder implements CommonResponseBuilder {
         if (msg.equals("null")) {
             msg = String.valueOf(ex.getMessage());
         }
-        ErrorImpl error = new ErrorImpl(ErrorsCode.REST_EXCEPTION.name(), "Critical error", msg);
+        ErrorImpl error;
+        if (msg.length() > 255) {
+            error = new ErrorImpl(ErrorsCode.REST_EXCEPTION.name(), "Critical error", "Full message available in log files");
+        } else {
+            error = new ErrorImpl(ErrorsCode.REST_EXCEPTION.name(), "Critical error", msg);
+        }
         RestResponse response = new RestResponse(false, null, Collections.singletonList(error), Collections.singletonList(Messages.SERVICE_EXCEPTION.getMessageObject()));
         return mapper.writeValueAsString(response);
     }

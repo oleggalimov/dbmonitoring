@@ -15,7 +15,7 @@ import org.mockito.MockitoAnnotations;
 import org.mockito.Spy;
 import org.oleggalimov.dbmonitoring.back.builders.ResponseBuilder;
 import org.oleggalimov.dbmonitoring.back.dto.implementations.DbInstanceImpl;
-import org.oleggalimov.dbmonitoring.back.dto.implementations.UserImpl;
+import org.oleggalimov.dbmonitoring.back.dto.implementations.DbUserImpl;
 import org.oleggalimov.dbmonitoring.back.dto.interfaces.CommonDbInstance;
 import org.oleggalimov.dbmonitoring.back.endpoints.CheckStatus;
 import org.oleggalimov.dbmonitoring.back.endpoints.CreateInstance;
@@ -131,7 +131,7 @@ class RestControllersErrorsTest {
     @Tag("Rest")
     @Test
     void shouldReturnOneUserErrorMessagesTest() throws Exception {
-        DbInstanceImpl instance = new DbInstanceImpl("test_id", "test_host", 1251, "sid", new UserImpl("login", null));
+        DbInstanceImpl instance = new DbInstanceImpl("test_id", "test_host", 1251, "sid", new DbUserImpl("login", null));
         String response = this.mockMvc
                 .perform(
                         post("/createinstance")

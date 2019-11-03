@@ -12,9 +12,11 @@ import org.springframework.stereotype.Service;
 @Aspect
 public class LoggerAspect {
     @Pointcut(value = "@annotation(org.oleggalimov.dbmonitoring.back.annotations.LogEvent)")
-//    public void annotationPointCut() {}
-//    @Before("annotationPointCut()")
-    @Before(value = "@annotation(org.oleggalimov.dbmonitoring.back.annotations.LogEvent)")
+    public void annotationPointCut() {
+    }
+
+    @Before("annotationPointCut()")
+//    @Before(value = "@annotation(org.oleggalimov.dbmonitoring.back.annotations.LogEvent)")
     public void logEvent(JoinPoint joinPoint) {
         MethodSignature signature = (MethodSignature) joinPoint.getSignature();
         LogEvent annotation = signature.getMethod().getAnnotation(LogEvent.class);

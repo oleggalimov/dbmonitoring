@@ -12,7 +12,9 @@ import org.junit.jupiter.api.Test;
 import org.oleggalimov.dbmonitoring.back.configuration.MainConfiguration;
 import org.oleggalimov.dbmonitoring.back.dto.implementations.DbInstanceImpl;
 import org.oleggalimov.dbmonitoring.back.dto.interfaces.CommonDbInstance;
+import org.oleggalimov.dbmonitoring.back.enumerations.BodyItemKeys;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockServletContext;
 import org.springframework.test.annotation.DirtiesContext;
@@ -48,6 +50,10 @@ class RestControllersTest {
 
     @Autowired
     private WebApplicationContext wac;
+
+    @Autowired
+    protected MongoTemplate mongoTemplate;
+
 
     @BeforeEach
     void setup() throws Exception {
@@ -90,7 +96,7 @@ class RestControllersTest {
         final JsonNode jsonNode = mapper.readTree(response);
         assertTrue(validateJsonFromString(jsonNode));
         assertTrue(jsonNode.get("success").asBoolean());
-        assertFalse(jsonNode.get("body").get("INSTANCES").isNull());
+        assertFalse(jsonNode.get("body").get(BodyItemKeys.INSTANCES.name()).isNull());
     }
 
     @Tag("Rest")
@@ -230,10 +236,50 @@ class RestControllersTest {
         assertEquals(0, jsonNode.get("errors").size());
     }
 
+    @Tag("Rest")
+    @Test
+    void shouldCreateUser() throws Exception {
+        String response = this.mockMvc
+                .perform(post("/createuser")
+                        .content("{\"login\":\"testLogin\",\"email\":\"test@mail.ru\",\"firstName\":\"\",\"lastName\":\"\",\"personNumber\":\"\",\"password\":\"testPassword\",\"roles\":[\"ADMIN\"]}")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andReturn()
+                .getResponse()
+                .getContentAsString();
+        assertNotNull(response);
+        assertTrue(response.length() > 0);
+        System.out.println(response);
+        final JsonNode jsonNode = mapper.readTree(response);
+        assertTrue(validateJsonFromString(jsonNode));
+    }
+
+    @Tag("Rest")
+    @Test
+    void listUsersGet() throws Exception {
+        String response = this.mockMvc
+                .perform(get("/userslist"))
+                .andExpect(status().isOk())
+                .andReturn()
+                .getResponse()
+                .getContentAsString();
+        assertNotNull(response);
+        assertTrue(response.length() > 0);
+        System.out.println(response);
+        final JsonNode jsonNode = mapper.readTree(response);
+        assertTrue(validateJsonFromString(jsonNode));
+    }
+
+
+
     private boolean validateJsonFromString(JsonNode json) throws ProcessingException {
         final JsonSchemaFactory factory = JsonSchemaFactory.byDefault();
         final JsonSchema schema = factory.getJsonSchema(responseSchema);
         ProcessingReport report = schema.validate(json);
-        return report.isSuccess();
+        if (!report.isSuccess()) {
+            System.out.println("Validation errors: " + report);
+            return false;
+        }
+        return true;
     }
 }

@@ -3,6 +3,7 @@ package org.oleggalimov.dbmonitoring.back.configuration;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
+import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 import org.springframework.web.WebApplicationInitializer;
 import org.springframework.web.context.ContextLoaderListener;
 import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
@@ -16,6 +17,7 @@ import javax.servlet.ServletRegistration;
 @ComponentScan(basePackages = {"org.oleggalimov.dbmonitoring.back"})
 @EnableAspectJAutoProxy
 @EnableWebMvc
+@EnableMongoRepositories(value = {"org.oleggalimov.dbmonitoring.back.repositories"})
 public class MainConfiguration implements WebApplicationInitializer {
 
     @Override

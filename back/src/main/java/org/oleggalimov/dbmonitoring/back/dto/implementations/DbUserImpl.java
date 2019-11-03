@@ -1,19 +1,19 @@
 package org.oleggalimov.dbmonitoring.back.dto.implementations;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import org.oleggalimov.dbmonitoring.back.dto.interfaces.CommonUser;
+import org.oleggalimov.dbmonitoring.back.dto.interfaces.CommonDbUser;
 
 import java.io.Serializable;
 
-public class UserImpl implements CommonUser, Serializable {
+public class DbUserImpl implements CommonDbUser, Serializable {
     private String login;
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private transient String password;
 
-    public UserImpl() {
+    public DbUserImpl() {
     }
 
-    public UserImpl(String login, String password) {
+    public DbUserImpl(String login, String password) {
         this.login = login;
         this.password = password;
     }
