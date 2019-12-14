@@ -1,7 +1,7 @@
 package org.oleggalimov.dbmonitoring.back.enumerations;
 
-public enum MessageType {
-    INFO,
-    WARNING,
-    ERROR
+public enum Role {
+    ADMIN,
+    USER_ADMIN,
+    USER
 }

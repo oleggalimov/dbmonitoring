@@ -1,7 +1,5 @@
 package org.oleggalimov.dbmonitoring.back.enumerations;
 
-public enum MessageType {
-    INFO,
-    WARNING,
-    ERROR
+public enum ErrorCode {
+    REST_EXCEPTION
 }

@@ -2,16 +2,14 @@ package org.oleggalimov.dbmonitoring.back.builders;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.oleggalimov.dbmonitoring.back.dto.implementations.ErrorImpl;
-import org.oleggalimov.dbmonitoring.back.dto.implementations.RestResponse;
-import org.oleggalimov.dbmonitoring.back.dto.interfaces.CommonBody;
-import org.oleggalimov.dbmonitoring.back.enumerations.ErrorsCode;
-import org.oleggalimov.dbmonitoring.back.enumerations.Messages;
+import org.oleggalimov.dbmonitoring.back.dto.Error;
+import org.oleggalimov.dbmonitoring.back.dto.Message;
+import org.oleggalimov.dbmonitoring.back.dto.RestResponse;
+import org.oleggalimov.dbmonitoring.back.dto.RestResponseBody;
+import org.oleggalimov.dbmonitoring.back.enumerations.ErrorCode;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 public class ResponseBuilder implements CommonResponseBuilder {
@@ -25,10 +23,11 @@ public class ResponseBuilder implements CommonResponseBuilder {
         this.mapper = mapper;
     }
 
-    public String buildRestResponse(boolean success, CommonBody body, List<Serializable> errors, List<Serializable> messages) throws JsonProcessingException {
-        List<Serializable> responseErrors = errors == null ? new ArrayList<>() : errors;
-        List<Serializable> responseMessages = messages == null ? new ArrayList<>() : messages;
-        RestResponse response = new RestResponse(success, body, responseErrors, responseMessages);
+    public String buildRestResponse(boolean success, RestResponseBody body, List<Error> errors, List<Message> messages) throws JsonProcessingException {
+        RestResponseBody responseBody = body == null ? new RestResponseBody() : body;
+        List<Error> responseErrors = errors == null ? new ArrayList<>() : errors;
+        List<Message> responseMessages = messages == null ? new ArrayList<>() : messages;
+        RestResponse response = new RestResponse(success, responseBody, responseErrors, responseMessages);
         return mapper.writeValueAsString(response);
     }
 
@@ -38,20 +37,12 @@ public class ResponseBuilder implements CommonResponseBuilder {
         if (msg.equals("null")) {
             msg = String.valueOf(ex.getMessage());
         }
-        ErrorImpl error;
+        List<Error> errorList = new ArrayList<>();
         if (msg.length() > 255) {
-            error = new ErrorImpl(ErrorsCode.REST_EXCEPTION.name(), "Critical error", "Full message available in log files");
+            errorList.add(new Error(ErrorCode.REST_EXCEPTION.name(), "Critical error", "Full message available in log files"));
         } else {
-            error = new ErrorImpl(ErrorsCode.REST_EXCEPTION.name(), "Critical error", msg);
+            errorList.add(new Error(ErrorCode.REST_EXCEPTION.name(), "Critical error", msg));
         }
-        RestResponse response = new RestResponse(false, null, Collections.singletonList(error), Collections.singletonList(Messages.SERVICE_EXCEPTION.getMessageObject()));
-        return mapper.writeValueAsString(response);
+        return buildRestResponse(false, null, errorList, null);
     }
-
-    public String buildErrorResponse(List<Serializable> messages) throws JsonProcessingException {
-        RestResponse response = new RestResponse(false, null, Collections.emptyList(), messages);
-        return mapper.writeValueAsString(response);
-    }
-
-
 }

@@ -1,7 +1,6 @@
 package org.oleggalimov.dbmonitoring.back.enumerations;
 
-public enum MessageType {
-    INFO,
-    WARNING,
-    ERROR
+public enum BodyItemKey {
+    INSTANCES,
+    USERS
 }
