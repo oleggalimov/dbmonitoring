@@ -14,11 +14,12 @@ public enum Messages {
 
     USER_CREATED(new Message("U_I_01", "Success user operation: create", "User was successfully added", MessageType.INFO)),
     USER_UPDATED(new Message("U_I_02", "Success user operation: update", "User was successfully updated", MessageType.INFO)),
-    USER_DELETED(new Message("U_I_03", "Success user operation: delete", "User was successfully delete", MessageType.INFO)),
+    USER_DELETED(new Message("U_I_03", "Success user operation: delete", "User was successfully deleted", MessageType.INFO)),
 
     USER_IS_NOT_ADDED(new Message("U_W_01", "Add user error", "User was not added", MessageType.WARNING)),
     USER_IS_ABSENT(new Message("U_W_02", "Read user error", "No user was found in database", MessageType.WARNING)),
-    USER_IS_NOT_DELETED(new Message("U_W_03", "Delete user error", "User was not deleted", MessageType.WARNING));
+    USER_IS_NOT_DELETED(new Message("U_W_03", "Delete user error", "User was not deleted", MessageType.WARNING)),
+    USER_IS_NOT_UPDATED(new Message("U_W_04", "Update instance error", "User was not updated", MessageType.WARNING));
     private Message messageObject;
 
     Messages(Message msg) {

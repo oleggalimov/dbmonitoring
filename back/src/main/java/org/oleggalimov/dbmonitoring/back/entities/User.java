@@ -1,5 +1,6 @@
 package org.oleggalimov.dbmonitoring.back.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.oleggalimov.dbmonitoring.back.enumerations.Role;
 import org.oleggalimov.dbmonitoring.back.enumerations.UserStatus;
 import org.springframework.data.annotation.Id;
@@ -34,6 +35,7 @@ public class User {
         this.status = status;
     }
 
+    @JsonIgnore
     public String getId() {
         return id;
     }

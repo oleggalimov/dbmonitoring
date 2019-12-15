@@ -37,8 +37,12 @@ public class DeleteUser {
             if (user == null) {
                 return responseBuilder.buildRestResponse(false, null, null, Collections.singletonList(Messages.USER_IS_ABSENT.getMessageObject()));
             } else {
-                userService.deleteUser(user);
-                return responseBuilder.buildRestResponse(true, null, null, Collections.singletonList(Messages.USER_DELETED.getMessageObject()));
+                long deleted = userService.deleteUser(user);
+                if (deleted == 0) {
+                    return responseBuilder.buildRestResponse(true, null, null, Collections.singletonList(Messages.USER_DELETED.getMessageObject()));
+                } else {
+                    return responseBuilder.buildRestResponse(false, null, null, Collections.singletonList(Messages.USER_IS_NOT_DELETED.getMessageObject()));
+                }
             }
         } catch (Exception ex) {
             ex.printStackTrace();

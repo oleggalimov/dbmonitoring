@@ -14,4 +14,5 @@ public interface IUserRepository<T extends User> extends MongoRepository<T, Stri
     @Query("{ 'eMail' : ?0 }")
     T findByEmail(String eMail);
 
+    Long countByLogin(String login);
 }

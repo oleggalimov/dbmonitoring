@@ -1,4 +1,4 @@
-package org.oleggalimov.dbmonitoring.back.integration.endpoints;
+package org.oleggalimov.dbmonitoring.back.unit;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -23,6 +23,13 @@ import org.oleggalimov.dbmonitoring.back.endpoints.instance.DeleteInstance;
 import org.oleggalimov.dbmonitoring.back.endpoints.instance.GetInstance;
 import org.oleggalimov.dbmonitoring.back.endpoints.instance.ListInstances;
 import org.oleggalimov.dbmonitoring.back.endpoints.instance.UpdateInstance;
+import org.oleggalimov.dbmonitoring.back.endpoints.user.CreateUser;
+import org.oleggalimov.dbmonitoring.back.endpoints.user.DeleteUser;
+import org.oleggalimov.dbmonitoring.back.endpoints.user.GetUser;
+import org.oleggalimov.dbmonitoring.back.endpoints.user.ListUsers;
+import org.oleggalimov.dbmonitoring.back.endpoints.user.UpdateUser;
+import org.oleggalimov.dbmonitoring.back.entities.User;
+import org.oleggalimov.dbmonitoring.back.enumerations.UserStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -65,6 +72,21 @@ class RestControllersErrorsTest {
     @InjectMocks
     UpdateInstance updateInstanceController;
 
+    @InjectMocks
+    CreateUser createUserController;
+
+    @InjectMocks
+    DeleteUser deleteUserController;
+
+    @InjectMocks
+    GetUser getUserController;
+
+    @InjectMocks
+    ListUsers listUsersController;
+
+    @InjectMocks
+    UpdateUser updateUserController;
+
 
     @Mock
     CopyOnWriteArraySet<DataBaseInstance> instanceSet;
@@ -82,7 +104,8 @@ class RestControllersErrorsTest {
         this.mockMvc = MockMvcBuilders
                 .standaloneSetup(
                         listInstancesController, statusController, createInstanceController, deleteInstanceController,
-                        getInstanceController, updateInstanceController
+                        getInstanceController, updateInstanceController, createUserController, deleteUserController, getUserController,
+                        listUsersController, updateUserController
                 )
                 .build();
         mapper = new ObjectMapper();
@@ -208,6 +231,120 @@ class RestControllersErrorsTest {
         assertTrue(response.length() > 0);
         final JsonNode jsonNode = mapper.readTree(response);
         validateJsonFromString(jsonNode);
+    }
+
+    @Tag("/update/instance")
+    @Test
+    void createUserErrorTest() throws Exception {
+        User badUser = new User("login", "mail@r.ru", null, "firstname", "lastName", "personNumber", "12345678", UserStatus.ACTIVE);
+        String body = mapper.writeValueAsString(badUser);
+        String response = mockMvc.
+                perform(post("/create/user")
+                        .contentType(MediaType.APPLICATION_JSON_UTF8)
+                        .content(body)
+                )
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.success").value("false"))
+                .andExpect(jsonPath("$.body").isEmpty())
+                .andExpect(jsonPath("$.messages").isEmpty())
+                .andExpect(jsonPath("$.errors[0].code").value("REST_EXCEPTION"))
+                .andExpect(jsonPath("$.errors[0].title").value("Critical error"))
+                .andExpect(jsonPath("$.errors[0].message").value("null"))
+                .andReturn()
+                .getResponse()
+                .getContentAsString();
+        System.out.println(response);
+        assertNotNull(response);
+        assertTrue(response.length() > 0);
+        final JsonNode jsonNode = mapper.readTree(response);
+        validateJsonFromString(jsonNode);
+    }
+
+    @Tag("delete/user/{login}")
+    @Test
+    void deleteUserErrorTest() throws Exception {
+        String result = mockMvc.
+                perform(delete("/delete/user/123"))
+                .andExpect(status().is2xxSuccessful())
+                .andExpect(jsonPath("$.success").value("false"))
+                .andExpect(jsonPath("$.body").isEmpty())
+                .andExpect(jsonPath("$.messages").isEmpty())
+                .andExpect(jsonPath("$.errors[0].code").value("REST_EXCEPTION"))
+                .andExpect(jsonPath("$.errors[0].title").value("Critical error"))
+                .andExpect(jsonPath("$.errors[0].message").value("null"))
+                .andReturn()
+                .getResponse()
+                .getContentAsString();
+
+        validateJsonFromString(mapper.readTree(result));
+        System.out.println(result);
+    }
+
+    @Tag("list/user/{login}")
+    @Test
+    void getUserErrorTest() throws Exception {
+        String result = mockMvc.
+                perform(get("/list/user/login"))
+                .andExpect(status().is2xxSuccessful())
+                .andExpect(jsonPath("$.success").value("false"))
+                .andExpect(jsonPath("$.body").isEmpty())
+                .andExpect(jsonPath("$.messages").isEmpty())
+                .andExpect(jsonPath("$.errors[0].code").value("REST_EXCEPTION"))
+                .andExpect(jsonPath("$.errors[0].title").value("Critical error"))
+                .andExpect(jsonPath("$.errors[0].message").value("null"))
+                .andReturn()
+                .getResponse()
+                .getContentAsString();
+
+        validateJsonFromString(mapper.readTree(result));
+        System.out.println(result);
+    }
+
+    @Tag("list/user/{login}")
+    @Test
+    void listUserErrorTest() throws Exception {
+        String result = mockMvc.
+                perform(get("/list/user"))
+                .andExpect(status().isOk())
+                .andExpect(status().is2xxSuccessful())
+                .andExpect(jsonPath("$.success").value("false"))
+                .andExpect(jsonPath("$.body").isEmpty())
+                .andExpect(jsonPath("$.messages").isEmpty())
+                .andExpect(jsonPath("$.errors[0].code").value("REST_EXCEPTION"))
+                .andExpect(jsonPath("$.errors[0].title").value("Critical error"))
+                .andExpect(jsonPath("$.errors[0].message").value("null"))
+                .andReturn()
+                .getResponse()
+                .getContentAsString();
+
+        validateJsonFromString(mapper.readTree(result));
+        System.out.println(result);
+    }
+
+    @Tag("update/user")
+    @Test
+    void updateUserErrorTest() throws Exception {
+        User badUser = new User("login", "mail@ru.ru", null, "firstname", "lastName", "personNumber", "q12345678", UserStatus.ACTIVE);
+        String body = mapper.writeValueAsString(badUser);
+        String result = mockMvc.
+                perform(put("/update/user")
+                        .contentType(MediaType.APPLICATION_JSON_UTF8)
+                        .content(body)
+                )
+                .andExpect(status().isOk())
+                .andExpect(status().is2xxSuccessful())
+                .andExpect(jsonPath("$.success").value("false"))
+                .andExpect(jsonPath("$.body").isEmpty())
+                .andExpect(jsonPath("$.messages").isEmpty())
+                .andExpect(jsonPath("$.errors[0].code").value("REST_EXCEPTION"))
+                .andExpect(jsonPath("$.errors[0].title").value("Critical error"))
+                .andExpect(jsonPath("$.errors[0].message").value("null"))
+                .andReturn()
+                .getResponse()
+                .getContentAsString();
+
+        validateJsonFromString(mapper.readTree(result));
+        System.out.println(result);
     }
 
     private void validateJsonFromString(JsonNode json) throws ProcessingException {

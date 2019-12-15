@@ -43,8 +43,9 @@ public class UserService {
 
     }
 
-    public void deleteUser(User user) {
+    public long deleteUser(User user) {
         userRepository.delete(user);
+        return userRepository.countByLogin(user.getLogin());
     }
 
     public boolean updateUser(User user) {

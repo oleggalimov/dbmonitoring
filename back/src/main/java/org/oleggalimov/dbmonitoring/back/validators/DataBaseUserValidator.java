@@ -23,9 +23,11 @@ public class DataBaseUserValidator {
 
         if (login == null || StringValidator.isEmpty(login)) {
             errors.add(Errors.DB_USER_VALIDATION_EMPTY_LOGIN.getError());
-        } else if (password == null || StringValidator.isEmpty(password)) {
+        }
+        if (password == null || StringValidator.isEmpty(password)) {
             errors.add(Errors.DB_USER_VALIDATION_EMPTY_PASSWORD.getError());
-        } else if (password.length() < 8) {
+        }
+        if (password != null && password.length() < 8) {
             errors.add(Errors.DB_USER_VALIDATION_SHORT_PASSWORD.getError());
         }
         return errors;

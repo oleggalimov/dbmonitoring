@@ -26,17 +26,19 @@ public class DatabaseInstanceValidator {
 
         if (id == null || StringValidator.isEmpty(id)) {
             errors.add(Errors.DB_INSTANCE_VALIDATION_EMPTY_ID.getError());
-        } else if (host == null || StringValidator.isEmpty(host)) {
+        }
+        if (host == null || StringValidator.isEmpty(host)) {
             errors.add(Errors.DB_INSTANCE_VALIDATION_EMPTY_HOST.getError());
-            return Collections.singletonList(Errors.DB_INSTANCE_VALIDATION_EMPTY_HOST.getError());
-        } else if (sid == null || StringValidator.isEmpty(sid)) {
+        }
+        if (sid == null || StringValidator.isEmpty(sid)) {
             errors.add(Errors.DB_INSTANCE_VALIDATION_EMPTY_SID.getError());
-        } else if (port == null) {
+        }
+        if (port == null) {
             errors.add(Errors.DB_INSTANCE_VALIDATION_EMPTY_PORT.getError());
-        } else if (type == null) {
+        }
+        if (type == null) {
             errors.add(Errors.DB_INSTANCE_VALIDATION_EMPTY_TYPE.getError());
         }
-
         List<Error> userValidationErrors = DataBaseUserValidator.validate(user);
         if (!userValidationErrors.isEmpty()) {
             errors.addAll(userValidationErrors);

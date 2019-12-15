@@ -47,6 +47,5 @@ public class CreateUser {
             ex.printStackTrace();
             return responseBuilder.buildExceptionResponse(ex);
         }
-
     }
 }

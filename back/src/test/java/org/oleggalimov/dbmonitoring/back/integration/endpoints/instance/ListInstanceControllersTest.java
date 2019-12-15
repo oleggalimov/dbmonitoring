@@ -1,4 +1,4 @@
-package org.oleggalimov.dbmonitoring.back.integration.endpoints;
+package org.oleggalimov.dbmonitoring.back.integration.endpoints.instance;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;

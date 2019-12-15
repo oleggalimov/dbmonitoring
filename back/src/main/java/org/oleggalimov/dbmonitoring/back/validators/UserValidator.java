@@ -20,11 +20,14 @@ public class UserValidator {
 
         if (login == null || StringValidator.isEmpty(login)) {
             errors.add(Errors.USER_VALIDATION_EMPTY_LOGIN.getError());
-        } else if (password == null || StringValidator.isEmpty(password)) {
+        }
+        if (password == null || StringValidator.isEmpty(password)) {
             errors.add(Errors.USER_VALIDATION_EMPTY_PASSWORD.getError());
-        } else if (password.length() < 8) {
+        }
+        if (password != null && password.length() < 8) {
             errors.add(Errors.USER_VALIDATION_SHORT_PASSWORD.getError());
-        } else if (email == null || StringValidator.isInValidEMail(email)) {
+        }
+        if (email == null || StringValidator.isInValidEMail(email)) {
             errors.add(Errors.USER_VALIDATION_BAD_EMAIL.getError());
         }
         return errors;
