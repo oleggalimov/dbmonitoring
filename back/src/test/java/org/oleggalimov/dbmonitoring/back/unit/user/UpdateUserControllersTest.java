@@ -60,7 +60,7 @@ class UpdateUserControllersTest {
     @Tag("update/user")
     @Test
     void updateUserTest() throws Exception {
-        String body = mapper.writeValueAsString(user);
+        String body = "{\"login\":\"login\",\"roles\":null,\"firstName\":\"firstname\",\"lastName\":\"lastName\",\"personNumber\":\"personNumber\",\"password\":\"q12345678\",\"status\":\"ACTIVE\",\"email\":\"qq@qq.ru\"}";
         Mockito.when(userService.updateUser(Mockito.any(User.class))).thenReturn(true);
         String result = mockMvc.
                 perform(put("/update/user")
@@ -87,7 +87,7 @@ class UpdateUserControllersTest {
     @Tag("update/user")
     @Test
     void updateUserTestWithNotUpdatedResult() throws Exception {
-        String body = mapper.writeValueAsString(user);
+        String body = "{\"login\":\"login\",\"roles\":null,\"firstName\":\"firstname\",\"lastName\":\"lastName\",\"personNumber\":\"personNumber\",\"password\":\"q12345678\",\"status\":\"ACTIVE\",\"email\":\"qq@qq.ru\"}";
         Mockito.when(userService.updateUser(Mockito.any(User.class))).thenReturn(false);
         String result = mockMvc.
                 perform(put("/update/user")
@@ -114,8 +114,7 @@ class UpdateUserControllersTest {
     @Tag("update/user")
     @Test
     void updateUserTestWithBadUser() throws Exception {
-        User badUser = new User("login", null, null, "firstname", "lastName", "personNumber", "q", UserStatus.ACTIVE);
-        String body = mapper.writeValueAsString(badUser);
+        String body = "{\"login\":\"login\",\"roles\":null,\"firstName\":\"firstname\",\"lastName\":\"lastName\",\"personNumber\":\"personNumber\",\"password\":\"q678\",\"status\":\"ACTIVE\",\"email\":\"\"}";
         Mockito.when(userService.updateUser(Mockito.any(User.class))).thenReturn(false);
         String result = mockMvc.
                 perform(put("/update/user")

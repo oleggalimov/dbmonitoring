@@ -68,12 +68,12 @@ class ListUsersControllerTest {
         );
     }
 
-    @Tag("list/user")
+    @Tag("list/user/all")
     @Test
     void getUserTest() throws Exception {
         Mockito.when(userService.findAll()).thenReturn(users);
         String result = mockMvc.
-                perform(get("/list/user"))
+                perform(get("/list/user/all"))
                 .andExpect(status().isOk())
                 .andExpect(status().is2xxSuccessful())
                 .andExpect(jsonPath("$.success").value("true"))
@@ -82,7 +82,6 @@ class ListUsersControllerTest {
                 .andExpect(jsonPath("$.body.USERS[0].firstName").value("first_name"))
                 .andExpect(jsonPath("$.body.USERS[0].lastName").value("lastName"))
                 .andExpect(jsonPath("$.body.USERS[0].personNumber").value("personNumber"))
-                .andExpect(jsonPath("$.body.USERS[0].password").value("password"))
                 .andExpect(jsonPath("$.body.USERS[0].status").value("ACTIVE"))
                 .andExpect(jsonPath("$.body.USERS[0].email").value("e@mail.ru"))
                 .andExpect(jsonPath("$.body.USERS[1].login").value("login2"))
@@ -90,7 +89,6 @@ class ListUsersControllerTest {
                 .andExpect(jsonPath("$.body.USERS[1].firstName").value("first_name2"))
                 .andExpect(jsonPath("$.body.USERS[1].lastName").value("lastName2"))
                 .andExpect(jsonPath("$.body.USERS[1].personNumber").value("personNumber2"))
-                .andExpect(jsonPath("$.body.USERS[1].password").value("password2"))
                 .andExpect(jsonPath("$.body.USERS[1].status").value("BLOCKED"))
                 .andExpect(jsonPath("$.body.USERS[1].email").value("e@mail.ru2"))
                 .andExpect(jsonPath("$.errors").isEmpty())
@@ -108,7 +106,7 @@ class ListUsersControllerTest {
     void getUserTestWithNoUsers() throws Exception {
         Mockito.when(userService.findAll()).thenReturn(Collections.emptyList());
         String result = mockMvc.
-                perform(get("/list/user"))
+                perform(get("/list/user/all"))
                 .andExpect(status().isOk())
                 .andExpect(status().is2xxSuccessful())
                 .andExpect(jsonPath("$.success").value("true"))

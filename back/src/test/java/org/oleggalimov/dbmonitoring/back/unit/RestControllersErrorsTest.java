@@ -28,8 +28,6 @@ import org.oleggalimov.dbmonitoring.back.endpoints.user.DeleteUser;
 import org.oleggalimov.dbmonitoring.back.endpoints.user.GetUser;
 import org.oleggalimov.dbmonitoring.back.endpoints.user.ListUsers;
 import org.oleggalimov.dbmonitoring.back.endpoints.user.UpdateUser;
-import org.oleggalimov.dbmonitoring.back.entities.User;
-import org.oleggalimov.dbmonitoring.back.enumerations.UserStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -236,8 +234,7 @@ class RestControllersErrorsTest {
     @Tag("/update/instance")
     @Test
     void createUserErrorTest() throws Exception {
-        User badUser = new User("login", "mail@r.ru", null, "firstname", "lastName", "personNumber", "12345678", UserStatus.ACTIVE);
-        String body = mapper.writeValueAsString(badUser);
+        String body = "{\"login\":\"login\",\"roles\":null,\"firstName\":\"firstname\",\"lastName\":\"lastName\",\"personNumber\":\"personNumber\",\"password\":\"q12345678\",\"status\":\"ACTIVE\",\"email\":\"qq@qq.ru\"}";
         String response = mockMvc.
                 perform(post("/create/user")
                         .contentType(MediaType.APPLICATION_JSON_UTF8)
@@ -300,11 +297,11 @@ class RestControllersErrorsTest {
         System.out.println(result);
     }
 
-    @Tag("list/user/{login}")
+    @Tag("list/user/all")
     @Test
-    void listUserErrorTest() throws Exception {
+    void listUsersErrorTest() throws Exception {
         String result = mockMvc.
-                perform(get("/list/user"))
+                perform(get("/list/user/all"))
                 .andExpect(status().isOk())
                 .andExpect(status().is2xxSuccessful())
                 .andExpect(jsonPath("$.success").value("false"))
@@ -324,8 +321,7 @@ class RestControllersErrorsTest {
     @Tag("update/user")
     @Test
     void updateUserErrorTest() throws Exception {
-        User badUser = new User("login", "mail@ru.ru", null, "firstname", "lastName", "personNumber", "q12345678", UserStatus.ACTIVE);
-        String body = mapper.writeValueAsString(badUser);
+        String body = "{\"login\":\"login\",\"roles\":null,\"firstName\":\"firstname\",\"lastName\":\"lastName\",\"personNumber\":\"personNumber\",\"password\":\"q12345678\",\"status\":\"ACTIVE\",\"email\":\"qq@qq.ru\"}";
         String result = mockMvc.
                 perform(put("/update/user")
                         .contentType(MediaType.APPLICATION_JSON_UTF8)

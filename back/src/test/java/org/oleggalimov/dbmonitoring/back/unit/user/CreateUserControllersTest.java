@@ -55,12 +55,13 @@ class CreateUserControllersTest {
         File file = ResourceUtils.getFile(this.getClass().getResource("/Response.json"));
         responseSchema = mapper.readTree(file);
         user = new User("login", "e@mail.ru", null, "firstname", "lastName", "personNumber", "password", UserStatus.ACTIVE);
+
     }
 
     @Tag("create/user")
     @Test
     void createUserTest() throws Exception {
-        String body = mapper.writeValueAsString(user);
+        String body = "{\"login\":\"login\",\"roles\":null,\"firstName\":\"firstname\",\"lastName\":\"lastName\",\"personNumber\":\"personNumber\",\"password\":\"q12345678\",\"status\":\"ACTIVE\",\"email\":\"qq@qq.ru\"}";
         Mockito.when(userService.saveUser(Mockito.any(User.class))).thenReturn(user);
         String result = mockMvc.
                 perform(post("/create/user")
@@ -87,7 +88,7 @@ class CreateUserControllersTest {
     @Tag("create/user")
     @Test
     void createUserTestWithNotAddedResult() throws Exception {
-        String body = mapper.writeValueAsString(user);
+        String body = "{\"login\":\"login\",\"roles\":null,\"firstName\":\"firstname\",\"lastName\":\"lastName\",\"personNumber\":\"personNumber\",\"password\":\"q12345678\",\"status\":\"ACTIVE\",\"email\":\"qq@qq.ru\"}";
         Mockito.when(userService.saveUser(Mockito.any(User.class))).thenReturn(null);
         String result = mockMvc.
                 perform(post("/create/user")
@@ -114,8 +115,7 @@ class CreateUserControllersTest {
     @Tag("create/user")
     @Test
     void createUserTestWithBadUserInfo() throws Exception {
-        User badUser = new User("login", null, null, "firstname", "lastName", "personNumber", "q", UserStatus.ACTIVE);
-        String body = mapper.writeValueAsString(badUser);
+        String body = "{\"login\":\"login\",\"roles\":null,\"firstName\":\"firstname\",\"lastName\":\"lastName\",\"personNumber\":\"personNumber\",\"password\":\"q\",\"status\":\"ACTIVE\",\"email\":\"\"}";
         Mockito.when(userService.saveUser(Mockito.any(User.class))).thenReturn(null);
         String result = mockMvc.
                 perform(post("/create/user")

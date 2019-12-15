@@ -23,7 +23,7 @@ public class ListUsers {
         this.userService = service;
     }
 
-    @GetMapping("list/user")
+    @GetMapping("list/user/all")
     @LogHttpEvent(eventType = RequestMethod.GET, message = "list/user")
 
     public String listUsers() throws JsonProcessingException {

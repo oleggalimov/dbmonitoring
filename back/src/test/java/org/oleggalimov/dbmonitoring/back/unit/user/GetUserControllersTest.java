@@ -76,7 +76,6 @@ class GetUserControllersTest {
                 .andExpect(jsonPath("$.body.USERS[0].firstName").value("first_name"))
                 .andExpect(jsonPath("$.body.USERS[0].lastName").value("lastName"))
                 .andExpect(jsonPath("$.body.USERS[0].personNumber").value("personNumber"))
-                .andExpect(jsonPath("$.body.USERS[0].password").value("password"))
                 .andExpect(jsonPath("$.body.USERS[0].status").value("ACTIVE"))
                 .andExpect(jsonPath("$.body.USERS[0].email").value("e@mail.ru"))
                 .andExpect(jsonPath("$.errors").isEmpty())
