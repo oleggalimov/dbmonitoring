@@ -17,7 +17,7 @@ import org.mockito.MockitoAnnotations;
 import org.mockito.Spy;
 import org.oleggalimov.dbmonitoring.back.builders.ResponseBuilder;
 import org.oleggalimov.dbmonitoring.back.endpoints.user.ListUsers;
-import org.oleggalimov.dbmonitoring.back.entities.User;
+import org.oleggalimov.dbmonitoring.back.entities.MonitoringSystemUser;
 import org.oleggalimov.dbmonitoring.back.enumerations.Role;
 import org.oleggalimov.dbmonitoring.back.enumerations.UserStatus;
 import org.oleggalimov.dbmonitoring.back.services.UserService;
@@ -41,7 +41,7 @@ class ListUsersControllerTest {
     private MockMvc mockMvc;
     private JsonNode responseSchema;
     private static ObjectMapper mapper = new ObjectMapper();
-    private static List<User> users;
+    private static List<MonitoringSystemUser> monitoringSystemUsers;
 
     @Spy
     ResponseBuilder builder = new ResponseBuilder(mapper);
@@ -61,17 +61,17 @@ class ListUsersControllerTest {
         responseSchema = mapper.readTree(file);
         Set<Role> roles = EnumSet.of(Role.ADMIN);
         Set<Role> roles2 = EnumSet.of(Role.USER_ADMIN);
-        users = new ArrayList<>();
-        Collections.addAll(users,
-                new User("login", "e@mail.ru", roles, "first_name", "lastName", "personNumber", "password", UserStatus.ACTIVE),
-                new User("login2", "e@mail.ru2", roles2, "first_name2", "lastName2", "personNumber2", "password2", UserStatus.BLOCKED)
+        monitoringSystemUsers = new ArrayList<>();
+        Collections.addAll(monitoringSystemUsers,
+                new MonitoringSystemUser("login", "e@mail.ru", roles, "first_name", "lastName", "personNumber", "password", UserStatus.ACTIVE),
+                new MonitoringSystemUser("login2", "e@mail.ru2", roles2, "first_name2", "lastName2", "personNumber2", "password2", UserStatus.BLOCKED)
         );
     }
 
     @Tag("list/user/all")
     @Test
     void getUserTest() throws Exception {
-        Mockito.when(userService.findAll()).thenReturn(users);
+        Mockito.when(userService.findAll()).thenReturn(monitoringSystemUsers);
         String result = mockMvc.
                 perform(get("/list/user/all"))
                 .andExpect(status().isOk())

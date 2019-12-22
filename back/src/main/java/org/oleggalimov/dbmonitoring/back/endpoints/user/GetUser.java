@@ -4,7 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import org.oleggalimov.dbmonitoring.back.annotations.LogHttpEvent;
 import org.oleggalimov.dbmonitoring.back.builders.ResponseBuilder;
 import org.oleggalimov.dbmonitoring.back.dto.RestResponseBody;
-import org.oleggalimov.dbmonitoring.back.entities.User;
+import org.oleggalimov.dbmonitoring.back.entities.MonitoringSystemUser;
 import org.oleggalimov.dbmonitoring.back.enumerations.BodyItemKey;
 import org.oleggalimov.dbmonitoring.back.enumerations.Messages;
 import org.oleggalimov.dbmonitoring.back.services.UserService;
@@ -36,12 +36,12 @@ public class GetUser {
             if (StringValidator.isEmpty(login)) {
                 throw new Exception("Login is empty.");
             }
-            User user = userService.findUserByLogin(login);
-            if (user == null) {
+            MonitoringSystemUser monitoringSystemUser = userService.findUserByLogin(login);
+            if (monitoringSystemUser == null) {
                 return responseBuilder.buildRestResponse(false, null, null, Collections.singletonList(Messages.USER_IS_ABSENT.getMessageObject()));
             } else {
                 RestResponseBody body = new RestResponseBody();
-                body.setItem(BodyItemKey.USERS.toString(), Collections.singletonList(user));
+                body.setItem(BodyItemKey.USERS.toString(), Collections.singletonList(monitoringSystemUser));
                 return responseBuilder.buildRestResponse(true, body, null, null);
             }
         } catch (Exception ex) {

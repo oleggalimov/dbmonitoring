@@ -4,7 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import org.oleggalimov.dbmonitoring.back.annotations.LogHttpEvent;
 import org.oleggalimov.dbmonitoring.back.builders.ResponseBuilder;
 import org.oleggalimov.dbmonitoring.back.dto.Error;
-import org.oleggalimov.dbmonitoring.back.entities.User;
+import org.oleggalimov.dbmonitoring.back.entities.MonitoringSystemUser;
 import org.oleggalimov.dbmonitoring.back.enumerations.Messages;
 import org.oleggalimov.dbmonitoring.back.services.UserService;
 import org.oleggalimov.dbmonitoring.back.validators.UserValidator;
@@ -31,13 +31,13 @@ public class CreateUser {
 
     @PostMapping(value = "create/user", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @LogHttpEvent(eventType = RequestMethod.POST, message = "create/user")
-    public String createUser(@RequestBody User user) throws JsonProcessingException {
+    public String createUser(@RequestBody MonitoringSystemUser monitoringSystemUser) throws JsonProcessingException {
         try {
-            List<Error> validationErrors = UserValidator.validate(user);
+            List<Error> validationErrors = UserValidator.validate(monitoringSystemUser);
             if (validationErrors.size() != 0) {
                 return responseBuilder.buildRestResponse(false, null, validationErrors, null);
             }
-            User added = userService.saveUser(user);
+            MonitoringSystemUser added = userService.saveUser(monitoringSystemUser);
             if (added == null) {
                 return responseBuilder.buildRestResponse(false, null, null, Collections.singletonList(Messages.USER_IS_NOT_ADDED.getMessageObject()));
             } else {

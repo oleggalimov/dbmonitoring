@@ -13,7 +13,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-class DataBaseUserValidatorTest {
+class DataBaseMonitoringSystemUserValidatorTest {
     private static ObjectMapper mapper;
 
     @BeforeAll

@@ -4,7 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import org.oleggalimov.dbmonitoring.back.annotations.LogHttpEvent;
 import org.oleggalimov.dbmonitoring.back.builders.ResponseBuilder;
 import org.oleggalimov.dbmonitoring.back.dto.Error;
-import org.oleggalimov.dbmonitoring.back.entities.User;
+import org.oleggalimov.dbmonitoring.back.entities.MonitoringSystemUser;
 import org.oleggalimov.dbmonitoring.back.enumerations.Messages;
 import org.oleggalimov.dbmonitoring.back.services.UserService;
 import org.oleggalimov.dbmonitoring.back.validators.UserValidator;
@@ -30,13 +30,13 @@ public class UpdateUser {
 
     @PutMapping(value = "update/user")
     @LogHttpEvent(eventType = RequestMethod.PUT, message = "update/user")
-    public String updateUser(@RequestBody User user) throws JsonProcessingException {
+    public String updateUser(@RequestBody MonitoringSystemUser monitoringSystemUser) throws JsonProcessingException {
         try {
-            List<Error> validationErrors = UserValidator.validate(user);
+            List<Error> validationErrors = UserValidator.validate(monitoringSystemUser);
             if (validationErrors.size() > 0) {
                 return responseBuilder.buildRestResponse(false, null, validationErrors, null);
             }
-            boolean update = userService.updateUser(user);
+            boolean update = userService.updateUser(monitoringSystemUser);
             if (update) {
                 return responseBuilder.buildRestResponse(true, null, null, Collections.singletonList(Messages.USER_UPDATED.getMessageObject()));
             } else {

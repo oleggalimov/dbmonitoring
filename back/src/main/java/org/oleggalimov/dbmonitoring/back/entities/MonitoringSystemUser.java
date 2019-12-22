@@ -10,7 +10,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import java.util.Set;
 
 @Document(collection = "Users")
-public class User {
+public class MonitoringSystemUser {
     @Id
     private String id;
     private String login;
@@ -23,10 +23,10 @@ public class User {
     private String password;
     private UserStatus status;
 
-    public User() {
+    public MonitoringSystemUser() {
     }
 
-    public User(String login, String eMail, Set<Role> roles, String firstName, String lastName, String personNumber, String password, UserStatus status) {
+    public MonitoringSystemUser(String login, String eMail, Set<Role> roles, String firstName, String lastName, String personNumber, String password, UserStatus status) {
         this.login = login;
         this.eMail = eMail;
         this.roles = roles;

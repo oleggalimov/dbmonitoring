@@ -16,11 +16,9 @@ import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.mockito.Spy;
 import org.oleggalimov.dbmonitoring.back.builders.ResponseBuilder;
-import org.oleggalimov.dbmonitoring.back.endpoints.user.CreateUser;
-import org.oleggalimov.dbmonitoring.back.entities.User;
-import org.oleggalimov.dbmonitoring.back.enumerations.UserStatus;
+import org.oleggalimov.dbmonitoring.back.endpoints.user.DeleteUser;
+import org.oleggalimov.dbmonitoring.back.entities.MonitoringSystemUser;
 import org.oleggalimov.dbmonitoring.back.services.UserService;
-import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.util.ResourceUtils;
@@ -28,15 +26,14 @@ import org.springframework.util.ResourceUtils;
 import java.io.File;
 import java.io.IOException;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-class CreateUserControllersTest {
+class DeleteMonitoringSystemUserControllersTest {
     private MockMvc mockMvc;
     private JsonNode responseSchema;
     private static ObjectMapper mapper = new ObjectMapper();
-    private static User user;
 
     @Spy
     ResponseBuilder builder = new ResponseBuilder(mapper);
@@ -45,37 +42,31 @@ class CreateUserControllersTest {
     UserService userService;
 
     @InjectMocks
-    private CreateUser createUser;
+    private DeleteUser deleteUser;
 
 
     @BeforeEach
     private void setUp() throws IOException {
         MockitoAnnotations.initMocks(this);
-        mockMvc = MockMvcBuilders.standaloneSetup(createUser).build();
+        mockMvc = MockMvcBuilders.standaloneSetup(deleteUser).build();
         File file = ResourceUtils.getFile(this.getClass().getResource("/Response.json"));
         responseSchema = mapper.readTree(file);
-        user = new User("login", "e@mail.ru", null, "firstname", "lastName", "personNumber", "password", UserStatus.ACTIVE);
-
     }
 
-    @Tag("create/user")
+    @Tag("delete/user/{login}")
     @Test
-    void createUserTest() throws Exception {
-        String body = "{\"login\":\"login\",\"roles\":null,\"firstName\":\"firstname\",\"lastName\":\"lastName\",\"personNumber\":\"personNumber\",\"password\":\"q12345678\",\"status\":\"ACTIVE\",\"email\":\"qq@qq.ru\"}";
-        Mockito.when(userService.saveUser(Mockito.any(User.class))).thenReturn(user);
+    void deleteUserTest() throws Exception {
+        Mockito.when(userService.findUserByLogin(Mockito.anyString())).thenReturn(new MonitoringSystemUser());
         String result = mockMvc.
-                perform(post("/create/user")
-                        .contentType(MediaType.APPLICATION_JSON_UTF8)
-                        .content(body)
-                )
+                perform(delete("/delete/user/123"))
                 .andExpect(status().isOk())
                 .andExpect(status().is2xxSuccessful())
                 .andExpect(jsonPath("$.success").value("true"))
                 .andExpect(jsonPath("$.body").isEmpty())
                 .andExpect(jsonPath("$.errors").isEmpty())
-                .andExpect(jsonPath("$.messages[0].code").value("U_I_01"))
-                .andExpect(jsonPath("$.messages[0].title").value("Success user operation: create"))
-                .andExpect(jsonPath("$.messages[0].message").value("User was successfully added"))
+                .andExpect(jsonPath("$.messages[0].code").value("U_I_03"))
+                .andExpect(jsonPath("$.messages[0].title").value("Success user operation: delete"))
+                .andExpect(jsonPath("$.messages[0].message").value("User was successfully deleted"))
                 .andExpect(jsonPath("$.messages[0].type").value("INFO"))
                 .andReturn()
                 .getResponse()
@@ -85,24 +76,20 @@ class CreateUserControllersTest {
         System.out.println(result);
     }
 
-    @Tag("create/user")
+    @Tag("delete/user/{login}")
     @Test
-    void createUserTestWithNotAddedResult() throws Exception {
-        String body = "{\"login\":\"login\",\"roles\":null,\"firstName\":\"firstname\",\"lastName\":\"lastName\",\"personNumber\":\"personNumber\",\"password\":\"q12345678\",\"status\":\"ACTIVE\",\"email\":\"qq@qq.ru\"}";
-        Mockito.when(userService.saveUser(Mockito.any(User.class))).thenReturn(null);
+    void deleteUserTestWithNoSuchUser() throws Exception {
+        Mockito.when(userService.findUserByLogin(Mockito.anyString())).thenReturn(null);
         String result = mockMvc.
-                perform(post("/create/user")
-                        .contentType(MediaType.APPLICATION_JSON_UTF8)
-                        .content(body)
-                )
+                perform(delete("/delete/user/123"))
                 .andExpect(status().isOk())
                 .andExpect(status().is2xxSuccessful())
                 .andExpect(jsonPath("$.success").value("false"))
                 .andExpect(jsonPath("$.body").isEmpty())
                 .andExpect(jsonPath("$.errors").isEmpty())
-                .andExpect(jsonPath("$.messages[0].code").value("U_W_01"))
-                .andExpect(jsonPath("$.messages[0].title").value("Add user error"))
-                .andExpect(jsonPath("$.messages[0].message").value("User was not added"))
+                .andExpect(jsonPath("$.messages[0].code").value("U_W_02"))
+                .andExpect(jsonPath("$.messages[0].title").value("Read user error"))
+                .andExpect(jsonPath("$.messages[0].message").value("No user was found in database"))
                 .andExpect(jsonPath("$.messages[0].type").value("WARNING"))
                 .andReturn()
                 .getResponse()
@@ -112,27 +99,22 @@ class CreateUserControllersTest {
         System.out.println(result);
     }
 
-    @Tag("create/user")
+    @Tag("delete/user/{login}")
     @Test
-    void createUserTestWithBadUserInfo() throws Exception {
-        String body = "{\"login\":\"login\",\"roles\":null,\"firstName\":\"firstname\",\"lastName\":\"lastName\",\"personNumber\":\"personNumber\",\"password\":\"q\",\"status\":\"ACTIVE\",\"email\":\"\"}";
-        Mockito.when(userService.saveUser(Mockito.any(User.class))).thenReturn(null);
+    void deleteUserTestWithNotDeleted() throws Exception {
+        Mockito.when(userService.findUserByLogin(Mockito.anyString())).thenReturn(new MonitoringSystemUser());
+        Mockito.when(userService.deleteUser(Mockito.any(MonitoringSystemUser.class))).thenReturn(1L);
         String result = mockMvc.
-                perform(post("/create/user")
-                        .contentType(MediaType.APPLICATION_JSON_UTF8)
-                        .content(body)
-                )
+                perform(delete("/delete/user/123"))
                 .andExpect(status().isOk())
                 .andExpect(status().is2xxSuccessful())
                 .andExpect(jsonPath("$.success").value("false"))
                 .andExpect(jsonPath("$.body").isEmpty())
-                .andExpect(jsonPath("$.messages").isEmpty())
-                .andExpect(jsonPath("$.errors[0].code").value("U_04"))
-                .andExpect(jsonPath("$.errors[0].title").value("User info is invalid"))
-                .andExpect(jsonPath("$.errors[0].message").value("Password is too short"))
-                .andExpect(jsonPath("$.errors[1].code").value("U_05"))
-                .andExpect(jsonPath("$.errors[1].title").value("User info is invalid"))
-                .andExpect(jsonPath("$.errors[1].message").value("E-mail address is malformed"))
+                .andExpect(jsonPath("$.errors").isEmpty())
+                .andExpect(jsonPath("$.messages[0].code").value("U_W_03"))
+                .andExpect(jsonPath("$.messages[0].title").value("Delete user error"))
+                .andExpect(jsonPath("$.messages[0].message").value("User was not deleted"))
+                .andExpect(jsonPath("$.messages[0].type").value("WARNING"))
                 .andReturn()
                 .getResponse()
                 .getContentAsString();

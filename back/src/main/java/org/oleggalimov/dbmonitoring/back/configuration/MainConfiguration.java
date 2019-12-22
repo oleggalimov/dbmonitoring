@@ -18,6 +18,7 @@ import javax.servlet.ServletRegistration;
 @EnableAspectJAutoProxy
 @EnableWebMvc
 @EnableMongoRepositories(value = {"org.oleggalimov.dbmonitoring.back.repositories"})
+
 public class MainConfiguration implements WebApplicationInitializer {
 
     @Override

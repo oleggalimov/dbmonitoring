@@ -1,6 +1,6 @@
 package org.oleggalimov.dbmonitoring.back.services;
 
-import org.oleggalimov.dbmonitoring.back.entities.User;
+import org.oleggalimov.dbmonitoring.back.entities.MonitoringSystemUser;
 import org.oleggalimov.dbmonitoring.back.repositories.IUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -9,54 +9,54 @@ import java.util.List;
 
 @Service
 public class UserService {
-    private IUserRepository<User> userRepository;
+    private IUserRepository<MonitoringSystemUser> userRepository;
 
     @Autowired
-    public UserService(IUserRepository<User> userRepository) {
+    public UserService(IUserRepository<MonitoringSystemUser> userRepository) {
         this.userRepository = userRepository;
     }
 
-    public User findUserByLogin(String userLogin) {
+    public MonitoringSystemUser findUserByLogin(String userLogin) {
         return userRepository.findByLogin(userLogin);
     }
 
-    public User findUserById(String id) {
+    public MonitoringSystemUser findUserById(String id) {
         return userRepository.findById(id).orElse(null);
     }
 
-    public User findByEmail(String eMail) {
+    public MonitoringSystemUser findByEmail(String eMail) {
         return userRepository.findByEmail(eMail);
     }
 
-    public List<User> findAll() {
+    public List<MonitoringSystemUser> findAll() {
         return userRepository.findAll();
     }
 
-    public User saveUser(User user) throws Exception {
-        if (userRepository.findByEmail(user.getEMail()) != null) {
+    public MonitoringSystemUser saveUser(MonitoringSystemUser monitoringSystemUser) throws Exception {
+        if (userRepository.findByEmail(monitoringSystemUser.getEMail()) != null) {
             throw new Exception("User with such e-mail already exists");
-        } else if (userRepository.findByLogin(user.getLogin()) != null) {
+        } else if (userRepository.findByLogin(monitoringSystemUser.getLogin()) != null) {
             throw new Exception("User with such login already exists");
         } else {
-            return userRepository.save(user);
+            return userRepository.save(monitoringSystemUser);
         }
 
     }
 
-    public long deleteUser(User user) {
-        userRepository.delete(user);
-        return userRepository.countByLogin(user.getLogin());
+    public long deleteUser(MonitoringSystemUser monitoringSystemUser) {
+        userRepository.delete(monitoringSystemUser);
+        return userRepository.countByLogin(monitoringSystemUser.getLogin());
     }
 
-    public boolean updateUser(User user) {
-        User oldUser;
-        oldUser = userRepository.findByEmail(user.getEMail());
-        if (oldUser == null) {
-            oldUser = userRepository.findByLogin(user.getLogin());
+    public boolean updateUser(MonitoringSystemUser monitoringSystemUser) {
+        MonitoringSystemUser oldMonitoringSystemUser;
+        oldMonitoringSystemUser = userRepository.findByEmail(monitoringSystemUser.getEMail());
+        if (oldMonitoringSystemUser == null) {
+            oldMonitoringSystemUser = userRepository.findByLogin(monitoringSystemUser.getLogin());
         }
-        if (oldUser != null) {
-            userRepository.delete(oldUser);
-            userRepository.save(user);
+        if (oldMonitoringSystemUser != null) {
+            userRepository.delete(oldMonitoringSystemUser);
+            userRepository.save(monitoringSystemUser);
             return true;
         }
         return false;

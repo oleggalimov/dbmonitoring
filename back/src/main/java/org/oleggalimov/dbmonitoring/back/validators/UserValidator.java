@@ -1,7 +1,7 @@
 package org.oleggalimov.dbmonitoring.back.validators;
 
 import org.oleggalimov.dbmonitoring.back.dto.Error;
-import org.oleggalimov.dbmonitoring.back.entities.User;
+import org.oleggalimov.dbmonitoring.back.entities.MonitoringSystemUser;
 import org.oleggalimov.dbmonitoring.back.enumerations.Errors;
 
 import java.util.ArrayList;
@@ -9,14 +9,14 @@ import java.util.Collections;
 import java.util.List;
 
 public class UserValidator {
-    public static List<Error> validate(User user) {
+    public static List<Error> validate(MonitoringSystemUser monitoringSystemUser) {
         List<Error> errors = new ArrayList<>();
-        if (user == null) {
+        if (monitoringSystemUser == null) {
             return Collections.singletonList(Errors.USER_VALIDATION_EMPTY_USER.getError());
         }
-        String login = user.getLogin();
-        String password = user.getPassword();
-        String email = user.getEMail();
+        String login = monitoringSystemUser.getLogin();
+        String password = monitoringSystemUser.getPassword();
+        String email = monitoringSystemUser.getEMail();
 
         if (login == null || StringValidator.isEmpty(login)) {
             errors.add(Errors.USER_VALIDATION_EMPTY_LOGIN.getError());

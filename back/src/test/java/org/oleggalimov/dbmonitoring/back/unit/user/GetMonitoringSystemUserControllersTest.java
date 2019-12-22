@@ -17,7 +17,7 @@ import org.mockito.MockitoAnnotations;
 import org.mockito.Spy;
 import org.oleggalimov.dbmonitoring.back.builders.ResponseBuilder;
 import org.oleggalimov.dbmonitoring.back.endpoints.user.GetUser;
-import org.oleggalimov.dbmonitoring.back.entities.User;
+import org.oleggalimov.dbmonitoring.back.entities.MonitoringSystemUser;
 import org.oleggalimov.dbmonitoring.back.enumerations.Role;
 import org.oleggalimov.dbmonitoring.back.enumerations.UserStatus;
 import org.oleggalimov.dbmonitoring.back.services.UserService;
@@ -34,11 +34,11 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-class GetUserControllersTest {
+class GetMonitoringSystemUserControllersTest {
     private MockMvc mockMvc;
     private JsonNode responseSchema;
     private static ObjectMapper mapper = new ObjectMapper();
-    private static User user;
+    private static MonitoringSystemUser monitoringSystemUser;
 
     @Spy
     ResponseBuilder builder = new ResponseBuilder(mapper);
@@ -57,13 +57,13 @@ class GetUserControllersTest {
         File file = ResourceUtils.getFile(this.getClass().getResource("/Response.json"));
         responseSchema = mapper.readTree(file);
         Set<Role> roles = EnumSet.allOf(Role.class);
-        user = new User("login", "e@mail.ru", roles, "first_name", "lastName", "personNumber", "password", UserStatus.ACTIVE);
+        monitoringSystemUser = new MonitoringSystemUser("login", "e@mail.ru", roles, "first_name", "lastName", "personNumber", "password", UserStatus.ACTIVE);
     }
 
     @Tag("list/user/{login}")
     @Test
     void getUserTest() throws Exception {
-        Mockito.when(userService.findUserByLogin(Mockito.anyString())).thenReturn(user);
+        Mockito.when(userService.findUserByLogin(Mockito.anyString())).thenReturn(monitoringSystemUser);
         String result = mockMvc.
                 perform(get("/list/user/login"))
                 .andExpect(status().isOk())

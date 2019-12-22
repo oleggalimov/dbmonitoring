@@ -17,7 +17,7 @@ import org.mockito.MockitoAnnotations;
 import org.mockito.Spy;
 import org.oleggalimov.dbmonitoring.back.builders.ResponseBuilder;
 import org.oleggalimov.dbmonitoring.back.endpoints.user.UpdateUser;
-import org.oleggalimov.dbmonitoring.back.entities.User;
+import org.oleggalimov.dbmonitoring.back.entities.MonitoringSystemUser;
 import org.oleggalimov.dbmonitoring.back.enumerations.UserStatus;
 import org.oleggalimov.dbmonitoring.back.services.UserService;
 import org.springframework.http.MediaType;
@@ -32,11 +32,11 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-class UpdateUserControllersTest {
+class UpdateMonitoringSystemUserControllersTest {
     private MockMvc mockMvc;
     private JsonNode responseSchema;
     private static ObjectMapper mapper = new ObjectMapper();
-    private static User user;
+    private static MonitoringSystemUser monitoringSystemUser;
 
     @Spy
     ResponseBuilder builder = new ResponseBuilder(mapper);
@@ -54,14 +54,14 @@ class UpdateUserControllersTest {
         mockMvc = MockMvcBuilders.standaloneSetup(updateUser).build();
         File file = ResourceUtils.getFile(this.getClass().getResource("/Response.json"));
         responseSchema = mapper.readTree(file);
-        user = new User("login", "e@mail.ru", null, "firstname", "lastName", "personNumber", "password", UserStatus.ACTIVE);
+        monitoringSystemUser = new MonitoringSystemUser("login", "e@mail.ru", null, "firstname", "lastName", "personNumber", "password", UserStatus.ACTIVE);
     }
 
     @Tag("update/user")
     @Test
     void updateUserTest() throws Exception {
         String body = "{\"login\":\"login\",\"roles\":null,\"firstName\":\"firstname\",\"lastName\":\"lastName\",\"personNumber\":\"personNumber\",\"password\":\"q12345678\",\"status\":\"ACTIVE\",\"email\":\"qq@qq.ru\"}";
-        Mockito.when(userService.updateUser(Mockito.any(User.class))).thenReturn(true);
+        Mockito.when(userService.updateUser(Mockito.any(MonitoringSystemUser.class))).thenReturn(true);
         String result = mockMvc.
                 perform(put("/update/user")
                         .contentType(MediaType.APPLICATION_JSON_UTF8)
@@ -88,7 +88,7 @@ class UpdateUserControllersTest {
     @Test
     void updateUserTestWithNotUpdatedResult() throws Exception {
         String body = "{\"login\":\"login\",\"roles\":null,\"firstName\":\"firstname\",\"lastName\":\"lastName\",\"personNumber\":\"personNumber\",\"password\":\"q12345678\",\"status\":\"ACTIVE\",\"email\":\"qq@qq.ru\"}";
-        Mockito.when(userService.updateUser(Mockito.any(User.class))).thenReturn(false);
+        Mockito.when(userService.updateUser(Mockito.any(MonitoringSystemUser.class))).thenReturn(false);
         String result = mockMvc.
                 perform(put("/update/user")
                         .contentType(MediaType.APPLICATION_JSON_UTF8)
@@ -115,7 +115,7 @@ class UpdateUserControllersTest {
     @Test
     void updateUserTestWithBadUser() throws Exception {
         String body = "{\"login\":\"login\",\"roles\":null,\"firstName\":\"firstname\",\"lastName\":\"lastName\",\"personNumber\":\"personNumber\",\"password\":\"q678\",\"status\":\"ACTIVE\",\"email\":\"\"}";
-        Mockito.when(userService.updateUser(Mockito.any(User.class))).thenReturn(false);
+        Mockito.when(userService.updateUser(Mockito.any(MonitoringSystemUser.class))).thenReturn(false);
         String result = mockMvc.
                 perform(put("/update/user")
                         .contentType(MediaType.APPLICATION_JSON_UTF8)

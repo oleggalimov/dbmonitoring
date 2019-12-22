@@ -3,7 +3,7 @@ package org.oleggalimov.dbmonitoring.back.endpoints.user;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import org.oleggalimov.dbmonitoring.back.annotations.LogHttpEvent;
 import org.oleggalimov.dbmonitoring.back.builders.ResponseBuilder;
-import org.oleggalimov.dbmonitoring.back.entities.User;
+import org.oleggalimov.dbmonitoring.back.entities.MonitoringSystemUser;
 import org.oleggalimov.dbmonitoring.back.enumerations.Messages;
 import org.oleggalimov.dbmonitoring.back.services.UserService;
 import org.oleggalimov.dbmonitoring.back.validators.StringValidator;
@@ -33,11 +33,11 @@ public class DeleteUser {
             if (StringValidator.isEmpty(login)) {
                 throw new Exception("Login is empty.");
             }
-            User user = userService.findUserByLogin(login);
-            if (user == null) {
+            MonitoringSystemUser monitoringSystemUser = userService.findUserByLogin(login);
+            if (monitoringSystemUser == null) {
                 return responseBuilder.buildRestResponse(false, null, null, Collections.singletonList(Messages.USER_IS_ABSENT.getMessageObject()));
             } else {
-                long deleted = userService.deleteUser(user);
+                long deleted = userService.deleteUser(monitoringSystemUser);
                 if (deleted == 0) {
                     return responseBuilder.buildRestResponse(true, null, null, Collections.singletonList(Messages.USER_DELETED.getMessageObject()));
                 } else {
