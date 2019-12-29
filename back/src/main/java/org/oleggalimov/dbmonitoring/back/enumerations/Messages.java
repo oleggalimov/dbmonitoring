@@ -11,6 +11,7 @@ public enum Messages {
     DB_INSTANCE_IS_NOT_DELETED(new Message("DBI_W_02", "Delete instance error", "Instance was not deleted", MessageType.WARNING)),
     DB_INSTANCE_IS_NOT_ADDED(new Message("DBI_W_03", "Add instance error", "Instance was not added", MessageType.WARNING)),
     DB_INSTANCE_IS_NOT_UPDATED(new Message("DBI_W_04", "Update instance error", "Instance was not updated", MessageType.WARNING)),
+    DB_INSTANCE_IS_ALREADY_EXIST(new Message("DBI_W_05", "Add instance error", "Instance with such id already exists", MessageType.WARNING)),
 
     USER_CREATED(new Message("U_I_01", "Success user operation: create", "User was successfully added", MessageType.INFO)),
     USER_UPDATED(new Message("U_I_02", "Success user operation: update", "User was successfully updated", MessageType.INFO)),

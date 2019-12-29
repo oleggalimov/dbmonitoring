@@ -37,6 +37,11 @@ public class CreateInstance {
             if (validationErrors.size() > 0) {
                 return responseBuilder.buildRestResponse(false, null, validationErrors, null);
             }
+            DataBaseInstance existedInstance = null;
+            boolean idAlreadyExists = instanceSet.stream().anyMatch(item -> item.getId().equalsIgnoreCase(instance.getId()));
+            if (idAlreadyExists) {
+                return responseBuilder.buildRestResponse(false, null, null, Collections.singletonList(Messages.DB_INSTANCE_IS_ALREADY_EXIST.getMessageObject()));
+            }
             boolean added = instanceSet.add(instance);
             if (!added) {
                 return responseBuilder.buildRestResponse(false, null, null, Collections.singletonList(Messages.DB_INSTANCE_IS_NOT_ADDED.getMessageObject()));
