@@ -87,6 +87,8 @@
             <scope>test</scope>
         </dependency>
 
+        <!--Jdbc-->
+
         <!--    tests-->
         <dependency>
             <groupId>javax.servlet</groupId>

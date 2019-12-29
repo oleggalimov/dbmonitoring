@@ -86,7 +86,6 @@ public class DataBaseInstance {
 
     }
 
-
     public boolean deepEquals(DataBaseInstance otherInstance) {
         if (!this.id.equals(otherInstance.getId())) {
             return false;
@@ -99,5 +98,16 @@ public class DataBaseInstance {
         } else if (this.type != otherInstance.type) {
             return false;
         } else return this.user.equals(otherInstance.getUser());
+    }
+
+    @Override
+    public String toString() {
+        return "DataBaseInstance{" +
+                "id='" + id + '\'' +
+                ", host='" + host + '\'' +
+                ", port=" + port +
+                ", sid='" + sid + '\'' +
+                ", type=" + type +
+                '}';
     }
 }
