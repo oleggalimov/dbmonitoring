@@ -4,6 +4,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
+import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.web.WebApplicationInitializer;
 import org.springframework.web.context.ContextLoaderListener;
 import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
@@ -18,7 +19,7 @@ import javax.servlet.ServletRegistration;
 @EnableAspectJAutoProxy
 @EnableWebMvc
 @EnableMongoRepositories(value = {"org.oleggalimov.dbmonitoring.back.repositories"})
-
+@EnableScheduling
 public class MainConfiguration implements WebApplicationInitializer {
 
     @Override

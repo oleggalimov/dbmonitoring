@@ -20,7 +20,7 @@ import org.springframework.jndi.JndiTemplate;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import javax.naming.NamingException;
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.List;
@@ -31,43 +31,21 @@ import java.util.concurrent.CopyOnWriteArraySet;
 public class Beans {
     private Logger LOGGER = LoggerFactory.getLogger(Beans.class);
 
-    @Bean
-    public Map<String, String> getJNDIValues() {
-        List<String> jndiKeys = Arrays.asList(
-                "java:/dbmonitoring/dropuserdb"
-        );
-        Map<String, String> result = new HashMap<>();
-        JndiTemplate jndi = new JndiTemplate();
-        jndiKeys.forEach(key -> {
-            try {
-                result.put(key, (String) jndi.lookup(key));
-            } catch (NamingException e) {
-                LOGGER.debug("Не удалось найти значение JNDI: {}", key);
-                e.printStackTrace();
-            }
-        });
-        return result;
-    }
-
-
-    @Bean
-    public MonitoringSystemUser getDefaultSystemUser(@Autowired BCryptPasswordEncoder passwordEncoder) {
-        String password = passwordEncoder.encode("passw0rd");
-        return new MonitoringSystemUser(
-                "Admin", "noreply@domain.com", EnumSet.allOf(Role.class), "John", "Doe", "987", password, UserStatus.ACTIVE
-        );
-    }
-
-
+    //DB instances
     @Bean
     public CopyOnWriteArraySet<DataBaseInstance> instanceHashSet() {
         CopyOnWriteArraySet<DataBaseInstance> instances = new CopyOnWriteArraySet<>();
         instances.add(new DataBaseInstance("test", "host", 1520, "sid", new DataBaseUser("login", "password"), DatabaseInstanceType.ORACLE));
         return instances;
     }
+
+    //User repository (Mongo)
     @Bean
-    public ResponseBuilder getResponseBuilder() {
-        return new ResponseBuilder(new ObjectMapper());
+    public MonitoringSystemUser getDefaultSystemUser(@Autowired BCryptPasswordEncoder passwordEncoder) {
+        String password = passwordEncoder.encode("passw0rd");
+        return new MonitoringSystemUser(
+                "Admin", "noreply@domain.com", EnumSet.allOf(Role.class), "John", "Doe", "987", password, UserStatus.ACTIVE
+        );
     }
 
     @Bean
@@ -96,5 +74,39 @@ public class Beans {
     public BCryptPasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
+
+    //jndi
+    @Bean
+    public Map<String, String> getJNDIValues(@Autowired List<String> keys) {
+        Map<String, String> result = new HashMap<>();
+        if (keys.isEmpty()) {
+            LOGGER.debug("Список ключей пуст");
+            return result;
+        }
+        JndiTemplate jndi = new JndiTemplate();
+        keys.forEach(key -> {
+            try {
+                result.put(key, (String) jndi.lookup(key));
+            } catch (NamingException e) {
+                LOGGER.debug("Не удалось найти значение JNDI: {}", key);
+                e.printStackTrace();
+            }
+        });
+        return result;
+    }
+
+    @Bean
+    public List<String> getJNDIKeys() {
+        return Collections.singletonList(
+                "java:/dbmonitoring/dropuserdb"
+        );
+    }
+
+    //response utils
+    @Bean
+    public ResponseBuilder getResponseBuilder() {
+        return new ResponseBuilder(new ObjectMapper());
+    }
+
 
 }
