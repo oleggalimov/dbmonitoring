@@ -1,9 +1,9 @@
-package org.oleggalimov.dbmonitoring.back.integration.endpoints;
+package org.oleggalimov.dbmonitoring.back.tests.integration.endpoints;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
-import org.oleggalimov.dbmonitoring.back.configuration.MainConfiguration;
+import org.oleggalimov.dbmonitoring.back.tests.TestContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.junit.jupiter.web.SpringJUnitWebConfig;
 import org.springframework.test.web.servlet.MockMvc;
@@ -14,7 +14,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@SpringJUnitWebConfig(classes = MainConfiguration.class)
+@SpringJUnitWebConfig(classes = TestContext.class)
 // обертка для @WebAppConfiguration @ExtendWith(SpringExtension.class)
 class CheckStatusControllerTest {
     private MockMvc mockMvc;

@@ -31,8 +31,7 @@ public class ListInstances {
             RestResponseBody body = new RestResponseBody();
             body.setItem(BodyItemKey.INSTANCES.toString(), instanceSet);
             return responseBuilder.buildRestResponse(true, body, null, null);
-        } catch (
-                Exception ex) {
+        } catch (Exception ex) {
             ex.printStackTrace();
             return responseBuilder.buildExceptionResponse(ex);
         }

@@ -1,4 +1,4 @@
-package org.oleggalimov.dbmonitoring.back.integration.endpoints.instance;
+package org.oleggalimov.dbmonitoring.back.tests.integration.endpoints.instance;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -10,7 +10,6 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
-import org.oleggalimov.dbmonitoring.back.configuration.MainConfiguration;
 import org.oleggalimov.dbmonitoring.back.dto.DataBaseInstance;
 import org.oleggalimov.dbmonitoring.back.dto.DataBaseUser;
 import org.oleggalimov.dbmonitoring.back.dto.Error;
@@ -18,6 +17,7 @@ import org.oleggalimov.dbmonitoring.back.dto.Message;
 import org.oleggalimov.dbmonitoring.back.dto.RestResponse;
 import org.oleggalimov.dbmonitoring.back.enumerations.DatabaseInstanceType;
 import org.oleggalimov.dbmonitoring.back.enumerations.MessageType;
+import org.oleggalimov.dbmonitoring.back.tests.TestContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.junit.jupiter.web.SpringJUnitWebConfig;
 import org.springframework.test.web.servlet.MockMvc;
@@ -36,7 +36,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@SpringJUnitWebConfig(classes = MainConfiguration.class)
+@SpringJUnitWebConfig(classes = TestContext.class)
 // обертка для @WebAppConfiguration @ExtendWith(SpringExtension.class)
 class GetInstanceControllersTest {
     private static MockMvc mockMvc;
@@ -138,7 +138,7 @@ class GetInstanceControllersTest {
         assertEquals("DBI_W_01", message.getCode());
         assertEquals("Read instance error", message.getTitle());
         assertEquals("No instance was found in list", message.getMessage());
-        assertEquals(MessageType.WARNING, message.getType());
+        Assertions.assertEquals(MessageType.WARNING, message.getType());
     }
 
     private void validateJsonFromString(JsonNode json) throws ProcessingException {

@@ -1,4 +1,4 @@
-package org.oleggalimov.dbmonitoring.back.unit;
+package org.oleggalimov.dbmonitoring.back.tests.unit;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -93,7 +93,7 @@ class RestControllersErrorsTest {
             ResponseBuilder builder = new ResponseBuilder(new ObjectMapper());
 
     private Throwable exception;
-    private static String body = "{\"id\":\"test_id\",\"host\":\"test_host\",\"port\":1251,\"sid\":\"sid\",\"user\":{\"login\":\"login\", \"password\":\"password\"}, \"type\":\"ORACLE\"}";
+    private static String body = "{\"id\":\"test_id\",\"host\":\"test_host\",\"port\":1251,\"sid\":\"sid\",\"database\":\"databaseTest\",\"user\":{\"login\":\"login\", \"password\":\"password\"}, \"type\":\"ORACLE\"}";
 
     @BeforeEach
     void init() throws IOException {
@@ -116,6 +116,7 @@ class RestControllersErrorsTest {
     @Test
     void listErrorTest() throws Exception {
         Mockito.when(instanceSet.add(Mockito.any(DataBaseInstance.class))).thenThrow(exception);
+        DataBaseInstance dataBaseInstance = mapper.readValue(body, DataBaseInstance.class);
         String response = this.mockMvc
                 .perform(post("/create/instance")
                         .contentType(MediaType.APPLICATION_JSON_UTF8)

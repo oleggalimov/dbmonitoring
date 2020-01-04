@@ -1,4 +1,4 @@
-package org.oleggalimov.dbmonitoring.back.unit.validators;
+package org.oleggalimov.dbmonitoring.back.tests.unit.validators;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Assertions;

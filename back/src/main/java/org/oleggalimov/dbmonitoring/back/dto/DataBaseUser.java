@@ -30,4 +30,5 @@ public class DataBaseUser {
     public String getPassword() {
         return password;
     }
+
 }

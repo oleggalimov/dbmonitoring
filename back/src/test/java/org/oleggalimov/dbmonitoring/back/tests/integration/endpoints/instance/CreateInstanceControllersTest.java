@@ -1,4 +1,4 @@
-package org.oleggalimov.dbmonitoring.back.integration.endpoints.instance;
+package org.oleggalimov.dbmonitoring.back.tests.integration.endpoints.instance;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
-import org.oleggalimov.dbmonitoring.back.configuration.MainConfiguration;
+import org.oleggalimov.dbmonitoring.back.tests.TestContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit.jupiter.web.SpringJUnitWebConfig;
@@ -27,7 +27,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@SpringJUnitWebConfig(classes = MainConfiguration.class)
+@SpringJUnitWebConfig(classes = TestContext.class)
 // обертка для @WebAppConfiguration @ExtendWith(SpringExtension.class)
 
 class CreateInstanceControllersTest {
@@ -36,8 +36,10 @@ class CreateInstanceControllersTest {
     private static JsonNode responseSchema;
     private static boolean isContextInit = false;
 
+
     @Autowired
     private WebApplicationContext wac;
+
 
     @BeforeEach
     void setup() throws Exception {

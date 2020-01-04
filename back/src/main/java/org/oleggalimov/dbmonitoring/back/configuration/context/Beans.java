@@ -3,6 +3,8 @@ package org.oleggalimov.dbmonitoring.back.configuration.context;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
+import org.influxdb.InfluxDB;
+import org.influxdb.InfluxDBFactory;
 import org.oleggalimov.dbmonitoring.back.builders.ResponseBuilder;
 import org.oleggalimov.dbmonitoring.back.dto.DataBaseInstance;
 import org.oleggalimov.dbmonitoring.back.dto.DataBaseUser;
@@ -13,8 +15,11 @@ import org.oleggalimov.dbmonitoring.back.enumerations.UserStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.context.annotation.PropertySources;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.jndi.JndiTemplate;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -26,8 +31,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CopyOnWriteArraySet;
+import java.util.concurrent.TimeUnit;
 
 @Configuration
+@PropertySources({
+        @PropertySource("classpath:influx.properties")
+})
 public class Beans {
     private Logger LOGGER = LoggerFactory.getLogger(Beans.class);
 
@@ -35,7 +44,9 @@ public class Beans {
     @Bean
     public CopyOnWriteArraySet<DataBaseInstance> instanceHashSet() {
         CopyOnWriteArraySet<DataBaseInstance> instances = new CopyOnWriteArraySet<>();
-        instances.add(new DataBaseInstance("test", "host", 1520, "sid", new DataBaseUser("login", "password"), DatabaseInstanceType.ORACLE));
+        instances.add(
+                new DataBaseInstance("test", "host", 1520, "sid", "testDataBase",
+                        new DataBaseUser("login", "password"), DatabaseInstanceType.ORACLE));
         return instances;
     }
 
@@ -108,5 +119,19 @@ public class Beans {
         return new ResponseBuilder(new ObjectMapper());
     }
 
+    //influxDB
+
+    @Bean
+    InfluxDB getInfluxDBInstance(
+            @Value("${connection.url}") String connectURl,
+            @Value("${connection.username}") String user,
+            @Value("${connection.password}") String pass,
+            @Value("${batching.byCount}") int batchByCount,
+            @Value("${batching.byTimeInMs}") int batchByTime
+    ) {
+        InfluxDB influxBean = InfluxDBFactory.connect(connectURl, user, pass);
+        influxBean.enableBatch(batchByCount, batchByTime, TimeUnit.MILLISECONDS);
+        return influxBean;
+    }
 
 }

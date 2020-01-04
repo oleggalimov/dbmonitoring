@@ -1,4 +1,4 @@
-package org.oleggalimov.dbmonitoring.back.integration.endpoints.instance;
+package org.oleggalimov.dbmonitoring.back.tests.integration.endpoints.instance;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -10,9 +10,10 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
-import org.oleggalimov.dbmonitoring.back.configuration.MainConfiguration;
+import org.oleggalimov.dbmonitoring.back.dto.DataBaseInstance;
+import org.oleggalimov.dbmonitoring.back.tests.TestContext;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.http.MediaType;
 import org.springframework.test.context.junit.jupiter.web.SpringJUnitWebConfig;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -23,14 +24,14 @@ import java.io.File;
 import java.util.concurrent.CopyOnWriteArraySet;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@SpringJUnitWebConfig(classes = MainConfiguration.class)
+@SpringJUnitWebConfig(classes = TestContext.class)
 // обертка для @WebAppConfiguration @ExtendWith(SpringExtension.class)
-@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
-class DeleteInstanceControllersTest {
+
+class UpdateInstanceControllersTest {
     private static MockMvc mockMvc;
     private static ObjectMapper mapper;
     private static JsonNode responseSchema;
@@ -50,20 +51,22 @@ class DeleteInstanceControllersTest {
         }
     }
 
-    @Tag("/delete/instance/{id}")
+    @Tag("/update/instance")
     @Test
-    void deleteInstance() throws Exception {
-
+    void updateInstance() throws Exception {
+        String body = "{\"id\":\"test\",\"host\":\"1520\",\"port\":1251,\"sid\":\"sid\",\"user\":{\"login\":\"login\", \"password\":\"newPassword\"}, \"type\":\"ORACLE\"}";
         String response = mockMvc
                 .perform(
-                        delete("/delete/instance/test"))
+                        put("/update/instance")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(body))
                 .andExpect(status().is2xxSuccessful())
                 .andExpect(jsonPath("$.success").value("true"))
                 .andExpect(jsonPath("$.body").isEmpty())
                 .andExpect(jsonPath("$.errors").isEmpty())
-                .andExpect(jsonPath("$.messages[0].code").value("DBI_I_03"))
-                .andExpect(jsonPath("$.messages[0].title").value("Success instance operation: delete"))
-                .andExpect(jsonPath("$.messages[0].message").value("Instance was successfully deleted"))
+                .andExpect(jsonPath("$.messages[0].code").value("DBI_I_02"))
+                .andExpect(jsonPath("$.messages[0].title").value("Success instance operation: update"))
+                .andExpect(jsonPath("$.messages[0].message").value("Instance was successfully updated"))
                 .andExpect(jsonPath("$.messages[0].type").value("INFO"))
                 .andReturn()
                 .getResponse()
@@ -72,23 +75,28 @@ class DeleteInstanceControllersTest {
         validateJsonFromString(jsonNode);
         System.out.println(jsonNode);
         CopyOnWriteArraySet instanceHashSet = (CopyOnWriteArraySet) wac.getBean("instanceHashSet");
-        assertEquals(0, instanceHashSet.size());
+        instanceHashSet.forEach(instance -> {
+            DataBaseInstance dataBaseInstance = (DataBaseInstance) instance;
+            assertEquals("newPassword", dataBaseInstance.getUser().getPassword());
+        });
     }
 
-    @Tag("/delete/instance/{id}")
+    @Tag("/update/instance")
     @Test
-    void deleteInstanceWithBadId() throws Exception {
-
+    void updateInstanceWithBadData() throws Exception {
+        String body = "{\"id\":\"test\",\"host\":\"awe\",\"port\":123,\"sid\":\"sid\",\"user\":{\"login\":\"login\", \"password\":\"pass\"}, \"type\":\"ORACLE\"}";
         String response = mockMvc
                 .perform(
-                        delete("/delete/instance/   "))
+                        put("/update/instance")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(body))
                 .andExpect(status().is2xxSuccessful())
                 .andExpect(jsonPath("$.success").value("false"))
                 .andExpect(jsonPath("$.body").isEmpty())
                 .andExpect(jsonPath("$.messages").isEmpty())
-                .andExpect(jsonPath("$.errors[0].code").value("DBI_02"))
-                .andExpect(jsonPath("$.errors[0].title").value("Database instance info is invalid"))
-                .andExpect(jsonPath("$.errors[0].message").value("Id is empty"))
+                .andExpect(jsonPath("$.errors[0].code").value("DBU_04"))
+                .andExpect(jsonPath("$.errors[0].title").value("Database user info is invalid"))
+                .andExpect(jsonPath("$.errors[0].message").value("Password is too short"))
                 .andReturn()
                 .getResponse()
                 .getContentAsString();
@@ -96,23 +104,28 @@ class DeleteInstanceControllersTest {
         validateJsonFromString(jsonNode);
         System.out.println(jsonNode);
         CopyOnWriteArraySet instanceHashSet = (CopyOnWriteArraySet) wac.getBean("instanceHashSet");
-        assertEquals(1, instanceHashSet.size());
+        instanceHashSet.forEach(instance -> {
+            DataBaseInstance dataBaseInstance = (DataBaseInstance) instance;
+            assertEquals("password", dataBaseInstance.getUser().getPassword());
+        });
     }
 
-    @Tag("/delete/instance/{id}")
+    @Tag("/update/instance")
     @Test
-    void deleteInstanceWithNoSuchId() throws Exception {
-
+    void updateInstanceWithNoSuchInstance() throws Exception {
+        String body = "{\"id\":\" q\",\"host\":\"awe\",\"port\":123,\"sid\":\"sid\",\"user\":{\"login\":\"login\", \"password\":\"password\"}, \"type\":\"ORACLE\"}";
         String response = mockMvc
                 .perform(
-                        delete("/delete/instance/noSuchId"))
+                        put("/update/instance")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(body))
                 .andExpect(status().is2xxSuccessful())
                 .andExpect(jsonPath("$.success").value("false"))
                 .andExpect(jsonPath("$.body").isEmpty())
                 .andExpect(jsonPath("$.errors").isEmpty())
-                .andExpect(jsonPath("$.messages[0].code").value("DBI_W_02"))
-                .andExpect(jsonPath("$.messages[0].title").value("Delete instance error"))
-                .andExpect(jsonPath("$.messages[0].message").value("Instance was not deleted"))
+                .andExpect(jsonPath("$.messages[0].code").value("DBI_W_01"))
+                .andExpect(jsonPath("$.messages[0].title").value("Read instance error"))
+                .andExpect(jsonPath("$.messages[0].message").value("No instance was found in list"))
                 .andExpect(jsonPath("$.messages[0].type").value("WARNING"))
                 .andReturn()
                 .getResponse()
@@ -121,8 +134,12 @@ class DeleteInstanceControllersTest {
         validateJsonFromString(jsonNode);
         System.out.println(jsonNode);
         CopyOnWriteArraySet instanceHashSet = (CopyOnWriteArraySet) wac.getBean("instanceHashSet");
-        assertEquals(1, instanceHashSet.size());
+        instanceHashSet.forEach(instance -> {
+            DataBaseInstance dataBaseInstance = (DataBaseInstance) instance;
+            assertEquals("password", dataBaseInstance.getUser().getPassword());
+        });
     }
+
 
     private void validateJsonFromString(JsonNode json) throws ProcessingException {
         final JsonSchemaFactory factory = JsonSchemaFactory.byDefault();

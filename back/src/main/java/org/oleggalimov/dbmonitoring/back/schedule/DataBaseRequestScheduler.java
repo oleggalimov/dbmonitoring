@@ -1,9 +1,11 @@
 package org.oleggalimov.dbmonitoring.back.schedule;
 
+import org.influxdb.InfluxDB;
 import org.oleggalimov.dbmonitoring.back.dto.DataBaseInstance;
 import org.oleggalimov.dbmonitoring.back.schedule.tasks.DatabaseRequestTaskFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
@@ -23,9 +25,12 @@ import java.util.concurrent.TimeoutException;
 public class DataBaseRequestScheduler {
     private final CopyOnWriteArraySet<DataBaseInstance> instanceSet;
     private final Logger LOGGER = LoggerFactory.getLogger(DatabaseRequestTaskFactory.class);
+    private final InfluxDB influxDB;
 
-    public DataBaseRequestScheduler(CopyOnWriteArraySet<DataBaseInstance> instanceSet) {
+    @Autowired
+    public DataBaseRequestScheduler(CopyOnWriteArraySet<DataBaseInstance> instanceSet, InfluxDB influxDB) {
         this.instanceSet = instanceSet;
+        this.influxDB = influxDB;
     }
 
     @Scheduled(fixedRate = 60 * 1000L)
@@ -42,7 +47,9 @@ public class DataBaseRequestScheduler {
         LOGGER.debug("End creation futures at {}, total: {}", new Date(), futures.size());
 
         LOGGER.debug("Start processing data at {}", new Date());
-        futures.keySet().parallelStream()
+        futures
+                .keySet()
+                .parallelStream()
                 .map(key -> {
                     try {
                         return futures.get(key).get(50L, TimeUnit.SECONDS);
@@ -55,7 +62,6 @@ public class DataBaseRequestScheduler {
                 .filter(Objects::nonNull)
                 .forEach(System.out::println);
         LOGGER.debug("End processing data at {}", new Date());
-
         LOGGER.debug("End another task at {}", new Date());
 
     }

@@ -8,17 +8,19 @@ public class DataBaseInstance {
     private String host;
     private Integer port;
     private String sid;
+    private String database;
     private DataBaseUser user;
     private DatabaseInstanceType type;
 
     public DataBaseInstance() {
     }
 
-    public DataBaseInstance(String id, String host, Integer port, String sid, DataBaseUser user, DatabaseInstanceType type) {
+    public DataBaseInstance(String id, String host, Integer port, String sid, String database, DataBaseUser user, DatabaseInstanceType type) {
         this.id = id;
         this.host = host;
         this.port = port;
         this.sid = sid;
+        this.database = database;
         this.user = user;
         this.type = type;
     }
@@ -71,6 +73,14 @@ public class DataBaseInstance {
         this.type = type;
     }
 
+    public String getDatabase() {
+        return database;
+    }
+
+    public void setDatabase(String database) {
+        this.database = database;
+    }
+
     public boolean equals(Object obj) {
         if (obj == null) {
             return false;
@@ -89,13 +99,15 @@ public class DataBaseInstance {
     public boolean deepEquals(DataBaseInstance otherInstance) {
         if (!this.id.equals(otherInstance.getId())) {
             return false;
-        } else if (!this.host.equals(otherInstance.getHost())) {
+        } else if (!this.host.equalsIgnoreCase(otherInstance.getHost())) {
             return false;
         } else if (!this.port.equals(otherInstance.getPort())) {
             return false;
-        } else if (!this.sid.equals(otherInstance.getSid())) {
+        } else if (!this.sid.equalsIgnoreCase(otherInstance.getSid())) {
             return false;
         } else if (this.type != otherInstance.type) {
+            return false;
+        } else if (!this.database.equalsIgnoreCase(otherInstance.getDatabase())) {
             return false;
         } else return this.user.equals(otherInstance.getUser());
     }
@@ -107,6 +119,8 @@ public class DataBaseInstance {
                 ", host='" + host + '\'' +
                 ", port=" + port +
                 ", sid='" + sid + '\'' +
+                ", database='" + database + '\'' +
+                ", user=" + user +
                 ", type=" + type +
                 '}';
     }

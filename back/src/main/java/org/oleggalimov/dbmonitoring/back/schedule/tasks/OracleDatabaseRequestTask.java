@@ -1,6 +1,9 @@
 package org.oleggalimov.dbmonitoring.back.schedule.tasks;
 
+import org.influxdb.dto.Point;
 import org.oleggalimov.dbmonitoring.back.dto.DataBaseInstance;
+
+import java.util.Map;
 
 public class OracleDatabaseRequestTask extends AbstractDatabaseRequestTask {
 
@@ -9,7 +12,7 @@ public class OracleDatabaseRequestTask extends AbstractDatabaseRequestTask {
     }
 
     @Override
-    public String call() throws Exception {
-        return "Executing request to " + instance.getType() + " with params: " + this.instance.toString();
+    public Map<String, Point> call() throws Exception {
+        return null;
     }
 }
