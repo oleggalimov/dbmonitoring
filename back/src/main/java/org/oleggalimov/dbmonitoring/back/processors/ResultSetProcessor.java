@@ -1,11 +1,13 @@
 package org.oleggalimov.dbmonitoring.back.processors;
 
 import org.influxdb.dto.Point;
+import org.springframework.data.util.Pair;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
 import java.util.Map;
 
 public interface ResultSetProcessor {
-    Map<String, Point> transformResult(ResultSet resultSet, String dbName, String measurement) throws SQLException;
+    Pair<String, List<Point>> transformResult(ResultSet resultSet, String dbName, String measurement) throws SQLException;
 }

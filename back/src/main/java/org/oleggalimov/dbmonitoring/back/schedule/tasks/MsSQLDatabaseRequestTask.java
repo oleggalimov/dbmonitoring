@@ -2,7 +2,9 @@ package org.oleggalimov.dbmonitoring.back.schedule.tasks;
 
 import org.influxdb.dto.Point;
 import org.oleggalimov.dbmonitoring.back.dto.DataBaseInstance;
+import org.springframework.data.util.Pair;
 
+import java.util.List;
 import java.util.Map;
 
 public class MsSQLDatabaseRequestTask extends AbstractDatabaseRequestTask {
@@ -12,7 +14,7 @@ public class MsSQLDatabaseRequestTask extends AbstractDatabaseRequestTask {
     }
 
     @Override
-    public Map<String, Point> call() throws Exception {
+    public Pair<String, List<Point>> call() throws Exception {
         return null;
     }
 }

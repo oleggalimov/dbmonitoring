@@ -3,13 +3,13 @@ package org.oleggalimov.dbmonitoring.back.processors;
 import org.influxdb.dto.Point;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.util.Pair;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 public class PostgresResultSetProcessor implements ResultSetProcessor {
@@ -20,8 +20,8 @@ public class PostgresResultSetProcessor implements ResultSetProcessor {
             "blk_read_time", "blk_write_time");
 
     @Override
-    public Map<String, Point> transformResult(ResultSet resultSet, String dbName, String measurement) throws SQLException {
-        Map<String, Point> result = new HashMap<>();
+    public Pair<String, List<Point>> transformResult(ResultSet resultSet, String dbName, String measurement) throws SQLException {
+        List<Point> points = new ArrayList<>();
         while (resultSet.next()) {
             Point.Builder point = Point.measurement(measurement);
             point.time(System.currentTimeMillis(), TimeUnit.MILLISECONDS);
@@ -39,8 +39,8 @@ public class PostgresResultSetProcessor implements ResultSetProcessor {
                 }
 
             });
-            result.put(dbName, point.build());
+            points.add(point.build());
         }
-        return result;
+        return Pair.of(dbName, points);
     }
 }

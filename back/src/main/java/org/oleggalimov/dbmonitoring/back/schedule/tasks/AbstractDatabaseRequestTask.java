@@ -4,11 +4,13 @@ import org.influxdb.dto.Point;
 import org.oleggalimov.dbmonitoring.back.dto.DataBaseInstance;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.util.Pair;
 
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Callable;
 
-public abstract class AbstractDatabaseRequestTask implements Callable<Map<String, Point>> {
+public abstract class AbstractDatabaseRequestTask implements Callable<Pair<String, List<Point>>> {
     protected DataBaseInstance instance;
     Logger LOGGER = LoggerFactory.getLogger(AbstractDatabaseRequestTask.class);
 

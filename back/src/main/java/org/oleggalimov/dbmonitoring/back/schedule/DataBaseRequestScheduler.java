@@ -1,16 +1,19 @@
 package org.oleggalimov.dbmonitoring.back.schedule;
 
-import org.influxdb.InfluxDB;
+import org.influxdb.dto.Point;
 import org.oleggalimov.dbmonitoring.back.dto.DataBaseInstance;
 import org.oleggalimov.dbmonitoring.back.schedule.tasks.DatabaseRequestTaskFactory;
+import org.oleggalimov.dbmonitoring.back.services.InfluxMetricsPersister;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.util.Pair;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.CopyOnWriteArraySet;
@@ -25,12 +28,12 @@ import java.util.concurrent.TimeoutException;
 public class DataBaseRequestScheduler {
     private final CopyOnWriteArraySet<DataBaseInstance> instanceSet;
     private final Logger LOGGER = LoggerFactory.getLogger(DatabaseRequestTaskFactory.class);
-    private final InfluxDB influxDB;
+    private final InfluxMetricsPersister persister;
 
     @Autowired
-    public DataBaseRequestScheduler(CopyOnWriteArraySet<DataBaseInstance> instanceSet, InfluxDB influxDB) {
+    public DataBaseRequestScheduler(CopyOnWriteArraySet<DataBaseInstance> instanceSet, InfluxMetricsPersister metricsPersister) {
         this.instanceSet = instanceSet;
-        this.influxDB = influxDB;
+        this.persister = metricsPersister;
     }
 
     @Scheduled(fixedRate = 60 * 1000L)
@@ -38,7 +41,7 @@ public class DataBaseRequestScheduler {
         ExecutorService service = Executors.newCachedThreadPool();
         LOGGER.debug("Start another task at {}", new Date());
 
-        Map<String, Future> futures = new HashMap<>();
+        Map<String, Future<Pair<String, List<Point>>>> futures = new HashMap<>();
         LOGGER.debug("Start creation futures at {}, instances size: {}", new Date(), instanceSet.size());
         instanceSet.stream()
                 .map(DatabaseRequestTaskFactory::getTask)
@@ -60,7 +63,7 @@ public class DataBaseRequestScheduler {
                     }
                 })
                 .filter(Objects::nonNull)
-                .forEach(System.out::println);
+                .forEach(persister::persistMetrics);
         LOGGER.debug("End processing data at {}", new Date());
         LOGGER.debug("End another task at {}", new Date());
 

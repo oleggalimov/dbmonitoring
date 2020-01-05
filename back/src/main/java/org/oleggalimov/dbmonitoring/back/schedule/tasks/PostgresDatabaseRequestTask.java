@@ -5,11 +5,13 @@ import org.oleggalimov.dbmonitoring.back.dto.DataBaseInstance;
 import org.oleggalimov.dbmonitoring.back.processors.ResultSetProcessor;
 import org.oleggalimov.dbmonitoring.back.services.AbstractResultSetProcessorFactory;
 import org.postgresql.ds.PGSimpleDataSource;
+import org.springframework.data.util.Pair;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class PostgresDatabaseRequestTask extends AbstractDatabaseRequestTask {
@@ -19,7 +21,7 @@ public class PostgresDatabaseRequestTask extends AbstractDatabaseRequestTask {
     }
 
     @Override
-    public Map<String, Point> call() throws Exception {
+    public Pair<String, List<Point>> call() throws Exception {
         LOGGER.debug("Executing request to {} with params: {}", instance.getType(), this.instance.toString());
         String REQUEST_STAT = "select * from pg_stat_database where datname=?";
         PGSimpleDataSource pgSimpleDataSource = new PGSimpleDataSource();
