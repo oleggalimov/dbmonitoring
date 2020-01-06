@@ -78,7 +78,6 @@ class ListInstanceControllersTest {
         assertEquals("test", dataBaseInstance.getId());
         assertEquals("host", dataBaseInstance.getHost());
         assertEquals(1520, dataBaseInstance.getPort());
-        assertEquals("sid", dataBaseInstance.getSid());
         assertEquals(DatabaseInstanceType.ORACLE, dataBaseInstance.getType());
         DataBaseUser dataBaseInstanceUser = dataBaseInstance.getUser();
         assertEquals("login", dataBaseInstanceUser.getLogin());

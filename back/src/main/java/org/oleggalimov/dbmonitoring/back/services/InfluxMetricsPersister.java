@@ -11,6 +11,7 @@ import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class InfluxMetricsPersister {
@@ -25,17 +26,35 @@ public class InfluxMetricsPersister {
     public void persistMetrics(Pair<String, List<Point>> metrics) {
         String dbName = metrics.getFirst();
         if (!databaseExists(dbName)) {
-            Query createDB = new Query("CREATE DATABASE "+dbName);
+            Query createDB = new Query("CREATE DATABASE " + dbName);
             influxDB.query(createDB);
         }
-        metrics.getSecond().forEach(point -> influxDB.write(dbName,"autogen", point));
+        metrics.getSecond().forEach(point -> influxDB.write(dbName, "autogen", point));
     }
 
     private boolean databaseExists(String dbName) {
         Query selectDb = new Query("SHOW DATABASES");
         LOGGER.debug("Checking for database ({}) exists", dbName);
-        QueryResult databases = influxDB.query(selectDb);
-        LOGGER.debug("List of databases: {}", databases);
-        return false;
+        List<QueryResult.Result> resultList = influxDB.query(selectDb).getResults();
+        if (resultList == null || resultList.isEmpty()) {
+            return false;
+        }
+        try {
+            return resultList.stream()
+                    .map(QueryResult.Result::getSeries)
+                    .collect(Collectors.toList())
+                    .stream()
+                    .flatMap(List::stream)
+                    .map(QueryResult.Series::getValues)
+                    .flatMap(List::stream)
+                    .flatMap(List::stream)
+//                to collect all values to list use this
+//                .collect(Collectors.toList());
+                    .anyMatch(dbName::equals);
+        } catch (Exception ex) {
+            LOGGER.debug("Error on processing  database exists resultset");
+            ex.printStackTrace();
+            return false;
+        }
     }
 }

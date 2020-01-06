@@ -20,27 +20,32 @@ public class PostgresResultSetProcessor implements ResultSetProcessor {
             "blk_read_time", "blk_write_time");
 
     @Override
-    public Pair<String, List<Point>> transformResult(ResultSet resultSet, String dbName, String measurement) throws SQLException {
+    public Pair<String, List<Point>> transformResult(ResultSet resultSet, String instanceId, String measurement) {
         List<Point> points = new ArrayList<>();
-        while (resultSet.next()) {
-            Point.Builder point = Point.measurement(measurement);
-            point.time(System.currentTimeMillis(), TimeUnit.MILLISECONDS);
-            KEYS.forEach(key -> {
-                try {
-                    if (key.equalsIgnoreCase("datname")) {
-                        point.addField("datname", resultSet.getString("datname"));
-                    } else if (key.equalsIgnoreCase("blk_read_time") || key.equalsIgnoreCase("blk_write_time")) {
-                        point.addField(key, resultSet.getDouble(key));
-                    } else {
-                        point.addField(key, resultSet.getLong(key));
+        try {
+            while (resultSet.next()) {
+                Point.Builder point = Point.measurement(measurement);
+                point.time(System.currentTimeMillis(), TimeUnit.MILLISECONDS);
+                KEYS.forEach(key -> {
+                    try {
+                        if (key.equalsIgnoreCase("datname")) {
+                            point.addField("datname", resultSet.getString("datname"));
+                        } else if (key.equalsIgnoreCase("blk_read_time") || key.equalsIgnoreCase("blk_write_time")) {
+                            point.addField(key, resultSet.getDouble(key));
+                        } else {
+                            point.addField(key, resultSet.getLong(key));
+                        }
+                    } catch (SQLException ex) {
+                        LOGGER.debug("SQLException with key {}: {}", key, ex.getMessage());
                     }
-                } catch (SQLException ex) {
-                    LOGGER.debug("SQLException with key {}: {}", key, ex.getMessage());
-                }
 
-            });
-            points.add(point.build());
+                });
+                points.add(point.build());
+            }
+            return Pair.of(instanceId, points);
+        } catch (SQLException ex) {
+            LOGGER.debug("SQLException with postgres result set : {}", ex.getMessage());
+            return null;
         }
-        return Pair.of(dbName, points);
     }
 }

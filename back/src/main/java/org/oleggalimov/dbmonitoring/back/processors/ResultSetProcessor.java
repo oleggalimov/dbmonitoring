@@ -9,5 +9,5 @@ import java.util.List;
 import java.util.Map;
 
 public interface ResultSetProcessor {
-    Pair<String, List<Point>> transformResult(ResultSet resultSet, String dbName, String measurement) throws SQLException;
+    Pair<String, List<Point>> transformResult(ResultSet resultSet, String instanceId, String measurement);
 }

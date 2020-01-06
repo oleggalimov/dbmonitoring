@@ -28,75 +28,62 @@ class DatabaseInstanceValidatorTest {
     @Test
     void userTest() {
         List<Error> errorList;
-        errorList = DatabaseInstanceValidator.validate(new DataBaseInstance("id", "host", 1521, "sid", "testDatabase", new DataBaseUser("login", "password"), DatabaseInstanceType.ORACLE));
+        errorList = DatabaseInstanceValidator.validate(new DataBaseInstance("id", "host", 1521, "testDatabase", new DataBaseUser("login", "password"), DatabaseInstanceType.ORACLE));
         assertEquals(0, errorList.size());
 
-        errorList = DatabaseInstanceValidator.validate(new DataBaseInstance("id", "host", 1521, "sid", "testDatabase", null, DatabaseInstanceType.ORACLE));
+        errorList = DatabaseInstanceValidator.validate(new DataBaseInstance("id", "host", 1521, "testDatabase", null, DatabaseInstanceType.ORACLE));
         validateError(Errors.DB_USER_VALIDATION_EMPTY_USER, errorList);
     }
 
     @Test
     void idTest() {
         List<Error> errorList;
-        errorList = DatabaseInstanceValidator.validate(new DataBaseInstance("", "host", 1521, "sid", "testDatabase", user, DatabaseInstanceType.ORACLE));
+        errorList = DatabaseInstanceValidator.validate(new DataBaseInstance("", "host", 1521, "testDatabase", user, DatabaseInstanceType.ORACLE));
         validateError(Errors.DB_INSTANCE_VALIDATION_EMPTY_ID, errorList);
 
-        errorList = DatabaseInstanceValidator.validate(new DataBaseInstance("  ", "host", 1521, "sid", "testDatabase", user, DatabaseInstanceType.ORACLE));
+        errorList = DatabaseInstanceValidator.validate(new DataBaseInstance("  ", "host", 1521, "testDatabase", user, DatabaseInstanceType.ORACLE));
         validateError(Errors.DB_INSTANCE_VALIDATION_EMPTY_ID, errorList);
 
-        errorList = DatabaseInstanceValidator.validate(new DataBaseInstance(null, "host", 1521, "sid", "testDatabase", user, DatabaseInstanceType.ORACLE));
+        errorList = DatabaseInstanceValidator.validate(new DataBaseInstance(null, "host", 1521, "testDatabase", user, DatabaseInstanceType.ORACLE));
         validateError(Errors.DB_INSTANCE_VALIDATION_EMPTY_ID, errorList);
 
-        errorList = DatabaseInstanceValidator.validate(new DataBaseInstance(" 1", "host", 1521, "sid", "testDatabase", user, DatabaseInstanceType.ORACLE));
+        errorList = DatabaseInstanceValidator.validate(new DataBaseInstance(" 1", "host", 1521, "testDatabase", user, DatabaseInstanceType.ORACLE));
         assertEquals(0, errorList.size());
     }
 
     @Test
     void hostTest() {
         List<Error> errorList;
-        errorList = DatabaseInstanceValidator.validate(new DataBaseInstance("323", "   \t ", 1521, "sid", "testDatabase", user, DatabaseInstanceType.ORACLE));
+        errorList = DatabaseInstanceValidator.validate(new DataBaseInstance("323", "   \t ", 1521, "testDatabase", user, DatabaseInstanceType.ORACLE));
         validateError(Errors.DB_INSTANCE_VALIDATION_EMPTY_HOST, errorList);
 
-        errorList = DatabaseInstanceValidator.validate(new DataBaseInstance("  1", "", 1521, "sid", "testDatabase", user, DatabaseInstanceType.ORACLE));
+        errorList = DatabaseInstanceValidator.validate(new DataBaseInstance("  1", "", 1521, "testDatabase", user, DatabaseInstanceType.ORACLE));
         validateError(Errors.DB_INSTANCE_VALIDATION_EMPTY_HOST, errorList);
 
-        errorList = DatabaseInstanceValidator.validate(new DataBaseInstance("null", null, 1521, "sid", "testDatabase", user, DatabaseInstanceType.ORACLE));
+        errorList = DatabaseInstanceValidator.validate(new DataBaseInstance("null", null, 1521, "testDatabase", user, DatabaseInstanceType.ORACLE));
         validateError(Errors.DB_INSTANCE_VALIDATION_EMPTY_HOST, errorList);
 
-        errorList = DatabaseInstanceValidator.validate(new DataBaseInstance(" 1", "host", 1521, "sid", "testDatabase", user, DatabaseInstanceType.ORACLE));
+        errorList = DatabaseInstanceValidator.validate(new DataBaseInstance(" 1", "host", 1521, "testDatabase", user, DatabaseInstanceType.ORACLE));
         assertEquals(0, errorList.size());
     }
 
     @Test
     void portTest() {
         List<Error> errorList;
-        errorList = DatabaseInstanceValidator.validate(new DataBaseInstance("323", "  host \t ", null, "sid", "testDatabase", user, DatabaseInstanceType.ORACLE));
+        errorList = DatabaseInstanceValidator.validate(new DataBaseInstance("323", "  host \t ", null, "testDatabase", user, DatabaseInstanceType.ORACLE));
         validateError(Errors.DB_INSTANCE_VALIDATION_EMPTY_PORT, errorList);
 
-        errorList = DatabaseInstanceValidator.validate(new DataBaseInstance(" 1", "host", 1521, "sid", "testDatabase", user, DatabaseInstanceType.ORACLE));
-        assertEquals(0, errorList.size());
-    }
-
-    @Test
-    void sidTest() {
-        List<Error> errorList;
-        errorList = DatabaseInstanceValidator.validate(new DataBaseInstance("323", "  host \t ", null, "  \t  ", "testDatabase", user, DatabaseInstanceType.ORACLE));
-        validateError(Errors.DB_INSTANCE_VALIDATION_EMPTY_SID, errorList);
-
-        errorList = DatabaseInstanceValidator.validate(new DataBaseInstance("323", "  host \t ", null, null, "testDatabase", user, DatabaseInstanceType.ORACLE));
-        validateError(Errors.DB_INSTANCE_VALIDATION_EMPTY_SID, errorList);
-
-        errorList = DatabaseInstanceValidator.validate(new DataBaseInstance(" 1", "host", 1521, "sid", "testDatabase", user, DatabaseInstanceType.ORACLE));
+        errorList = DatabaseInstanceValidator.validate(new DataBaseInstance(" 1", "host", 1521, "testDatabase", user, DatabaseInstanceType.ORACLE));
         assertEquals(0, errorList.size());
     }
 
     @Test
     void typeTest() {
         List<Error> errorList;
-        errorList = DatabaseInstanceValidator.validate(new DataBaseInstance("323", "  host \t ", 1521, "sds  \t  ", "testDatabase", user, null));
+        errorList = DatabaseInstanceValidator.validate(new DataBaseInstance("323", "  host \t ", 1521,  "testDatabase", user, null));
         validateError(Errors.DB_INSTANCE_VALIDATION_EMPTY_TYPE, errorList);
 
-        errorList = DatabaseInstanceValidator.validate(new DataBaseInstance(" 1", "host", 1521, "sid", "testDatabase", user, DatabaseInstanceType.ORACLE));
+        errorList = DatabaseInstanceValidator.validate(new DataBaseInstance(" 1", "host", 1521, "testDatabase", user, DatabaseInstanceType.ORACLE));
         assertEquals(0, errorList.size());
     }
 

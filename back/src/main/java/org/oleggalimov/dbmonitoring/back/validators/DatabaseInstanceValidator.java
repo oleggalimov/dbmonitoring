@@ -18,7 +18,6 @@ public class DatabaseInstanceValidator {
         List<Error> errors = new ArrayList<>();
         String id = instance.getId();
         String host = instance.getHost();
-        String sid = instance.getSid();
         Integer port = instance.getPort();
         DataBaseUser user = instance.getUser();
         DatabaseInstanceType type = instance.getType();
@@ -29,9 +28,6 @@ public class DatabaseInstanceValidator {
         }
         if (host == null || StringValidator.isEmpty(host)) {
             errors.add(Errors.DB_INSTANCE_VALIDATION_EMPTY_HOST.getError());
-        }
-        if (sid == null || StringValidator.isEmpty(sid)) {
-            errors.add(Errors.DB_INSTANCE_VALIDATION_EMPTY_SID.getError());
         }
         if (port == null) {
             errors.add(Errors.DB_INSTANCE_VALIDATION_EMPTY_PORT.getError());

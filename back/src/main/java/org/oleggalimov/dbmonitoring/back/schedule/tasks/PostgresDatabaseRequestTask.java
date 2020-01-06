@@ -2,8 +2,8 @@ package org.oleggalimov.dbmonitoring.back.schedule.tasks;
 
 import org.influxdb.dto.Point;
 import org.oleggalimov.dbmonitoring.back.dto.DataBaseInstance;
+import org.oleggalimov.dbmonitoring.back.processors.AbstractResultSetProcessorFactory;
 import org.oleggalimov.dbmonitoring.back.processors.ResultSetProcessor;
-import org.oleggalimov.dbmonitoring.back.services.AbstractResultSetProcessorFactory;
 import org.postgresql.ds.PGSimpleDataSource;
 import org.springframework.data.util.Pair;
 
@@ -22,8 +22,13 @@ public class PostgresDatabaseRequestTask extends AbstractDatabaseRequestTask {
 
     @Override
     public Pair<String, List<Point>> call() throws Exception {
+        ResultSetProcessor processor = AbstractResultSetProcessorFactory.getProcessor(instance.getType());
+        if (processor == null) {
+            LOGGER.debug("Can't get ResultSetProcessor for instance: {}", instance);
+            return null;
+        }
         LOGGER.debug("Executing request to {} with params: {}", instance.getType(), this.instance.toString());
-        String REQUEST_STAT = "select * from pg_stat_database where datname=?";
+        final String REQUEST_STAT = "select * from pg_stat_database where datname=?";
         PGSimpleDataSource pgSimpleDataSource = new PGSimpleDataSource();
         pgSimpleDataSource.setServerNames(new String[]{instance.getHost()});
         pgSimpleDataSource.setPortNumbers(new int[]{instance.getPort()});
@@ -35,12 +40,7 @@ public class PostgresDatabaseRequestTask extends AbstractDatabaseRequestTask {
             PreparedStatement statSqlRequest = connection.prepareStatement(REQUEST_STAT);
             statSqlRequest.setString(1, instance.getDatabase());
             ResultSet resultSet = statSqlRequest.executeQuery();
-            ResultSetProcessor processor = AbstractResultSetProcessorFactory.getProcessor(instance.getType());
-            if (processor != null) {
-                return processor.transformResult(resultSet, instance.getId(), "pg_stat_database");
-            } else {
-                return null;
-            }
+            return processor.transformResult(resultSet, instance.getId(), "pg_stat_database");
         } catch (Exception ex) {
             LOGGER.debug("Exception in PostgresDatabaseRequestTask: {}", ex.getMessage());
             return null;

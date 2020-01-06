@@ -1,4 +1,4 @@
-package org.oleggalimov.dbmonitoring.back.services;
+package org.oleggalimov.dbmonitoring.back.processors;
 
 import org.oleggalimov.dbmonitoring.back.enumerations.DatabaseInstanceType;
 import org.oleggalimov.dbmonitoring.back.processors.PostgresResultSetProcessor;
@@ -11,7 +11,9 @@ public class AbstractResultSetProcessorFactory {
         switch (type) {
             case MYSQL:
             case MSSQL:
+                break;
             case ORACLE:
+                result = new OracleResultSetProcessor();
                 break;
             case POSTGRES:
                 result = new PostgresResultSetProcessor();

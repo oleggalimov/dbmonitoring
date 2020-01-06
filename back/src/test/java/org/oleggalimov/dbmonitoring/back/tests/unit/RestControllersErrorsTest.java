@@ -93,7 +93,7 @@ class RestControllersErrorsTest {
             ResponseBuilder builder = new ResponseBuilder(new ObjectMapper());
 
     private Throwable exception;
-    private static String body = "{\"id\":\"test_id\",\"host\":\"test_host\",\"port\":1251,\"sid\":\"sid\",\"database\":\"databaseTest\",\"user\":{\"login\":\"login\", \"password\":\"password\"}, \"type\":\"ORACLE\"}";
+    private static String body = "{\"id\":\"test_id\",\"host\":\"test_host\",\"port\":1251,\"database\":\"databaseTest\",\"user\":{\"login\":\"login\", \"password\":\"password\"}, \"type\":\"ORACLE\"}";
 
     @BeforeEach
     void init() throws IOException {

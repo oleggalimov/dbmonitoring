@@ -65,7 +65,7 @@ public class TestBeans {
     @Bean
     public CopyOnWriteArraySet<DataBaseInstance> instanceHashSet() {
         CopyOnWriteArraySet<DataBaseInstance> instances = new CopyOnWriteArraySet<>();
-        instances.add(new DataBaseInstance("test", "host", 1520, "sid", "testDatabase", new DataBaseUser("login", "password"), DatabaseInstanceType.ORACLE));
+        instances.add(new DataBaseInstance("test", "host", 1520, "testDatabase", new DataBaseUser("login", "password"), DatabaseInstanceType.ORACLE));
         return instances;
     }
 

@@ -7,7 +7,6 @@ public class DataBaseInstance {
     private String id;
     private String host;
     private Integer port;
-    private String sid;
     private String database;
     private DataBaseUser user;
     private DatabaseInstanceType type;
@@ -15,11 +14,10 @@ public class DataBaseInstance {
     public DataBaseInstance() {
     }
 
-    public DataBaseInstance(String id, String host, Integer port, String sid, String database, DataBaseUser user, DatabaseInstanceType type) {
+    public DataBaseInstance(String id, String host, Integer port, String database, DataBaseUser user, DatabaseInstanceType type) {
         this.id = id;
         this.host = host;
         this.port = port;
-        this.sid = sid;
         this.database = database;
         this.user = user;
         this.type = type;
@@ -49,13 +47,6 @@ public class DataBaseInstance {
         this.port = port;
     }
 
-    public String getSid() {
-        return sid;
-    }
-
-    public void setSid(String sid) {
-        this.sid = sid;
-    }
 
     public void setUser(DataBaseUser user) {
         this.user = user;
@@ -103,8 +94,6 @@ public class DataBaseInstance {
             return false;
         } else if (!this.port.equals(otherInstance.getPort())) {
             return false;
-        } else if (!this.sid.equalsIgnoreCase(otherInstance.getSid())) {
-            return false;
         } else if (this.type != otherInstance.type) {
             return false;
         } else if (!this.database.equalsIgnoreCase(otherInstance.getDatabase())) {
@@ -118,7 +107,6 @@ public class DataBaseInstance {
                 "id='" + id + '\'' +
                 ", host='" + host + '\'' +
                 ", port=" + port +
-                ", sid='" + sid + '\'' +
                 ", database='" + database + '\'' +
                 ", user=" + user +
                 ", type=" + type +
