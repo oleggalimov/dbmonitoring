@@ -1,5 +1,5 @@
 package org.oleggalimov.dbmonitoring.back.enumerations;
-
+//TODO: код с душком, переделать на процедуры или вынести в конфигурацию.
 public enum OracleSQLMetricsQueries {
     WAIT_CLASS(
             "SELECT n.wait_class, Round(m.time_waited / m.intsize_csec, 3) VALUE "
