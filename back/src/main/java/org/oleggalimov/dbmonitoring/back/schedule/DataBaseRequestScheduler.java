@@ -57,7 +57,7 @@ public class DataBaseRequestScheduler {
                     try {
                         return futures.get(key).get(50L, TimeUnit.SECONDS);
                     } catch (InterruptedException | ExecutionException | TimeoutException e) {
-                        LOGGER.debug("Error collecting metrics with instance {}", key);
+                        LOGGER.error("Error collecting metrics with instance {}", key);
                         e.printStackTrace();
                         return null;
                     }

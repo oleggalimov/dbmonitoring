@@ -2,5 +2,6 @@ package org.oleggalimov.dbmonitoring.back.enumerations;
 
 public enum BodyItemKey {
     INSTANCES,
-    USERS
+    USERS,
+    POINTS
 }

@@ -6,11 +6,14 @@ import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.oleggalimov.dbmonitoring.back.annotations.LogHttpEvent;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 @Service
 @Aspect
 public class LoggerAspect {
+    private static final Logger LOGGER = LoggerFactory.getLogger(LoggerAspect.class);
     @Pointcut(value = "@annotation(org.oleggalimov.dbmonitoring.back.annotations.LogHttpEvent)")
     public void annotationPointCut() {
     }
@@ -20,7 +23,7 @@ public class LoggerAspect {
     public void logEvent(JoinPoint joinPoint) {
         MethodSignature signature = (MethodSignature) joinPoint.getSignature();
         LogHttpEvent annotation = signature.getMethod().getAnnotation(LogHttpEvent.class);
-        System.out.println("Event: " + annotation.eventType() + ", message: " + annotation.message());
+        LOGGER.info("Event: " + annotation.eventType() + ", message: " + annotation.message());
     }
 
 //    @Around(value = "@annotation(org.oleggalimov.dbmonitoring.back.annotations.LogEvent)")

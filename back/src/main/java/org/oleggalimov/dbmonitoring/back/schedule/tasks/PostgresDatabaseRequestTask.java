@@ -24,7 +24,7 @@ public class PostgresDatabaseRequestTask extends AbstractDatabaseRequestTask {
     public Pair<String, List<Point>> call() throws Exception {
         ResultSetProcessor processor = AbstractResultSetProcessorFactory.getProcessor(instance.getType());
         if (processor == null) {
-            LOGGER.debug("Can't get ResultSetProcessor for instance: {}", instance);
+            LOGGER.error("Can't get ResultSetProcessor for instance: {}", instance);
             return null;
         }
         LOGGER.debug("Executing request to {} with params: {}", instance.getType(), this.instance.toString());
@@ -42,7 +42,7 @@ public class PostgresDatabaseRequestTask extends AbstractDatabaseRequestTask {
             ResultSet resultSet = statSqlRequest.executeQuery();
             return processor.transformResult(resultSet, instance.getId(), "pg_stat_database");
         } catch (Exception ex) {
-            LOGGER.debug("Exception in PostgresDatabaseRequestTask: {}", ex.getMessage());
+            LOGGER.error("Exception in PostgresDatabaseRequestTask: {}", ex.getMessage());
             return null;
         }
     }

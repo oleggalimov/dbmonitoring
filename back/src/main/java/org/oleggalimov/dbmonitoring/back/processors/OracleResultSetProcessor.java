@@ -40,10 +40,10 @@ public class OracleResultSetProcessor implements ResultSetProcessor {
                 points.addAll(temp);
             }
         } catch (IllegalArgumentException ex) {
-            LOGGER.debug("Can't get enum from string {}", measurement);
+            LOGGER.error("Can't get enum from string {}", measurement);
             ex.printStackTrace();
         } catch (SQLException e) {
-            LOGGER.debug("SQL exception on oracle metrics processing:  {}", e.getMessage());
+            LOGGER.error("SQL exception on oracle metrics processing:  {}", e.getMessage());
             e.printStackTrace();
         }
         return Pair.of(instanceId, points);
@@ -74,8 +74,8 @@ public class OracleResultSetProcessor implements ResultSetProcessor {
             Point.Builder point = Point.measurement(OracleSQLMetricsQueries.WAIT_EVENT.name());
             point.time(System.currentTimeMillis(), TimeUnit.MILLISECONDS);
             point.tag("className", WAIT_CLASS);
-            point.tag("wait_event", WAIT_NAME);
-            point.addField("count", CNT);
+            point.tag("metric_name", WAIT_NAME);
+            point.addField("value", CNT);
             point.addField("latency", AVGMS);
             points.add(point.build());
         }
@@ -89,7 +89,7 @@ public class OracleResultSetProcessor implements ResultSetProcessor {
             float VALUE = resultSet.getFloat("VALUE");
             Point.Builder point = Point.measurement(OracleSQLMetricsQueries.WAIT_CLASS.name());
             point.time(System.currentTimeMillis(), TimeUnit.MILLISECONDS);
-            point.tag("className", WAIT_CLASS);
+            point.tag("metric_name", WAIT_CLASS);
             point.addField("value", VALUE);
             points.add(point.build());
         }
@@ -104,8 +104,8 @@ public class OracleResultSetProcessor implements ResultSetProcessor {
 
             Point.Builder point = Point.measurement(OracleSQLMetricsQueries.TABLESPACE.name());
             point.time(System.currentTimeMillis(), TimeUnit.MILLISECONDS);
-            point.tag("tablespace_name", TABLESPACE_NAME);
-            point.addField("perc_used", PERC_USED);
+            point.tag("metric_name", TABLESPACE_NAME);
+            point.addField("value", PERC_USED);
             points.add(point.build());
         }
         return points;

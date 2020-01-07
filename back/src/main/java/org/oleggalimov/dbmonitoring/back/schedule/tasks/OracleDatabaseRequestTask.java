@@ -27,7 +27,7 @@ public class OracleDatabaseRequestTask extends AbstractDatabaseRequestTask {
     public Pair<String, List<Point>> call() throws Exception {
         ResultSetProcessor processor = AbstractResultSetProcessorFactory.getProcessor(instance.getType());
         if (processor == null) {
-            LOGGER.debug("Can't get ResultSetProcessor for instance: {}", instance);
+            LOGGER.error("Can't get ResultSetProcessor for instance: {}", instance);
             return null;
         }
         String instanceId = instance.getId();

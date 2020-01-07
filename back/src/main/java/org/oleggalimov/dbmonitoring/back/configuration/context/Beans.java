@@ -99,8 +99,7 @@ public class Beans {
             try {
                 result.put(key, (String) jndi.lookup(key));
             } catch (NamingException e) {
-                LOGGER.debug("Не удалось найти значение JNDI: {}", key);
-                e.printStackTrace();
+                LOGGER.error("Не удалось найти значение JNDI: {}", key);
             }
         });
         return result;

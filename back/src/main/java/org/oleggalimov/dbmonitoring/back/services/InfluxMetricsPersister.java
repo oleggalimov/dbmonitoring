@@ -52,7 +52,7 @@ public class InfluxMetricsPersister {
 //                .collect(Collectors.toList());
                     .anyMatch(dbName::equals);
         } catch (Exception ex) {
-            LOGGER.debug("Error on processing  database exists resultset");
+            LOGGER.error("Error on processing  database exists resultSet");
             ex.printStackTrace();
             return false;
         }
