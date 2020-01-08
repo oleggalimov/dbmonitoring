@@ -1,4 +1,4 @@
-package org.oleggalimov.dbmonitoring.back.services;
+package org.oleggalimov.dbmonitoring.back.utils;
 
 import org.influxdb.dto.Query;
 import org.oleggalimov.dbmonitoring.back.dto.PointsRequest;

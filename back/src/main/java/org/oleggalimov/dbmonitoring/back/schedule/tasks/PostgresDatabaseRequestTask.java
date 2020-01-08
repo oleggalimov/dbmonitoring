@@ -1,9 +1,11 @@
 package org.oleggalimov.dbmonitoring.back.schedule.tasks;
 
+import oracle.jdbc.pool.OracleDataSource;
 import org.influxdb.dto.Point;
 import org.oleggalimov.dbmonitoring.back.dto.DataBaseInstance;
 import org.oleggalimov.dbmonitoring.back.processors.AbstractResultSetProcessorFactory;
 import org.oleggalimov.dbmonitoring.back.processors.ResultSetProcessor;
+import org.oleggalimov.dbmonitoring.back.utils.AbstractDataSourceFactory;
 import org.postgresql.ds.PGSimpleDataSource;
 import org.springframework.data.util.Pair;
 
@@ -29,12 +31,11 @@ public class PostgresDatabaseRequestTask extends AbstractDatabaseRequestTask {
         }
         LOGGER.debug("Executing request to {} with params: {}", instance.getType(), this.instance.toString());
         final String REQUEST_STAT = "select * from pg_stat_database where datname=?";
-        PGSimpleDataSource pgSimpleDataSource = new PGSimpleDataSource();
-        pgSimpleDataSource.setServerNames(new String[]{instance.getHost()});
-        pgSimpleDataSource.setPortNumbers(new int[]{instance.getPort()});
-        pgSimpleDataSource.setDatabaseName(instance.getDatabase());
-        pgSimpleDataSource.setUser(instance.getUser().getLogin());
-        pgSimpleDataSource.setPassword(instance.getUser().getPassword());
+        PGSimpleDataSource pgSimpleDataSource = (PGSimpleDataSource) AbstractDataSourceFactory.buildDataSource(instance);
+        if (pgSimpleDataSource==null) {
+            LOGGER.error("Exception in PostgresDatabaseRequestTask: data source is null");
+            return null;
+        }
         Map<String, Point> result = new HashMap<>();
         try (Connection connection = pgSimpleDataSource.getConnection()) {
             PreparedStatement statSqlRequest = connection.prepareStatement(REQUEST_STAT);

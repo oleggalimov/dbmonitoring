@@ -8,7 +8,7 @@ import org.oleggalimov.dbmonitoring.back.dto.PointsRequest;
 import org.oleggalimov.dbmonitoring.back.dto.RestResponseBody;
 import org.oleggalimov.dbmonitoring.back.enumerations.BodyItemKey;
 import org.oleggalimov.dbmonitoring.back.enumerations.Messages;
-import org.oleggalimov.dbmonitoring.back.services.InfluxQueryBuilder;
+import org.oleggalimov.dbmonitoring.back.utils.InfluxQueryBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;

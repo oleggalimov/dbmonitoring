@@ -7,6 +7,7 @@ import org.oleggalimov.dbmonitoring.back.dto.DataBaseInstance;
 import org.oleggalimov.dbmonitoring.back.enumerations.OracleSQLMetricsQueries;
 import org.oleggalimov.dbmonitoring.back.processors.AbstractResultSetProcessorFactory;
 import org.oleggalimov.dbmonitoring.back.processors.ResultSetProcessor;
+import org.oleggalimov.dbmonitoring.back.utils.AbstractDataSourceFactory;
 import org.springframework.data.util.Pair;
 
 import java.sql.Connection;
@@ -14,8 +15,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-
-import static org.oleggalimov.dbmonitoring.back.enumerations.OracleSQLMetricsQueries.WAIT_EVENT;
 
 public class OracleDatabaseRequestTask extends AbstractDatabaseRequestTask {
 
@@ -31,13 +30,11 @@ public class OracleDatabaseRequestTask extends AbstractDatabaseRequestTask {
             return null;
         }
         String instanceId = instance.getId();
-        OracleDataSource oracleDataSource = new OracleDataSource();
-        oracleDataSource.setServerName(instance.getHost());
-        oracleDataSource.setPortNumber(instance.getPort());
-        oracleDataSource.setDatabaseName(instance.getDatabase());
-        oracleDataSource.setUser(instance.getUser().getLogin());
-        oracleDataSource.setPassword(instance.getUser().getPassword());
-        oracleDataSource.setDriverType("thin");
+        OracleDataSource oracleDataSource = (OracleDataSource) AbstractDataSourceFactory.buildDataSource(instance);
+        if (oracleDataSource == null) {
+            LOGGER.error("Exception in OracleDatabaseRequestTask: data source is null");
+            return null;
+        }
         try (Connection connection = oracleDataSource.getConnection()) {
             List<Point> pointList = new ArrayList<>();
             for (OracleSQLMetricsQueries query : OracleSQLMetricsQueries.values()) {
@@ -48,7 +45,7 @@ public class OracleDatabaseRequestTask extends AbstractDatabaseRequestTask {
             }
             return Pair.of(instanceId, pointList);
         } catch (Exception ex) {
-            LOGGER.debug("Exception in OracleDatabaseRequestTask: {}", ex.getMessage());
+            LOGGER.error("Exception in OracleDatabaseRequestTask: {}", ex.getMessage());
             return null;
         }
     }
@@ -56,6 +53,6 @@ public class OracleDatabaseRequestTask extends AbstractDatabaseRequestTask {
     private List<Point> getPoints(Connection connection, OracleSQLMetricsQueries queryType, ResultSetProcessor processor) throws SQLException {
         LOGGER.debug("Executing request for {} metrics", queryType.name());
         ResultSet resultSet = connection.prepareStatement(queryType.getQuery()).executeQuery();
-        return  processor.transformResult(resultSet, instance.getId(), queryType.name()).getSecond();
+        return processor.transformResult(resultSet, instance.getId(), queryType.name()).getSecond();
     }
 }
