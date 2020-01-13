@@ -2241,15 +2241,123 @@ eval("var g;\n\n// This works in non-strict mode\ng = (function() {\n\treturn th
 
 /***/ }),
 
-/***/ "./src/main/js/app/components/About.tsx":
+/***/ "./src/main/js/app/components/Footer.tsx":
+/*!***********************************************!*\
+  !*** ./src/main/js/app/components/Footer.tsx ***!
+  \***********************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+eval("\r\nObject.defineProperty(exports, \"__esModule\", { value: true });\r\nconst React = __webpack_require__(/*! react */ \"./node_modules/react/index.js\");\r\nconst react_router_dom_1 = __webpack_require__(/*! react-router-dom */ \"./node_modules/react-router-dom/esm/react-router-dom.js\");\r\nconst reactstrap_1 = __webpack_require__(/*! reactstrap */ \"./node_modules/reactstrap/es/index.js\");\r\nclass Footer extends React.Component {\r\n    constructor(props) {\r\n        super(props);\r\n        this.state = {\r\n            contextPath: props.contextRoot\r\n        };\r\n    }\r\n    render() {\r\n        console.log(`location is ${location}`);\r\n        console.log(`href is ${location.href}`);\r\n        console.log(`protocol is ${location.protocol}`);\r\n        console.log(`pathname is ${location.pathname}`);\r\n        console.log(`origin is ${location.origin}`);\r\n        return (React.createElement(\"div\", null,\r\n            React.createElement(reactstrap_1.Navbar, { color: \"light\", light: true, expand: \"md\" },\r\n                React.createElement(reactstrap_1.NavbarBrand, { href: \"#\" }, \"\\u0421\\u0438\\u0441\\u0442\\u0435\\u043C\\u0430 \\u043C\\u043E\\u043D\\u0438\\u0442\\u043E\\u0440\\u0438\\u043D\\u0433\\u0430 \\u0431\\u0430\\u0437 \\u0434\\u0430\\u043D\\u043D\\u044B\\u0445\"),\r\n                React.createElement(reactstrap_1.Collapse, { navbar: true },\r\n                    React.createElement(reactstrap_1.Nav, { className: \"mr-auto\", navbar: true },\r\n                        React.createElement(reactstrap_1.UncontrolledDropdown, { nav: true, inNavbar: true, id: \"instanceDropDown\" },\r\n                            React.createElement(reactstrap_1.DropdownToggle, { nav: true, caret: true }, \"\\u0423\\u043F\\u0440\\u0430\\u0432\\u043B\\u0435\\u043D\\u0438\\u0435 \\u044D\\u043A\\u0437\\u0435\\u043C\\u043F\\u043B\\u044F\\u0440\\u0430\\u043C\\u0438\"),\r\n                            React.createElement(reactstrap_1.DropdownMenu, { right: true },\r\n                                React.createElement(reactstrap_1.DropdownItem, null,\r\n                                    React.createElement(react_router_dom_1.NavLink, { to: `listInstance`, style: { color: \"DIMGRAY\" } }, \"\\u041F\\u043E\\u043B\\u043D\\u044B\\u0439 \\u0441\\u043F\\u0438\\u0441\\u043E\\u043A \\u044D\\u043A\\u0437\\u0435\\u043C\\u043F\\u043B\\u044F\\u0440\\u043E\\u0432\"),\r\n                                    React.createElement(reactstrap_1.DropdownItem, { divider: true })),\r\n                                React.createElement(reactstrap_1.DropdownItem, null,\r\n                                    React.createElement(react_router_dom_1.NavLink, { to: `addInstance`, style: { color: \"DIMGRAY\" } }, \"\\u0414\\u043E\\u0431\\u0430\\u0432\\u0438\\u0442\\u044C\")),\r\n                                React.createElement(reactstrap_1.DropdownItem, null,\r\n                                    React.createElement(react_router_dom_1.NavLink, { to: `updateInstance`, style: { color: \"DIMGRAY\" } }, \"\\u0418\\u0437\\u043C\\u0435\\u043D\\u0438\\u0442\\u044C\")),\r\n                                React.createElement(reactstrap_1.DropdownItem, null,\r\n                                    React.createElement(react_router_dom_1.NavLink, { to: `removeInstance`, style: { color: \"DIMGRAY\" } }, \"\\u0423\\u0434\\u0430\\u043B\\u0438\\u0442\\u044C\")))),\r\n                        React.createElement(reactstrap_1.UncontrolledDropdown, { nav: true, inNavbar: true, id: \"userDropDown\" },\r\n                            React.createElement(reactstrap_1.DropdownToggle, { nav: true, caret: true }, \"\\u0423\\u043F\\u0440\\u0430\\u0432\\u043B\\u0435\\u043D\\u0438\\u0435 \\u043F\\u043E\\u043B\\u044C\\u0437\\u043E\\u0432\\u0430\\u0442\\u0435\\u043B\\u044F\\u043C\\u0438\"),\r\n                            React.createElement(reactstrap_1.DropdownMenu, { right: true },\r\n                                React.createElement(reactstrap_1.DropdownItem, null,\r\n                                    React.createElement(react_router_dom_1.NavLink, { to: `listUser`, style: { color: \"DIMGRAY\" } }, \"\\u041F\\u043E\\u043B\\u043D\\u044B\\u0439 \\u0441\\u043F\\u0438\\u0441\\u043E\\u043A \\u043F\\u043E\\u043B\\u044C\\u0437\\u043E\\u0432\\u0430\\u0442\\u0435\\u043B\\u0435\\u0439\")),\r\n                                React.createElement(reactstrap_1.DropdownItem, { divider: true }),\r\n                                React.createElement(reactstrap_1.DropdownItem, null,\r\n                                    React.createElement(react_router_dom_1.NavLink, { to: `addUser`, style: { color: \"DIMGRAY\" } }, \" \\u0414\\u043E\\u0431\\u0430\\u0432\\u0438\\u0442\\u044C\")),\r\n                                React.createElement(reactstrap_1.DropdownItem, null,\r\n                                    React.createElement(react_router_dom_1.NavLink, { to: `updateUser`, style: { color: \"DIMGRAY\" } }, \" \\u0418\\u0437\\u043C\\u0435\\u043D\\u0438\\u0442\\u044C\")),\r\n                                React.createElement(reactstrap_1.DropdownItem, null,\r\n                                    React.createElement(react_router_dom_1.NavLink, { to: `removeUser`, style: { color: \"DIMGRAY\" } }, \" \\u0423\\u0434\\u0430\\u043B\\u0438\\u0442\\u044C\")))),\r\n                        React.createElement(reactstrap_1.Button, { color: \"link\" }),\r\n                        React.createElement(reactstrap_1.Button, { color: \"link\" },\r\n                            React.createElement(react_router_dom_1.NavLink, { to: `metircs`, style: { color: \"DIMGRAY\" } }, \"\\u041F\\u0440\\u043E\\u0441\\u043C\\u043E\\u0442\\u0440 \\u043C\\u0435\\u0442\\u0440\\u0438\\u043A\"))),\r\n                    React.createElement(reactstrap_1.Button, { color: \"primary\" },\r\n                        \" \",\r\n                        React.createElement(react_router_dom_1.NavLink, { to: `/login`, style: { color: \"WHITE\" } }, \" \\u0412\\u043E\\u0439\\u0442\\u0438\"))))));\r\n    }\r\n}\r\nexports.default = Footer;\r\n\n\n//# sourceURL=webpack:///./src/main/js/app/components/Footer.tsx?");
+
+/***/ }),
+
+/***/ "./src/main/js/app/components/Instance/AddInstance.tsx":
+/*!*************************************************************!*\
+  !*** ./src/main/js/app/components/Instance/AddInstance.tsx ***!
+  \*************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+eval("\r\nObject.defineProperty(exports, \"__esModule\", { value: true });\r\nconst React = __webpack_require__(/*! react */ \"./node_modules/react/index.js\");\r\nexports.default = () => {\r\n    return (React.createElement(\"div\", null, \"\\u0414\\u043E\\u0431\\u0430\\u0432\\u0438\\u0442\\u044C \\u0438\\u043D\\u0441\\u0442\\u0430\\u043D\\u0441\"));\r\n};\r\n\n\n//# sourceURL=webpack:///./src/main/js/app/components/Instance/AddInstance.tsx?");
+
+/***/ }),
+
+/***/ "./src/main/js/app/components/Instance/ListInstances.tsx":
+/*!***************************************************************!*\
+  !*** ./src/main/js/app/components/Instance/ListInstances.tsx ***!
+  \***************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+eval("\r\nObject.defineProperty(exports, \"__esModule\", { value: true });\r\nconst React = __webpack_require__(/*! react */ \"./node_modules/react/index.js\");\r\nexports.default = () => {\r\n    return (React.createElement(\"div\", null, \"\\u0421\\u043F\\u0438\\u0441\\u043E\\u043A \\u0438\\u043D\\u0441\\u0442\\u0430\\u043D\\u0441\\u043E\\u0432\"));\r\n};\r\n\n\n//# sourceURL=webpack:///./src/main/js/app/components/Instance/ListInstances.tsx?");
+
+/***/ }),
+
+/***/ "./src/main/js/app/components/Instance/RemoveInstance.tsx":
+/*!****************************************************************!*\
+  !*** ./src/main/js/app/components/Instance/RemoveInstance.tsx ***!
+  \****************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+eval("\r\nObject.defineProperty(exports, \"__esModule\", { value: true });\r\nconst React = __webpack_require__(/*! react */ \"./node_modules/react/index.js\");\r\nexports.default = () => {\r\n    return (React.createElement(\"div\", null, \"\\u0423\\u0434\\u0430\\u043B\\u0438\\u0442\\u044C\"));\r\n};\r\n\n\n//# sourceURL=webpack:///./src/main/js/app/components/Instance/RemoveInstance.tsx?");
+
+/***/ }),
+
+/***/ "./src/main/js/app/components/Instance/UpdateInstance.tsx":
+/*!****************************************************************!*\
+  !*** ./src/main/js/app/components/Instance/UpdateInstance.tsx ***!
+  \****************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+eval("\r\nObject.defineProperty(exports, \"__esModule\", { value: true });\r\nconst React = __webpack_require__(/*! react */ \"./node_modules/react/index.js\");\r\nexports.default = () => {\r\n    return (React.createElement(\"div\", null, \"\\u041E\\u0431\\u043D\\u043E\\u0432\\u0438\\u0442\\u044C \\u0438\\u043D\\u0441\\u0442\\u0430\\u043D\\u0441\"));\r\n};\r\n\n\n//# sourceURL=webpack:///./src/main/js/app/components/Instance/UpdateInstance.tsx?");
+
+/***/ }),
+
+/***/ "./src/main/js/app/components/PageNotFound.tsx":
+/*!*****************************************************!*\
+  !*** ./src/main/js/app/components/PageNotFound.tsx ***!
+  \*****************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+eval("\r\nObject.defineProperty(exports, \"__esModule\", { value: true });\r\nconst React = __webpack_require__(/*! react */ \"./node_modules/react/index.js\");\r\nexports.default = () => {\r\n    return (React.createElement(\"div\", null, \"\\u0421\\u0442\\u0440\\u0430\\u043D\\u0438\\u0446\\u0430 \\u043D\\u0435 \\u043D\\u0430\\u0439\\u0434\\u0435\\u043D\\u0430\"));\r\n};\r\n\n\n//# sourceURL=webpack:///./src/main/js/app/components/PageNotFound.tsx?");
+
+/***/ }),
+
+/***/ "./src/main/js/app/components/Start.tsx":
 /*!**********************************************!*\
-  !*** ./src/main/js/app/components/About.tsx ***!
+  !*** ./src/main/js/app/components/Start.tsx ***!
   \**********************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-eval("\r\nObject.defineProperty(exports, \"__esModule\", { value: true });\r\nconst React = __webpack_require__(/*! react */ \"./node_modules/react/index.js\");\r\nexports.default = () => {\r\n    return (React.createElement(\"div\", null, \"\\u041E \\u043F\\u0440\\u0433\\u0440\\u0430\\u043C\\u043C\\u0435\"));\r\n};\r\n\n\n//# sourceURL=webpack:///./src/main/js/app/components/About.tsx?");
+eval("\r\nObject.defineProperty(exports, \"__esModule\", { value: true });\r\nconst React = __webpack_require__(/*! react */ \"./node_modules/react/index.js\");\r\nexports.default = () => {\r\n    return (React.createElement(\"div\", null,\r\n        React.createElement(\"h1\", null, \"\\u0421\\u0438\\u0441\\u0442\\u0435\\u043C\\u0430 \\u043C\\u043E\\u043D\\u0438\\u0442\\u043E\\u0440\\u0438\\u043D\\u0433\\u0430 \\u0431\\u0430\\u0437 \\u0434\\u0430\\u043D\\u043D\\u044B\\u0445\")));\r\n};\r\n\n\n//# sourceURL=webpack:///./src/main/js/app/components/Start.tsx?");
+
+/***/ }),
+
+/***/ "./src/main/js/app/components/User/AddUser.tsx":
+/*!*****************************************************!*\
+  !*** ./src/main/js/app/components/User/AddUser.tsx ***!
+  \*****************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+eval("\r\nObject.defineProperty(exports, \"__esModule\", { value: true });\r\nconst React = __webpack_require__(/*! react */ \"./node_modules/react/index.js\");\r\nexports.default = () => {\r\n    return (React.createElement(\"div\", null, \"\\u0414\\u043E\\u0431\\u0430\\u0432\\u0438\\u0442\\u044C \\u043F\\u043E\\u043B\\u044C\\u0437\\u043E\\u0432\\u0430\\u0442\\u0435\\u043B\\u044F\"));\r\n};\r\n\n\n//# sourceURL=webpack:///./src/main/js/app/components/User/AddUser.tsx?");
+
+/***/ }),
+
+/***/ "./src/main/js/app/components/User/ListUsers.tsx":
+/*!*******************************************************!*\
+  !*** ./src/main/js/app/components/User/ListUsers.tsx ***!
+  \*******************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+eval("\r\nObject.defineProperty(exports, \"__esModule\", { value: true });\r\nconst React = __webpack_require__(/*! react */ \"./node_modules/react/index.js\");\r\nexports.default = () => {\r\n    return (React.createElement(\"div\", null, \"\\u0421\\u043F\\u0438\\u0441\\u043E\\u043A \\u043F\\u043E\\u043B\\u044C\\u0437\\u043E\\u0432\\u0430\\u0442\\u0435\\u043B\\u0435\\u0439\"));\r\n};\r\n\n\n//# sourceURL=webpack:///./src/main/js/app/components/User/ListUsers.tsx?");
+
+/***/ }),
+
+/***/ "./src/main/js/app/components/User/UpdateUser.tsx":
+/*!********************************************************!*\
+  !*** ./src/main/js/app/components/User/UpdateUser.tsx ***!
+  \********************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+eval("\r\nObject.defineProperty(exports, \"__esModule\", { value: true });\r\nconst React = __webpack_require__(/*! react */ \"./node_modules/react/index.js\");\r\nexports.default = () => {\r\n    return (React.createElement(\"div\", null, \"\\u041E\\u0431\\u043D\\u043E\\u0432\\u0438\\u0442\\u044C \\u043F\\u043E\\u043B\\u044C\\u0437\\u043E\\u0432\\u0430\\u0442\\u0435\\u043B\\u044F\"));\r\n};\r\n\n\n//# sourceURL=webpack:///./src/main/js/app/components/User/UpdateUser.tsx?");
 
 /***/ }),
 
@@ -2261,7 +2369,7 @@ eval("\r\nObject.defineProperty(exports, \"__esModule\", { value: true });\r\nco
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-eval("\r\nObject.defineProperty(exports, \"__esModule\", { value: true });\r\n__webpack_require__(/*! bootstrap/dist/css/bootstrap.css */ \"./node_modules/bootstrap/dist/css/bootstrap.css\");\r\nconst React = __webpack_require__(/*! react */ \"./node_modules/react/index.js\");\r\nconst ReactDom = __webpack_require__(/*! react-dom */ \"./node_modules/react-dom/index.js\");\r\nconst react_router_dom_1 = __webpack_require__(/*! react-router-dom */ \"./node_modules/react-router-dom/esm/react-router-dom.js\");\r\nconst About_1 = __webpack_require__(/*! ./components/About */ \"./src/main/js/app/components/About.tsx\");\r\nconst reactstrap_1 = __webpack_require__(/*! reactstrap */ \"./node_modules/reactstrap/es/index.js\");\r\nclass App extends React.Component {\r\n    render() {\r\n        console.log(`pathname is ${location.pathname}`);\r\n        let aboutPAth = `${location.pathname}about`;\r\n        console.log(`about is ${aboutPAth}`);\r\n        return (React.createElement(react_router_dom_1.BrowserRouter, null,\r\n            React.createElement(\"div\", null,\r\n                React.createElement(reactstrap_1.Navbar, { color: \"light\", light: true, expand: \"md\" },\r\n                    React.createElement(reactstrap_1.NavbarBrand, null, \"\\u0421\\u0438\\u0441\\u0442\\u0435\\u043C\\u0430 \\u043C\\u043E\\u043D\\u0438\\u0442\\u043E\\u0440\\u0438\\u043D\\u0433\\u0430 \\u0431\\u0430\\u0437 \\u0434\\u0430\\u043D\\u043D\\u044B\\u0445\"),\r\n                    React.createElement(reactstrap_1.Collapse, { navbar: true },\r\n                        React.createElement(reactstrap_1.Nav, { className: \"mr-auto\", navbar: true },\r\n                            React.createElement(reactstrap_1.NavItem, null,\r\n                                React.createElement(reactstrap_1.NavLink, { href: '/' }, \"\\u0413\\u043B\\u0430\\u0432\\u043D\\u0430\\u044F\")),\r\n                            React.createElement(reactstrap_1.NavItem, null,\r\n                                React.createElement(reactstrap_1.NavLink, { href: \"/instances/\" }, \"\\u0423\\u043F\\u0440\\u0430\\u0432\\u043B\\u0435\\u043D\\u0438\\u0435 \\u044D\\u043A\\u0437\\u0435\\u043C\\u043F\\u043B\\u044F\\u0440\\u0430\\u043C\\u0438\")),\r\n                            React.createElement(reactstrap_1.NavItem, null,\r\n                                React.createElement(reactstrap_1.NavLink, { href: \"/users\" }, \"\\u0423\\u043F\\u0440\\u0430\\u0432\\u043B\\u0435\\u043D\\u0438\\u0435 \\u043F\\u043E\\u043B\\u044C\\u0437\\u043E\\u0432\\u0430\\u0442\\u0435\\u043B\\u044F\\u043C\\u0438\")),\r\n                            React.createElement(reactstrap_1.NavItem, null,\r\n                                React.createElement(reactstrap_1.NavLink, { href: `${location.pathname}about` }, \"\\u041E \\u043F\\u0440\\u043E\\u0433\\u0440\\u0430\\u043C\\u043C\\u0435\")),\r\n                            React.createElement(reactstrap_1.UncontrolledDropdown, { nav: true, inNavbar: true },\r\n                                React.createElement(reactstrap_1.DropdownToggle, { nav: true, caret: true }, \"Options\"),\r\n                                React.createElement(reactstrap_1.DropdownMenu, { right: true },\r\n                                    React.createElement(reactstrap_1.DropdownItem, null, \"Option 1\"),\r\n                                    React.createElement(reactstrap_1.DropdownItem, null, \"Option 2\"),\r\n                                    React.createElement(reactstrap_1.DropdownItem, { divider: true }),\r\n                                    React.createElement(reactstrap_1.DropdownItem, null, \"Reset\")))),\r\n                        React.createElement(reactstrap_1.Button, { color: \"primary\" }, \"\\u0412\\u043E\\u0439\\u0442\\u0438\")))),\r\n            React.createElement(\"div\", null,\r\n                React.createElement(react_router_dom_1.Switch, null,\r\n                    React.createElement(react_router_dom_1.Route, { path: `/`, component: App, exact: true }),\r\n                    React.createElement(react_router_dom_1.Route, { path: \"database_monitoring/about\", component: About_1.default }),\r\n                    React.createElement(react_router_dom_1.Route, { path: '/users', component: (props) => React.createElement(\"div\", null, \"\\u041F\\u043E\\u043B\\u044C\\u0437\\u043E\\u0432\\u0430\\u0442\\u0435\\u043B\\u0438\") }),\r\n                    React.createElement(react_router_dom_1.Route, { render: (props) => React.createElement(\"div\", null, \"\\u0421\\u0442\\u0440\\u0430\\u043D\\u0438\\u0446\\u0430 \\u043D\\u0435 \\u043D\\u0430\\u0439\\u0434\\u0435\\u043D\\u0430\") })))));\r\n    }\r\n}\r\nReactDom.render(React.createElement(App, null), document.getElementById(\"App\"));\r\n\n\n//# sourceURL=webpack:///./src/main/js/app/index.tsx?");
+eval("\r\nObject.defineProperty(exports, \"__esModule\", { value: true });\r\n__webpack_require__(/*! bootstrap/dist/css/bootstrap.css */ \"./node_modules/bootstrap/dist/css/bootstrap.css\");\r\nconst React = __webpack_require__(/*! react */ \"./node_modules/react/index.js\");\r\nconst ReactDom = __webpack_require__(/*! react-dom */ \"./node_modules/react-dom/index.js\");\r\nconst react_router_dom_1 = __webpack_require__(/*! react-router-dom */ \"./node_modules/react-router-dom/esm/react-router-dom.js\");\r\nconst Footer_1 = __webpack_require__(/*! ./components/Footer */ \"./src/main/js/app/components/Footer.tsx\");\r\nconst AddInstance_1 = __webpack_require__(/*! ./components/Instance/AddInstance */ \"./src/main/js/app/components/Instance/AddInstance.tsx\");\r\nconst ListInstances_1 = __webpack_require__(/*! ./components/Instance/ListInstances */ \"./src/main/js/app/components/Instance/ListInstances.tsx\");\r\nconst RemoveInstance_1 = __webpack_require__(/*! ./components/Instance/RemoveInstance */ \"./src/main/js/app/components/Instance/RemoveInstance.tsx\");\r\nconst UpdateInstance_1 = __webpack_require__(/*! ./components/Instance/UpdateInstance */ \"./src/main/js/app/components/Instance/UpdateInstance.tsx\");\r\nconst PageNotFound_1 = __webpack_require__(/*! ./components/PageNotFound */ \"./src/main/js/app/components/PageNotFound.tsx\");\r\nconst Start_1 = __webpack_require__(/*! ./components/Start */ \"./src/main/js/app/components/Start.tsx\");\r\nconst ListUsers_1 = __webpack_require__(/*! ./components/User/ListUsers */ \"./src/main/js/app/components/User/ListUsers.tsx\");\r\nconst AddUser_1 = __webpack_require__(/*! ./components/User/AddUser */ \"./src/main/js/app/components/User/AddUser.tsx\");\r\nconst UpdateUser_1 = __webpack_require__(/*! ./components/User/UpdateUser */ \"./src/main/js/app/components/User/UpdateUser.tsx\");\r\nclass App extends React.Component {\r\n    render() {\r\n        let context = location.pathname;\r\n        return (React.createElement(react_router_dom_1.HashRouter, null,\r\n            React.createElement(\"div\", null,\r\n                React.createElement(Footer_1.default, { contextRoot: context }),\r\n                React.createElement(\"br\", null),\r\n                React.createElement(react_router_dom_1.Switch, null,\r\n                    React.createElement(react_router_dom_1.Route, { path: \"/\", component: Start_1.default, exact: true }),\r\n                    React.createElement(react_router_dom_1.Route, { path: `/listInstance`, component: ListInstances_1.default }),\r\n                    React.createElement(react_router_dom_1.Route, { path: `/addInstance`, component: AddInstance_1.default }),\r\n                    React.createElement(react_router_dom_1.Route, { path: `/updateInstance`, component: UpdateInstance_1.default }),\r\n                    React.createElement(react_router_dom_1.Route, { path: `/removeInstance`, component: RemoveInstance_1.default }),\r\n                    React.createElement(react_router_dom_1.Route, { path: `/listUser`, component: ListUsers_1.default }),\r\n                    React.createElement(react_router_dom_1.Route, { path: `/addUser`, component: AddUser_1.default }),\r\n                    React.createElement(react_router_dom_1.Route, { path: `/updateUser`, component: UpdateUser_1.default }),\r\n                    React.createElement(react_router_dom_1.Route, { path: `/removeUser`, component: RemoveInstance_1.default }),\r\n                    React.createElement(react_router_dom_1.Route, { render: PageNotFound_1.default })))));\r\n    }\r\n}\r\nReactDom.render(React.createElement(App, null), document.getElementById(\"App\"));\r\n\n\n//# sourceURL=webpack:///./src/main/js/app/index.tsx?");
 
 /***/ })
 

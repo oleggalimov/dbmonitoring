@@ -1,8 +1,16 @@
 import * as React from 'react';
-import { BrowserRouter, useRouteMatch } from 'react-router-dom';
-import { Button, Collapse, DropdownItem, DropdownMenu, DropdownToggle, Nav, Navbar, NavbarBrand, NavItem, NavLink, UncontrolledDropdown } from 'reactstrap';
+import { NavLink } from 'react-router-dom';
+import { Button, Collapse, Nav, Navbar, NavbarBrand, UncontrolledDropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 
-export default class Footer extends React.Component {  
+
+export default class Footer extends React.Component<{ contextRoot: String }, { contextPath: String }> {
+  constructor(props) {
+    super(props);
+    this.state = {
+      contextPath: props.contextRoot
+    }
+  }
+
 
   render() {
     console.log(`location is ${location}`);
@@ -10,51 +18,67 @@ export default class Footer extends React.Component {
     console.log(`protocol is ${location.protocol}`);
     console.log(`pathname is ${location.pathname}`);
     console.log(`origin is ${location.origin}`);
-    let element = <BrowserRouter>
-     <div>
-     <Navbar color="light" light expand="md">
-        <NavbarBrand>Система мониторинга баз данных</NavbarBrand>
-        <Collapse navbar>
-          <Nav className="mr-auto" navbar>
-              <NavItem>
-                <NavLink href='/'>Главная</NavLink>
-              </NavItem>
-            <NavItem>
-              <NavLink href="/instances/">Управление экземплярами</NavLink>
-            </NavItem>
-            <NavItem>
-              <NavLink href="/users">Управление пользователями</NavLink>
-            </NavItem>
-            <NavItem>
-              <NavLink href={`${location.pathname}about`}>О программе</NavLink>
-            </NavItem>
-            <UncontrolledDropdown nav inNavbar>
-              <DropdownToggle nav caret>
-                Options
-              </DropdownToggle>
-              <DropdownMenu right>
-                <DropdownItem>
-                  Option 1
-                </DropdownItem>
-                <DropdownItem>
-                  Option 2
-                </DropdownItem>
-                <DropdownItem divider />
-                <DropdownItem>
-                  Reset
-                </DropdownItem>
-              </DropdownMenu>
-            </UncontrolledDropdown>
-          </Nav>
-          <Button color="primary">Войти</Button>
-        </Collapse>
-      </Navbar>
-  </div>
-  
-  </BrowserRouter>
-  
     return (
-        element
+      <div>
+        <Navbar color="light" light expand="md">
+          <NavbarBrand href="#">Система мониторинга баз данных</NavbarBrand>
+
+          <Collapse navbar>
+            <Nav className="mr-auto" navbar>
+              <UncontrolledDropdown nav inNavbar id="instanceDropDown">
+                <DropdownToggle nav caret>
+                  Управление экземплярами
+              </DropdownToggle>
+                <DropdownMenu right>
+                  <DropdownItem>
+                    <NavLink to={`listInstance`} style={{ color: "DIMGRAY" }}>Полный список экземпляров</NavLink>
+                    <DropdownItem divider />
+                  </DropdownItem>
+                  <DropdownItem>
+                    <NavLink to={`addInstance`} style={{ color: "DIMGRAY" }}>Добавить</NavLink>
+                  </DropdownItem>
+                  <DropdownItem>
+                    <NavLink to={`updateInstance`} style={{ color: "DIMGRAY" }}>Изменить</NavLink>
+                  </DropdownItem>
+                  
+                  <DropdownItem >
+                  <NavLink to={`removeInstance`} style={{ color: "DIMGRAY" }}>Удалить</NavLink>
+                </DropdownItem>
+                </DropdownMenu>
+              </UncontrolledDropdown>
+              <UncontrolledDropdown nav inNavbar id="userDropDown">
+                <DropdownToggle nav caret>
+                  Управление пользователями
+              </DropdownToggle>
+                <DropdownMenu right>
+                  <DropdownItem>
+                    <NavLink to={`listUser`} style={{ color: "DIMGRAY" }}>Полный список пользователей</NavLink>
+                  </DropdownItem>
+                  <DropdownItem divider />
+                  <DropdownItem>
+                    <NavLink to={`addUser`} style={{ color: "DIMGRAY" }}> Добавить</NavLink>
+                  </DropdownItem>
+                  <DropdownItem>
+                    <NavLink to={`updateUser`} style={{ color: "DIMGRAY" }}> Изменить</NavLink>
+                  </DropdownItem>
+                  <DropdownItem>
+                  <NavLink to={`removeUser`} style={{ color: "DIMGRAY" }}> Удалить</NavLink>
+                </DropdownItem>
+                </DropdownMenu>
+              </UncontrolledDropdown>
+              
+
+              <Button color="link">
+
+              </Button>
+              <Button color="link">
+                <NavLink to={`metircs`} style={{ color: "DIMGRAY" }}>Просмотр метрик</NavLink>
+              </Button>
+            </Nav>
+            <Button color="primary"> <NavLink to={`/login`} style={{ color: "WHITE" }}> Войти</NavLink></Button>
+          </Collapse>
+        </Navbar>
+      </div >
     );
   }
 }

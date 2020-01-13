@@ -1,58 +1,47 @@
 import 'bootstrap/dist/css/bootstrap.css';
 import * as React from 'react';
 import * as ReactDom from 'react-dom';
-import { BrowserRouter, Route, Switch } from 'react-router-dom';
-import About from './components/About';
-import { Navbar, NavbarBrand, Collapse, Nav, NavItem, UncontrolledDropdown, DropdownToggle, DropdownMenu, DropdownItem, Button, NavLink } from 'reactstrap';
+import { BrowserRouter, Route, Switch, HashRouter } from 'react-router-dom';
+import Footer from './components/Footer';
+import AddInstance from './components/Instance/AddInstance';
+import ListInstances from './components/Instance/ListInstances';
+import { default as InstanceRemove, default as RemoveInstance } from './components/Instance/RemoveInstance';
+import UpdateInstance from './components/Instance/UpdateInstance';
+import PageNotFound from './components/PageNotFound';
+import Start from './components/Start';
+import UserAdd from './components/User/AddUser';
+import ListUsers from './components/User/ListUsers';
+import UserUpdate from './components/User/UpdateUser';
+import AddUser from './components/User/AddUser';
+import UpdateUser from './components/User/UpdateUser';
 
 class App extends React.Component {
     render() {
-        console.log(`pathname is ${location.pathname}`);
-        let aboutPAth=`${location.pathname}about`;
-        console.log(`about is ${aboutPAth}`);
-
+        let context = location.pathname;
         return (
-            <BrowserRouter>
+            <HashRouter>
                 <div>
-                    <Navbar color="light" light expand="md">
-                        <NavbarBrand>Система мониторинга баз данных</NavbarBrand>
-                        <Collapse navbar>
-                            <Nav className="mr-auto" navbar>
-                                <NavItem>
-                                    <NavLink href='/'>Главная</NavLink>
-                                </NavItem>
-                                <NavItem>
-                                    <NavLink href="/instances/">Управление экземплярами</NavLink>
-                                </NavItem>
-                                <NavItem>
-                                    <NavLink href="/users">Управление пользователями</NavLink>
-                                </NavItem>
-                                <NavItem>
-                                    <NavLink href={`${location.pathname}about`}>О программе</NavLink>
-                                </NavItem>
-                                <UncontrolledDropdown nav inNavbar>
-                                    <DropdownToggle nav caret>Options</DropdownToggle>
-                                    <DropdownMenu right>
-                                        <DropdownItem>Option 1</DropdownItem>
-                                        <DropdownItem>Option 2</DropdownItem>
-                                        <DropdownItem divider />
-                                        <DropdownItem>Reset</DropdownItem>
-                                    </DropdownMenu>
-                                </UncontrolledDropdown>
-                            </Nav>
-                            <Button color="primary">Войти</Button>
-                        </Collapse>
-                    </Navbar>
-                </div>
-                <div>
+                    <Footer contextRoot={context}/>
+                    {/* <Footer /> */}
+                    <br />
                     <Switch>
-                        <Route path={`/`} component={App} exact={true} />
-                        <Route path="database_monitoring/about" component={About} />
-                        <Route path='/users' component={(props) => <div>Пользователи</div>} />
-                        <Route render={(props) => <div>Страница не найдена</div>} />
+                        <Route path="/" component={Start} exact={true} />
+                        <Route path={`/listInstance`} component={ListInstances} />
+                        <Route path={`/addInstance`} component={AddInstance} />
+                        <Route path={`/updateInstance`} component={UpdateInstance} />
+                        <Route path={`/removeInstance`} component={RemoveInstance} />
+
+                        <Route path={`/listUser`} component={ListUsers} />
+                        <Route path={`/addUser`} component={AddUser} />
+                        <Route path={`/updateUser`} component={UpdateUser} />
+                        <Route path={`/removeUser`} component={RemoveInstance} />
+                        
+                        
+                        <Route render={PageNotFound} />
                     </Switch>
                 </div>
-            </BrowserRouter>);
+            </HashRouter>
+        );
     }
 }
 
