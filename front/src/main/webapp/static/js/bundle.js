@@ -2273,7 +2273,7 @@ eval("\r\nObject.defineProperty(exports, \"__esModule\", { value: true });\r\nco
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-eval("\r\nObject.defineProperty(exports, \"__esModule\", { value: true });\r\nconst React = __webpack_require__(/*! react */ \"./node_modules/react/index.js\");\r\nexports.default = () => {\r\n    return (React.createElement(\"div\", null, \"\\u0421\\u043F\\u0438\\u0441\\u043E\\u043A \\u0438\\u043D\\u0441\\u0442\\u0430\\u043D\\u0441\\u043E\\u0432\"));\r\n};\r\n\n\n//# sourceURL=webpack:///./src/main/js/app/components/Instance/ListInstances.tsx?");
+eval("\r\nObject.defineProperty(exports, \"__esModule\", { value: true });\r\nconst React = __webpack_require__(/*! react */ \"./node_modules/react/index.js\");\r\nclass ListInstance extends React.Component {\r\n    componentDidMount() {\r\n        console.log(\"Компонент загрузился\");\r\n    }\r\n    render() {\r\n        return (React.createElement(\"div\", null, \"\\u0421\\u043F\\u0438\\u0441\\u043E\\u043A \\u0438\\u043D\\u0441\\u0442\\u0430\\u043D\\u0441\\u043E\\u0432\"));\r\n    }\r\n}\r\nexports.default = ListInstance;\r\n\n\n//# sourceURL=webpack:///./src/main/js/app/components/Instance/ListInstances.tsx?");
 
 /***/ }),
 

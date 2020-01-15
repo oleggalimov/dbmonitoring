@@ -1,5 +1,10 @@
 import React = require("react");
 
-export default ()=>{
-    return (<div>Список инстансов</div>)
+export default class ListInstance extends React.Component {
+    componentDidMount() {
+        console.log("Компонент загрузился");
+    }
+    render() {
+        return (<div>Список инстансов</div>);
+    }
 }
