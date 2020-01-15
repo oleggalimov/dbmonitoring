@@ -1,18 +1,16 @@
 import 'bootstrap/dist/css/bootstrap.css';
 import * as React from 'react';
 import * as ReactDom from 'react-dom';
-import { BrowserRouter, Route, Switch, HashRouter } from 'react-router-dom';
+import { HashRouter, Route, Switch } from 'react-router-dom';
 import Footer from './components/Footer';
 import AddInstance from './components/Instance/AddInstance';
 import ListInstances from './components/Instance/ListInstances';
-import { default as InstanceRemove, default as RemoveInstance } from './components/Instance/RemoveInstance';
+import { default as RemoveInstance } from './components/Instance/RemoveInstance';
 import UpdateInstance from './components/Instance/UpdateInstance';
 import PageNotFound from './components/PageNotFound';
 import Start from './components/Start';
-import UserAdd from './components/User/AddUser';
-import ListUsers from './components/User/ListUsers';
-import UserUpdate from './components/User/UpdateUser';
 import AddUser from './components/User/AddUser';
+import ListUsers from './components/User/ListUsers';
 import UpdateUser from './components/User/UpdateUser';
 
 class App extends React.Component {

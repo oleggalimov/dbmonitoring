@@ -28,7 +28,7 @@ module.exports = {
         extensions: [".ts", ".tsx", ".js", ".jsx",".json",".css"]
     },
     devServer: {
-        contentBase: path.join (__dirname, "./src/main/webapp"),
+        contentBase: path.join (__dirname, "./src/main/webapp/static"),
         port:9000,
         //hot:true,
         https:false,

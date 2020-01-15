@@ -13,11 +13,6 @@ export default class Footer extends React.Component<{ contextRoot: String }, { c
 
 
   render() {
-    console.log(`location is ${location}`);
-    console.log(`href is ${location.href}`);
-    console.log(`protocol is ${location.protocol}`);
-    console.log(`pathname is ${location.pathname}`);
-    console.log(`origin is ${location.origin}`);
     return (
       <div>
         <Navbar color="light" light expand="md">
