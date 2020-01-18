@@ -1,0 +1,19 @@
+{
+  "success": true,
+  "body": {
+    "INSTANCES": [
+      {
+        "id": "test",
+        "host": "host",
+        "port": 1520,
+        "database": "testDataBase",
+        "user": {
+          "login": "login"
+        },
+        "type": "ORACLE"
+      }
+    ]
+  },
+  "errors": [],
+  "messages": []
+}

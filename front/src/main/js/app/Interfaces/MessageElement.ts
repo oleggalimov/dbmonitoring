@@ -1,6 +1,6 @@
-export interface Message {
+export interface MessageElement {
     readonly code:String;
     readonly message:String;
     readonly title:String;
-    readonly type:CardType;
+    readonly type:String;
 }

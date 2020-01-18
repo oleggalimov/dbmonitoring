@@ -1,25 +1,36 @@
 import React = require("react");
-import { Message } from "../../Interfaces/Message";
-import MsgCard from "../MsgCard";
 import { Container } from "reactstrap";
-import * as Uuidv4 from 'uuid/v4';
+import MessageTransformer from "../../utils/MessageTransformer";
+import ErrorsTransformer from "../../utils/ErrorsTransformer";
+import LoadingErrorMessage from "../common/LoadingErrorMessage";
 
-export default class ListInstance extends React.Component<{ loading: boolean }, { loading: boolean, messages: Array<JSX.Element> | null }> {
+export default class ListInstance extends React.Component<
+    { loading: boolean },
+    {
+        loading: boolean,
+        instances: Array<JSX.Element> | null,
+        messages: Array<JSX.Element> | null,
+        errors: Array<JSX.Element> | null
+    }
+    > {
     constructor(props: any) {
         super(props);
         this.state = {
             loading: true,
-            messages: null
+            instances: null,
+            messages: null,
+            errors: null
         }
     }
     async loadInstances() {
         const contextRoot = location.origin + location.pathname;
-        let response = await fetch(`${contextRoot}rest/list/instance/allш`)
+        // await fetch(`${contextRoot}rest/list/instance/all`)
+        await fetch(`http://127.0.0.1:8887/list.json#`)
             .then((response) => {
                 if (response.status == 200) {
                     return response.json();
                 } else {
-                    throw Error(`Статус ответа: ${response.status}`);
+                    throw Error(`Response status: ${response.status}`);
                 }
             })
             .then((json) => {
@@ -29,31 +40,35 @@ export default class ListInstance extends React.Component<{ loading: boolean }, 
                     console.log(`Body is: ${json['body']}`);
 
                 } else {
-                    const messages = this.readMessagesFromJson(json);
-                    this.setState({ messages: messages })
-                    console.log(`Messages is: ${json['messages']}`);
+                    const messageList = MessageTransformer(json);
+                    const errorsList = ErrorsTransformer(json);
+                    this.setState({ messages: messageList, errors: errorsList });
                 }
             })
             .catch((error) => {
-                console.log(`Error: ${error}`);
+                console.debug(`${error}`);
+                this.setState({ loading: false, errors: [<LoadingErrorMessage key={'errorMessageBox'} />] });
             });
     }
-    readMessagesFromJson(json:any) : Array<JSX.Element> {
-        const messageList = json['messages'] as Array<Message>;
-        const msgElements: Array<JSX.Element> = new Array();
-        messageList.forEach(msg => {
-            msgElements.push(
-                <MsgCard title={msg.title} cardType={CardType.WARNING} message={msg.message} key={Uuidv4()} />
-            );
-        });
-        return msgElements;
-    }
+
     componentDidMount() {
         this.loadInstances();
     }
     render() {
         return (
-            this.state.loading ? <div>Загрузка...</div> : <Container>{this.state.messages}</Container>
+            this.state.loading ?
+                <div>Загрузка...</div> :
+                <Container>
+                    <div>
+                        {this.state.instances}
+                    </div>
+                    <div>
+                        {this.state.messages}
+                    </div>
+                    <div>
+                        {this.state.errors}
+                    </div>
+                </Container>
         );
     }
 }
