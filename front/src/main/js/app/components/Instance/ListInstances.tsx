@@ -1,14 +1,14 @@
 import React = require("react");
 import { Container } from "reactstrap";
-import MessageTransformer from "../../utils/MessageTransformer";
-import ErrorsTransformer from "../../utils/ErrorsTransformer";
 import LoadingErrorMessage from "../common/LoadingErrorMessage";
+import MessageComponentFactory from "../../utils/MessageComponentFactory";
+import ErrorComponentFactory from "../../utils/ErrorComponentFactory";
 
 export default class ListInstance extends React.Component<
     { loading: boolean },
     {
         loading: boolean,
-        instances: Array<JSX.Element> | null,
+        instances: JSX.Element | null,
         messages: Array<JSX.Element> | null,
         errors: Array<JSX.Element> | null
     }
@@ -40,8 +40,8 @@ export default class ListInstance extends React.Component<
                     console.log(`Body is: ${json['body']}`);
 
                 } else {
-                    const messageList = MessageTransformer(json);
-                    const errorsList = ErrorsTransformer(json);
+                    const messageList = MessageComponentFactory(json);
+                    const errorsList = ErrorComponentFactory(json);
                     this.setState({ messages: messageList, errors: errorsList });
                 }
             })
@@ -60,6 +60,7 @@ export default class ListInstance extends React.Component<
                 <div>Загрузка...</div> :
                 <Container>
                     <div>
+                       
                         {this.state.instances}
                     </div>
                     <div>

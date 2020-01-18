@@ -2,7 +2,7 @@ package org.oleggalimov.dbmonitoring.back.dto;
 
 import org.oleggalimov.dbmonitoring.back.enumerations.DatabaseInstanceType;
 
-public class DataBaseInstance {
+public class DataBaseInstance implements Cloneable {
 
     private String id;
     private String host;
@@ -10,6 +10,7 @@ public class DataBaseInstance {
     private String database;
     private DataBaseUser user;
     private DatabaseInstanceType type;
+    private String status;
 
     public DataBaseInstance() {
     }
@@ -72,6 +73,14 @@ public class DataBaseInstance {
         this.database = database;
     }
 
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
     public boolean equals(Object obj) {
         if (obj == null) {
             return false;
@@ -110,6 +119,12 @@ public class DataBaseInstance {
                 ", database='" + database + '\'' +
                 ", user=" + user +
                 ", type=" + type +
+                ", status='" + status + '\'' +
                 '}';
+    }
+
+    @Override
+    public DataBaseInstance clone() throws CloneNotSupportedException {
+        return (DataBaseInstance) super.clone();
     }
 }

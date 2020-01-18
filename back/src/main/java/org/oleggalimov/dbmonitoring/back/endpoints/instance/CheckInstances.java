@@ -18,8 +18,8 @@ import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.EnumMap;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.concurrent.CopyOnWriteArraySet;
 
 @RestController
@@ -39,29 +39,36 @@ public class CheckInstances {
     @GetMapping("check/instance/all")
     public String checkInstances() throws JsonProcessingException {
         try {
-            Map<DataBaseInstance, String> statusMap = new HashMap<>();
+            Set<DataBaseInstance> resultSet = new HashSet<>();
             for (DataBaseInstance instance : instanceSet) {
                 DataSource dataSource = AbstractDataSourceFactory.buildDataSource(instance);
                 String query = queries.get(instance.getType());
                 if (dataSource == null || query == null) {
                     LOGGER.error("Can't create data source (value = {}), or query is null (value = {})", dataSource, query);
-                    statusMap.put(instance, "Error with creation data source");
+                    DataBaseInstance temp = instance.clone();
+                    temp.setStatus("Error with creation data source");
+                    resultSet.add(temp);
                     continue;
                 }
                 try (Connection connection = dataSource.getConnection()) {
                     boolean result = connection.prepareStatement(query).execute();
+                    DataBaseInstance temp = instance.clone();
                     if (result) {
-                        statusMap.put(instance, "OK");
+                        temp.setStatus("OK");
+
                     } else {
-                        statusMap.put(instance, "FAIL");
+                        temp.setStatus("FAIL");
                     }
+                    resultSet.add(temp);
                 } catch (SQLException e) {
                     LOGGER.error("Error on status check for instance: {}, error: {}", instance, e.getMessage());
-                    statusMap.put(instance, e.getMessage());
+                    DataBaseInstance temp = instance.clone();
+                    temp.setStatus(e.getMessage());
+                    resultSet.add(temp);
                 }
             }
             RestResponseBody body = new RestResponseBody();
-            body.setItem(BodyItemKey.INSTANCES.toString(), statusMap);
+            body.setItem(BodyItemKey.INSTANCES.toString(), resultSet);
             return responseBuilder.buildRestResponse(true, body, null, null);
         } catch (Exception ex) {
             return responseBuilder.buildExceptionResponse(ex);
