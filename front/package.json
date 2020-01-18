@@ -5,12 +5,14 @@
   "main": "index.js",
   "scripts": {
     "watch": "webpack --watch",
+    "build": "webpack",
     "serve": "webpack-dev-server --hot",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Oleg Galimov",
   "license": "ISC",
   "dependencies": {
+    "@material-ui/core": "^4.8.3",
     "@types/axios": "^0.9.34",
     "@types/react": "16.9.7",
     "@types/react-dom": "16.9.4",

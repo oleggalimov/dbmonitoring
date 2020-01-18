@@ -1,22 +1,29 @@
 import * as React from 'react';
-import {
-  Card, CardImg, CardText, CardBody,
-  CardTitle, CardSubtitle, Button
-} from 'reactstrap';
+import { Card, CardBody, CardTitle } from 'reactstrap';
 
-const InstanceCard = (props : any) => {
-  return (
-    <div>
-      <Card>
-        <CardBody>
-          <CardTitle>Card title</CardTitle>
-          <CardSubtitle>Card subtitle</CardSubtitle>
-          <CardText>Some quick example text to build on the card title and make up the bulk of the card's content.</CardText>
-          <Button>Button</Button>
-        </CardBody>
-      </Card>
-    </div>
-  );
+const InstanceCard = (props: any) => {
+  const instance = props.instance;
+  const cardBody =
+    <CardBody>
+      <CardTitle><b>ID: </b>{instance.id}</CardTitle>
+      <p><b>HOST: </b>{instance.host}</p>
+      <p><b>PORT: </b>{instance.port}</p>
+      <p><b>DATABASE NAME: </b>{instance.database}</p>
+      <p><b>DATABASE USER LOGIN: </b> {instance.user.login}</p>
+      {props.withStatus != false
+        ?
+        <p><b>DATABASE STATUS: </b>{instance.status == null ? "Unknon" : instance.status}</p>
+        : null
+      }
+    </CardBody>
+
+  let card: JSX.Element;
+  if (props.withStatus) {
+    card = <Card body inverse color={instance.status == "OK" ? "success" : "danger"}>{cardBody}</Card>;
+  } else {
+    card = <Card>{cardBody}</Card>;
+  }
+  return (card);
 };
 
 export default InstanceCard;

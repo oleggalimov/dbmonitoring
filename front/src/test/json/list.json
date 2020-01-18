@@ -3,7 +3,47 @@
   "body": {
     "INSTANCES": [
       {
-        "id": "test",
+        "id": "1",
+        "host": "host",
+        "port": 1520,
+        "database": "testDataBase",
+        "user": {
+          "login": "login"
+        },
+        "type": "ORACLE"
+      },
+      {
+        "id": "2",
+        "host": "host",
+        "port": 1520,
+        "database": "testDataBase",
+        "user": {
+          "login": "login"
+        },
+        "type": "ORACLE"
+      },
+      {
+        "id": "3",
+        "host": "host",
+        "port": 1520,
+        "database": "testDataBase",
+        "user": {
+          "login": "login"
+        },
+        "type": "ORACLE"
+      },
+      {
+        "id": "4",
+        "host": "host",
+        "port": 1520,
+        "database": "testDataBase",
+        "user": {
+          "login": "login"
+        },
+        "type": "ORACLE"
+      },
+      {
+        "id": "5",
         "host": "host",
         "port": 1520,
         "database": "testDataBase",

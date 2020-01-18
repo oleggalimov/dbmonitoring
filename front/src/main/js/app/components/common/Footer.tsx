@@ -27,8 +27,8 @@ export default class Footer extends React.Component<{ contextRoot: String }, { c
                 <DropdownMenu right>
                   <DropdownItem>
                     <NavLink to={`listInstance`} style={{ color: "DIMGRAY" }}>Full list of instances</NavLink>
-                    <DropdownItem divider />
                   </DropdownItem>
+                  <DropdownItem divider />
                   <DropdownItem>
                     <NavLink to={`addInstance`} style={{ color: "DIMGRAY" }}>Add instance</NavLink>
                   </DropdownItem>
@@ -61,10 +61,7 @@ export default class Footer extends React.Component<{ contextRoot: String }, { c
                   </DropdownItem>
                 </DropdownMenu>
               </UncontrolledDropdown>
-
-
               <Button color="link">
-
               </Button>
               <Button color="link">
                 <NavLink to={`metircs`} style={{ color: "DIMGRAY" }}>View metrics</NavLink>

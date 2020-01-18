@@ -1,0 +1,97 @@
+{
+  "success": true,
+  "body": {
+    "INSTANCES": [
+      {
+        "id": "test",
+        "host": "host",
+        "port": 1520,
+        "database": "testDataBase",
+        "user": {
+          "login": "login"
+        },
+        "type": "ORACLE",
+        "status": "?????? ?????/??????: The Network Adapter could not establish the connection"
+      },
+      {
+        "id": "testOk",
+        "host": "host",
+        "port": 1520,
+        "database": "testDataBase",
+        "user": {
+          "login": "login"
+        },
+        "type": "ORACLE",
+        "status": "OK"
+      },
+      {
+        "id": "test",
+        "host": "host",
+        "port": 1520,
+        "database": "testDataBase",
+        "user": {
+          "login": "login"
+        },
+        "type": "ORACLE",
+        "status": "?????? ?????/??????: The Network Adapter could not establish the connection"
+      },
+      {
+        "id": "testOk",
+        "host": "host",
+        "port": 1520,
+        "database": "testDataBase",
+        "user": {
+          "login": "login"
+        },
+        "type": "ORACLE",
+        "status": "OK"
+      },
+      {
+        "id": "test",
+        "host": "host",
+        "port": 1520,
+        "database": "testDataBase",
+        "user": {
+          "login": "login"
+        },
+        "type": "ORACLE",
+        "status": "?????? ?????/??????: The Network Adapter could not establish the connection"
+      },
+      {
+        "id": "testOk",
+        "host": "host",
+        "port": 1520,
+        "database": "testDataBase",
+        "user": {
+          "login": "login"
+        },
+        "type": "ORACLE",
+        "status": "OK"
+      },
+      {
+        "id": "test",
+        "host": "host",
+        "port": 1520,
+        "database": "testDataBase",
+        "user": {
+          "login": "login"
+        },
+        "type": "ORACLE",
+        "status": "?????? ?????/??????: The Network Adapter could not establish the connection"
+      },
+      {
+        "id": "testOk",
+        "host": "host",
+        "port": 1520,
+        "database": "testDataBase",
+        "user": {
+          "login": "login"
+        },
+        "type": "ORACLE",
+        "status": "OK"
+      }
+    ]
+  },
+  "errors": [],
+  "messages": []
+}

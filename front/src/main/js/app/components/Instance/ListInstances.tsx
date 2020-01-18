@@ -1,16 +1,20 @@
 import React = require("react");
-import { Container } from "reactstrap";
+import { Container as div, CardGroup, Table, Row, Container, Spinner } from "reactstrap";
 import LoadingErrorMessage from "../common/LoadingErrorMessage";
 import MessageComponentFactory from "../../utils/MessageComponentFactory";
 import ErrorComponentFactory from "../../utils/ErrorComponentFactory";
+import InstanceComponentFactory from "../../utils/InstanceComponentFactory";
+import Switch from '@material-ui/core/Switch';
+
 
 export default class ListInstance extends React.Component<
     { loading: boolean },
     {
         loading: boolean,
-        instances: JSX.Element | null,
+        instances: Array<JSX.Element> | null,
         messages: Array<JSX.Element> | null,
         errors: Array<JSX.Element> | null
+        loadStatuses: boolean
     }
     > {
     constructor(props: any) {
@@ -19,13 +23,32 @@ export default class ListInstance extends React.Component<
             loading: true,
             instances: null,
             messages: null,
-            errors: null
+            errors: null,
+            loadStatuses: false
         }
+
     }
-    async loadInstances() {
+
+    handleSwitch = () => {
+        const switcher = !this.state.loadStatuses;
+        this.setState({
+            loadStatuses: switcher
+        });
+        this.loadInstances(switcher);
+    }
+
+    async loadInstances(loadStatuses:boolean=false) {
         const contextRoot = location.origin + location.pathname;
-        // await fetch(`${contextRoot}rest/list/instance/all`)
-        await fetch(`http://127.0.0.1:8887/list.json#`)
+        let requestURL: string;
+        this.setState({ loading: true });
+        if (loadStatuses) {
+            requestURL = `${contextRoot}rest/check/instance/all`;
+            // requestURL = 'http://127.0.0.1:8887/statusList.json';
+        } else {
+            requestURL = `${contextRoot}rest/list/instance/all`;
+            // requestURL = 'http://127.0.0.1:8887/list.json#';
+        }
+        await fetch(requestURL)
             .then((response) => {
                 if (response.status == 200) {
                     return response.json();
@@ -37,12 +60,16 @@ export default class ListInstance extends React.Component<
                 this.setState({ loading: false });
                 const successFlag = json['success'] as boolean;
                 if (successFlag) {
-                    console.log(`Body is: ${json['body']}`);
-
+                    const instanceList = InstanceComponentFactory(json['body'], this.state.loadStatuses);
+                    this.setState({
+                        instances: instanceList
+                    });
                 } else {
                     const messageList = MessageComponentFactory(json);
                     const errorsList = ErrorComponentFactory(json);
-                    this.setState({ messages: messageList, errors: errorsList });
+                    this.setState({
+                        messages: messageList, errors: errorsList
+                    });
                 }
             })
             .catch((error) => {
@@ -57,19 +84,21 @@ export default class ListInstance extends React.Component<
     render() {
         return (
             this.state.loading ?
-                <div>Загрузка...</div> :
-                <Container>
-                    <div>
-                       
-                        {this.state.instances}
-                    </div>
-                    <div>
-                        {this.state.messages}
-                    </div>
-                    <div>
-                        {this.state.errors}
-                    </div>
-                </Container>
+                <div className="d-flex justify-content-center"><Spinner color="secondary" type="grow" style={{ width: '8rem', height: '8rem' }} /> </div> :
+                <div>
+                    <Container fluid={true}>
+                        Загружать статусы <Switch color="secondary" checked={this.state.loadStatuses} onChange={this.handleSwitch} />
+                        <Row>{this.state.instances}</Row>
+                    </Container>
+                    <Container>
+                        <div>
+                            {this.state.messages}
+                        </div>
+                        <div>
+                            {this.state.errors}
+                        </div>
+                    </Container >
+                </div>
         );
     }
 }
