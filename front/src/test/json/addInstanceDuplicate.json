@@ -1,0 +1,13 @@
+{
+  "success": false,
+  "body": {},
+  "errors": [],
+  "messages": [
+    {
+      "code": "DBI_W_05",
+      "title": "Add instance error",
+      "message": "Instance with such id already exists",
+      "type": "WARNING"
+    }
+  ]
+}
