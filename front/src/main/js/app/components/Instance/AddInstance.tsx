@@ -59,7 +59,9 @@ export default class AddInstance extends React.Component<{}, {
 
 
     sendDataToServer = async () => {
-        const requestURL = "http://localhost";
+        const contextRoot = location.origin + location.pathname;
+        // const requestURL = 'http://127.0.0.1:8887/statusList.json';
+        const requestURL = `${contextRoot}rest/create/user`;
         console.debug("Sending request");
         this.setState({ sendingData: true, gotResult: false, errors: null, messages: null });
         await fetch(requestURL, {
@@ -70,7 +72,11 @@ export default class AddInstance extends React.Component<{}, {
             },
             body: JSON.stringify(this.state)
         }).then((response) => {
-            if (response.status == 200) {
+            
+            if (response.status == 403) {
+                alert("Need to log in");
+            }
+            else if (response.status == 200) {
                 return response.json();
             } else {
                 throw Error(`Response status: ${response.status}`);
@@ -90,7 +96,7 @@ export default class AddInstance extends React.Component<{}, {
                 }
             })
             .catch((error) => {
-                console.debug(`${error}`);
+                console.debug(`Exception in request: ${error}`);
                 this.setState({ sendingData: false, gotResult: true, errors: [<LoadingErrorMessage key={'errorMessageBox'} />] });
             });
     }
