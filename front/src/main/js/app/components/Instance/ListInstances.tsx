@@ -1,10 +1,10 @@
 import React = require("react");
-import { Container as div, CardGroup, Table, Row, Container, Spinner } from "reactstrap";
-import LoadingErrorMessage from "../common/LoadingErrorMessage";
-import MessageComponentFactory from "../../utils/MessageComponentFactory";
+import Switch from '@material-ui/core/Switch';
+import { Container, Row, Spinner } from "reactstrap";
 import ErrorComponentFactory from "../../utils/ErrorComponentFactory";
 import InstanceComponentFactory from "../../utils/InstanceComponentFactory";
-import Switch from '@material-ui/core/Switch';
+import MessageComponentFactory from "../../utils/MessageComponentFactory";
+import LoadingErrorMessage from "../common/LoadingErrorMessage";
 
 
 export default class ListInstance extends React.Component<
@@ -42,11 +42,11 @@ export default class ListInstance extends React.Component<
         let requestURL: string;
         this.setState({ loading: true });
         if (loadStatuses) {
-            requestURL = `${contextRoot}rest/check/instance/all`;
-            // requestURL = 'http://127.0.0.1:8887/statusList.json';
+            // requestURL = `${contextRoot}rest/check/instance/all`;
+            requestURL = 'http://127.0.0.1:8887/statusList.json';
         } else {
-            requestURL = `${contextRoot}rest/list/instance/all`;
-            // requestURL = 'http://127.0.0.1:8887/list.json#';
+            // requestURL = `${contextRoot}rest/list/instance/all`;
+            requestURL = 'http://127.0.0.1:8887/list.json#';
         }
         await fetch(requestURL)
             .then((response) => {
