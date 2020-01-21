@@ -36,6 +36,11 @@ public class SecurityConf extends WebSecurityConfigurerAdapter {
                 "/list/user/**",
                 "/update/user/**"
         };
+        final String[] instanceAdminUrls = new String [] {
+                "/create/instance/**",
+                "/delete/instance/**",
+                "/update/instance/**"
+        };
         final String loginProcessIngUrl = "/login";
 
         http
@@ -44,7 +49,8 @@ public class SecurityConf extends WebSecurityConfigurerAdapter {
                 .antMatchers("/").permitAll()
                 .antMatchers("/login").permitAll()
                 .antMatchers("/signup").permitAll()
-                .antMatchers(userAdminUrls).hasAuthority(Role.USER_ADMIN.name()).and().formLogin()
+//                .antMatchers(userAdminUrls).hasAuthority(Role.USER_ADMIN.name())
+//                .antMatchers(instanceAdminUrls).hasAuthority(Role.ADMIN.name())
 //                .loginProcessingUrl(loginProcessIngUrl)
         ;
     }

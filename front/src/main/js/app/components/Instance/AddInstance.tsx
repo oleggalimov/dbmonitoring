@@ -3,10 +3,13 @@ import { Form, FormGroup, Label, Input, Container, Col, Row, Button, Spinner } f
 import MessageComponentFactory from "../../utils/MessageComponentFactory";
 import ErrorComponentFactory from "../../utils/ErrorComponentFactory";
 import LoadingErrorMessage from "../common/LoadingErrorMessage";
+import { DataBaseUser } from "../../Interfaces/DataBaseUser";
+import LoadingSuccessMessage from "../common/LoadingSuccessMessage";
+import ForbiddenMeesage from "../common/ForbiddenMeesage";
+import InstanceInfoValidator from "../../utils/InstanceInfoValidator";
 
 export default class AddInstance extends React.Component<{}, {
-    instanceId: string, host: string, port: number, databaseName: string, type: string, userName: string,
-    password: string, sendingData: boolean, gotResult: boolean, messages: Array<JSX.Element> | null,
+    id: string, host: string, port: number, database: string, type: string, user: DataBaseUser, sendingData: boolean, gotResult: boolean, messages: Array<JSX.Element> | null,
     errors: Array<JSX.Element> | null
 }> {
     constructor(props: any) {
@@ -15,13 +18,15 @@ export default class AddInstance extends React.Component<{}, {
     }
     getInitState = () => {
         return {
-            instanceId: "",
+            id: "",
             host: "",
             port: 0,
-            databaseName: "",
+            database: "",
             type: "",
-            userName: "",
-            password: "",
+            user: {
+                login: "",
+                password: ""
+            },
             sendingData: false,
             gotResult: false,
             messages: null,
@@ -32,23 +37,33 @@ export default class AddInstance extends React.Component<{}, {
     fieldChangeHandler = (event: any) => {
         const fieldId = event.target.id;
         const fieldValue = event.target.value;
-        if (fieldId != "instancePort" && (fieldValue as String).length < 0) {
+        if (fieldId != "instancePort" && (fieldValue as string).length < 0) {
             return;
         }
         switch (fieldId) {
-            case "instanceId": this.setState({ instanceId: fieldValue });
+            case "instanceId": this.setState({ id: fieldValue });
                 break;
             case "instanceHost": this.setState({ host: fieldValue });
                 break;
             case "instancePort": this.setState({ port: fieldValue });
                 break;
-            case "dbName": this.setState({ databaseName: fieldValue });
+            case "dbName": this.setState({ database: fieldValue });
                 break;
             case "instanceType": this.setState({ type: fieldValue });
                 break;
-            case "dbUserName": this.setState({ userName: fieldValue });
+            case "dbUserName": this.setState({
+                user: {
+                    login: fieldValue,
+                    password: this.state.user.password
+                }
+            });
                 break;
-            case "dbUserPass": this.setState({ password: fieldValue });
+            case "dbUserPass": this.setState({
+                user: {
+                    login: this.state.user.login,
+                    password: fieldValue
+                }
+            });
                 break;
             default: console.debug("Field id is undefined!")
         }
@@ -59,10 +74,23 @@ export default class AddInstance extends React.Component<{}, {
 
 
     sendDataToServer = async () => {
+        const validationMessages : Array<JSX.Element>= InstanceInfoValidator(this.state);
+        if (validationMessages.length>0) {
+            this.setState({
+                sendingData: false, gotResult: true, messages: validationMessages
+            });
+            
+            return;
+        }
+
         const contextRoot = location.origin + location.pathname;
         // const requestURL = 'http://127.0.0.1:8887/statusList.json';
-        const requestURL = `${contextRoot}rest/create/user`;
-        console.debug("Sending request");
+        // const requestURL = `${contextRoot}rest/create/user`;
+        const requestURL = `http://127.0.0.1:8080/database_monitoring/rest/create/instance/`;
+        const { id, host, port, database, type, user } = this.state;
+        const postBody = {
+            id, host, port, database, type, user
+        }
         this.setState({ sendingData: true, gotResult: false, errors: null, messages: null });
         await fetch(requestURL, {
             method: 'POST',
@@ -70,11 +98,11 @@ export default class AddInstance extends React.Component<{}, {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify(this.state)
+            body: JSON.stringify(postBody)
         }).then((response) => {
-            
             if (response.status == 403) {
-                alert("Need to log in");
+                this.setState({ sendingData: false, gotResult: true, messages: [<ForbiddenMeesage key={'forbiddenMessageBox'} />] });
+                return null;
             }
             else if (response.status == 200) {
                 return response.json();
@@ -83,15 +111,18 @@ export default class AddInstance extends React.Component<{}, {
             }
         })
             .then((json) => {
-                this.setState({ sendingData: false });
+                if (json==null) {
+                    return;
+                }
                 const successFlag = json['success'] as boolean;
                 if (successFlag) {
-                    alert("Инстанс добавлен");
+                    this.setState(this.getInitState());
+                    this.setState({ sendingData: false, gotResult: true, messages: [<LoadingSuccessMessage key={'successMessageBox'} />] });
                 } else {
                     const messageList = MessageComponentFactory(json);
                     const errorsList = ErrorComponentFactory(json);
                     this.setState({
-                        messages: messageList, errors: errorsList
+                        sendingData: false, gotResult: true, messages: messageList, errors: errorsList
                     });
                 }
             })
@@ -100,7 +131,6 @@ export default class AddInstance extends React.Component<{}, {
                 this.setState({ sendingData: false, gotResult: true, errors: [<LoadingErrorMessage key={'errorMessageBox'} />] });
             });
     }
-
     render() {
         let buttonColumn: JSX.Element;
         if (this.state.sendingData) {
@@ -124,7 +154,7 @@ export default class AddInstance extends React.Component<{}, {
                                     <Label for="instanceId"><b>INSTANCE ID: </b></Label>
                                     <Input
                                         onChange={this.fieldChangeHandler} type="text" name="instanceIdentifier" id="instanceId"
-                                        placeholder="Input instance id..." value={this.state.instanceId} />
+                                        placeholder="Input instance id..." value={this.state.id} />
                                 </FormGroup>
                             </Col>
                             <Col md={4}>
@@ -142,13 +172,12 @@ export default class AddInstance extends React.Component<{}, {
                                 </FormGroup>
                             </Col>
                         </Row>
-
                         <Row form>
                             <Col md={6}>
                                 <FormGroup>
                                     <Label for="instanceDataBase"><b>DATABASE NAME (SID): </b></Label>
                                     <Input onChange={this.fieldChangeHandler} type="text" name="dtabaseNameIdentifier" id="dbName"
-                                        placeholder="Input database name or SID..." value={this.state.databaseName} />
+                                        placeholder="Input database name or SID..." value={this.state.database} />
                                 </FormGroup>
                             </Col>
                             <Col md={6}>
@@ -159,8 +188,8 @@ export default class AddInstance extends React.Component<{}, {
                                         <option>Select type...</option>
                                         <option>ORACLE</option>
                                         <option>POSTGRES</option>
-                                        <option>MS SQL</option>
-                                        <option>MY SQL</option>
+                                        <option>MSSQL</option>
+                                        <option>MYSQL</option>
                                     </Input>
                                 </FormGroup>
                             </Col>
@@ -170,14 +199,14 @@ export default class AddInstance extends React.Component<{}, {
                                 <FormGroup>
                                     <Label for="dbUserName"><b>DATABASE USER NAME: </b></Label>
                                     <Input onChange={this.fieldChangeHandler} type="text" name="dbUserNameIdentifier" id="dbUserName"
-                                        placeholder="Input database user name..." value={this.state.userName} />
+                                        placeholder="Input database user name..." value={this.state.user.login} />
                                 </FormGroup>
                             </Col>
                             <Col md={6}>
                                 <FormGroup>
                                     <Label for="dbUserPassword"><b>DATABASE USER PASSWORD: </b></Label>
                                     <Input onChange={this.fieldChangeHandler} autoComplete="on" type="password" name="dbUserPasswordIdentifier"
-                                        id="dbUserPass" placeholder="Input database user password..." value={this.state.password} />
+                                        id="dbUserPass" placeholder="Input database user password..." value={this.state.user.password} />
                                 </FormGroup>
                             </Col>
                         </Row>

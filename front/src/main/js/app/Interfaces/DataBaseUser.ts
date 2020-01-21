@@ -1,4 +1,4 @@
 export interface DataBaseUser {
-    readonly login:String;
-    readonly password?:String;
+    readonly login:string;
+    readonly password?:string;
 }
