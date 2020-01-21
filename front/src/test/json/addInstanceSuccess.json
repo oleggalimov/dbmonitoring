@@ -1,0 +1,13 @@
+{
+  "success": true,
+  "body": {},
+  "errors": [],
+  "messages": [
+    {
+      "code": "DBI_I_01",
+      "title": "Success instance operation: create",
+      "message": "Instance was successfully added",
+      "type": "INFO"
+    }
+  ]
+}
