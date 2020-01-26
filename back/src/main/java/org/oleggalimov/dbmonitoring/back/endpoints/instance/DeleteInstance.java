@@ -8,10 +8,7 @@ import org.oleggalimov.dbmonitoring.back.enumerations.Errors;
 import org.oleggalimov.dbmonitoring.back.enumerations.Messages;
 import org.oleggalimov.dbmonitoring.back.validators.StringValidator;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Collections;
 import java.util.concurrent.CopyOnWriteArraySet;
@@ -26,7 +23,7 @@ public class DeleteInstance {
         this.instanceSet = instanceSet;
         this.responseBuilder = builder;
     }
-
+    @CrossOrigin(origins = "*")
     @DeleteMapping("delete/instance/{id}")
     @LogHttpEvent(eventType = RequestMethod.DELETE, message = " delete/instance/{id}")
     public String deleteInstance(@PathVariable String id) throws JsonProcessingException {

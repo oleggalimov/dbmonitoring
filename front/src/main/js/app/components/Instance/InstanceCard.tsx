@@ -6,6 +6,7 @@ const InstanceCard = (props: any) => {
   const cardBody =
     <CardBody>
       <CardTitle><b>ID: </b>{instance.id}</CardTitle>
+      <p><b>TYPE: </b>{instance.type}</p>
       <p><b>HOST: </b>{instance.host}</p>
       <p><b>PORT: </b>{instance.port}</p>
       <p><b>DATABASE NAME: </b>{instance.database}</p>

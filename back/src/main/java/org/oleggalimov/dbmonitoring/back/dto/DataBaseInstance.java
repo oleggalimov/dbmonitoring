@@ -91,7 +91,7 @@ public class DataBaseInstance implements Cloneable {
         } else {
             DataBaseInstance otherInstance = (DataBaseInstance) obj;
             String otherInstanceId = otherInstance.getId();
-            return this.id.equals(otherInstanceId) && (this.type == otherInstance.type);
+            return this.id.equals(otherInstanceId);
         }
 
     }

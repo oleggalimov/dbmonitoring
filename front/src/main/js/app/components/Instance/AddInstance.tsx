@@ -9,8 +9,8 @@ import ForbiddenMeesage from "../common/ForbiddenMeesage";
 import InstanceInfoValidator from "../../utils/InstanceInfoValidator";
 
 export default class AddInstance extends React.Component<{}, {
-    id: string, host: string, port: number, database: string, type: string, user: DataBaseUser, sendingData: boolean, gotResult: boolean, messages: Array<JSX.Element> | null,
-    errors: Array<JSX.Element> | null
+    id: string, host: string, port: number, database: string, type: string, login: string, password: string, sendingData: boolean,
+    gotResult: boolean, messages: Array<JSX.Element> | null, errors: Array<JSX.Element> | null
 }> {
     constructor(props: any) {
         super(props);
@@ -23,10 +23,8 @@ export default class AddInstance extends React.Component<{}, {
             port: 0,
             database: "",
             type: "",
-            user: {
-                login: "",
-                password: ""
-            },
+            login: "",
+            password: "",
             sendingData: false,
             gotResult: false,
             messages: null,
@@ -52,17 +50,11 @@ export default class AddInstance extends React.Component<{}, {
             case "instanceType": this.setState({ type: fieldValue });
                 break;
             case "dbUserName": this.setState({
-                user: {
-                    login: fieldValue,
-                    password: this.state.user.password
-                }
+                login: fieldValue
             });
                 break;
             case "dbUserPass": this.setState({
-                user: {
-                    login: this.state.user.login,
-                    password: fieldValue
-                }
+                password: fieldValue
             });
                 break;
             default: console.debug("Field id is undefined!")
@@ -74,12 +66,12 @@ export default class AddInstance extends React.Component<{}, {
 
 
     sendDataToServer = async () => {
-        const validationMessages : Array<JSX.Element>= InstanceInfoValidator(this.state);
-        if (validationMessages.length>0) {
+        const validationMessages: Array<JSX.Element> = InstanceInfoValidator(this.state);
+        if (validationMessages.length > 0) {
             this.setState({
                 sendingData: false, gotResult: true, messages: validationMessages
             });
-            
+
             return;
         }
 
@@ -87,9 +79,9 @@ export default class AddInstance extends React.Component<{}, {
         // const requestURL = 'http://127.0.0.1:8887/statusList.json';
         // const requestURL = `${contextRoot}rest/create/user`;
         const requestURL = `http://127.0.0.1:8080/database_monitoring/rest/create/instance/`;
-        const { id, host, port, database, type, user } = this.state;
+        const { id, host, port, database, type, login, password } = this.state;
         const postBody = {
-            id, host, port, database, type, user
+            id, host, port, database, type, user:{login:login, password:password}
         }
         this.setState({ sendingData: true, gotResult: false, errors: null, messages: null });
         await fetch(requestURL, {
@@ -111,7 +103,7 @@ export default class AddInstance extends React.Component<{}, {
             }
         })
             .then((json) => {
-                if (json==null) {
+                if (json == null) {
                     return;
                 }
                 const successFlag = json['success'] as boolean;
@@ -199,14 +191,14 @@ export default class AddInstance extends React.Component<{}, {
                                 <FormGroup>
                                     <Label for="dbUserName"><b>DATABASE USER NAME: </b></Label>
                                     <Input onChange={this.fieldChangeHandler} type="text" name="dbUserNameIdentifier" id="dbUserName"
-                                        placeholder="Input database user name..." value={this.state.user.login} />
+                                        placeholder="Input database user name..." value={this.state.login} />
                                 </FormGroup>
                             </Col>
                             <Col md={6}>
                                 <FormGroup>
                                     <Label for="dbUserPassword"><b>DATABASE USER PASSWORD: </b></Label>
                                     <Input onChange={this.fieldChangeHandler} autoComplete="on" type="password" name="dbUserPasswordIdentifier"
-                                        id="dbUserPass" placeholder="Input database user password..." value={this.state.user.password} />
+                                        id="dbUserPass" placeholder="Input database user password..." value={this.state.password} />
                                 </FormGroup>
                             </Col>
                         </Row>
