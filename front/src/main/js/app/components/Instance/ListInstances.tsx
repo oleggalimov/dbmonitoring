@@ -43,10 +43,10 @@ export default class ListInstance extends React.Component<
         this.setState({ loading: true });
         if (loadStatuses) {
             // requestURL = `${contextRoot}rest/check/instance/all`;
-            requestURL = `http://127.0.0.1:8080/database_monitoring/rest/check/instance/all`;
+            requestURL = `http://localhost:8080/database_monitoring/rest/check/instance/all`;
         } else {
             // requestURL = `${contextRoot}rest/list/instance/all`;
-            requestURL = `http://127.0.0.1:8080/database_monitoring/rest/list/instance/all`;
+            requestURL = `http://localhost:8080/database_monitoring/rest/list/instance/all`;
         }
         await fetch(requestURL)
             .then((response) => {

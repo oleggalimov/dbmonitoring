@@ -79,7 +79,9 @@ export default class RemoveInstance extends React.Component<{}, {
             return <>
                 <Container>
                     <Row>
-                        <Col className="row justify-content-center" ><Spinner color="secondary" type="grow" style={{ width: '8rem', height: '8rem' }} /></Col>
+                        <Col className="row justify-content-center" >
+                            <Spinner color="primary" type="grow" style={{ width: '8rem', height: '8rem' }} />
+                        </Col>
                     </Row>
                 </Container>
             </>

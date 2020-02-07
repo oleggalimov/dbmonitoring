@@ -119,7 +119,7 @@ export default class UpdateInstance extends React.Component<{}, {
             });
     }
     sendDataToServer = async () => {
-        this.setState({errors: null, messages: null });
+        this.setState({ errors: null, messages: null });
         const validationMessages: Array<JSX.Element> = InstanceInfoValidator(this.state);
         if (validationMessages.length > 0) {
             this.setState({
@@ -180,7 +180,9 @@ export default class UpdateInstance extends React.Component<{}, {
             return <>
                 <Container>
                     <Row>
-                        <Col className="row justify-content-center" ><Spinner color="secondary" type="grow" style={{ width: '8rem', height: '8rem' }} /></Col>
+                        <Col className="row justify-content-center" >
+                            <Spinner color="primary" type="grow" style={{ width: '8rem', height: '8rem' }} />
+                        </Col>
                     </Row>
                 </Container>
             </>
