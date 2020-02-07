@@ -9,8 +9,8 @@ import ForbiddenMeesage from "../common/ForbiddenMeesage";
 import InstanceInfoValidator from "../../utils/InstanceInfoValidator";
 
 export default class AddInstance extends React.Component<{}, {
-    id: string, host: string, port: number, database: string, type: string, login: string, password: string, sendingData: boolean,
-    gotResult: boolean, messages: Array<JSX.Element> | null, errors: Array<JSX.Element> | null
+    id: string, host: string, port: number, database: string, type: string, login: string, password: string, 
+    sendingData: boolean, gotResult: boolean, messages: Array<JSX.Element> | null, errors: Array<JSX.Element> | null
 }> {
     constructor(props: any) {
         super(props);
