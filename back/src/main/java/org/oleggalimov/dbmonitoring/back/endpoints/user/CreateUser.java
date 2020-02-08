@@ -10,10 +10,8 @@ import org.oleggalimov.dbmonitoring.back.services.UserService;
 import org.oleggalimov.dbmonitoring.back.validators.UserValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Collections;
 import java.util.List;
@@ -28,9 +26,10 @@ public class CreateUser {
         this.responseBuilder = responseBuilder;
         this.userService = service;
     }
-
+    @CrossOrigin(origins = "*")
     @PostMapping(value = "create/user", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @LogHttpEvent(eventType = RequestMethod.POST, message = "create/user")
+    @Secured("USER_ADMIN")
     public String createUser(@RequestBody MonitoringSystemUser monitoringSystemUser) throws JsonProcessingException {
         try {
             List<Error> validationErrors = UserValidator.validate(monitoringSystemUser);

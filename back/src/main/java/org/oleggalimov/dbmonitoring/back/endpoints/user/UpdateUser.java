@@ -9,10 +9,8 @@ import org.oleggalimov.dbmonitoring.back.enumerations.Messages;
 import org.oleggalimov.dbmonitoring.back.services.UserService;
 import org.oleggalimov.dbmonitoring.back.validators.UserValidator;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Collections;
 import java.util.List;
@@ -27,9 +25,10 @@ public class UpdateUser {
         this.userService = userService;
         this.responseBuilder = builder;
     }
-
+    @CrossOrigin(origins = "*")
     @PutMapping(value = "update/user")
     @LogHttpEvent(eventType = RequestMethod.PUT, message = "update/user")
+    @Secured("USER_ADMIN")
     public String updateUser(@RequestBody MonitoringSystemUser monitoringSystemUser) throws JsonProcessingException {
         try {
             List<Error> validationErrors = UserValidator.validate(monitoringSystemUser);

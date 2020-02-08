@@ -12,6 +12,7 @@ import Start from './components/common/Start';
 import AddUser from './components/User/AddUser';
 import ListUsers from './components/User/ListUsers';
 import UpdateUser from './components/User/UpdateUser';
+import RemoveUser from './components/User/RemoveUser';
 
 class App extends React.Component {
     render() {
@@ -31,7 +32,7 @@ class App extends React.Component {
                         <Route path={`/listUser`} component={ListUsers} />
                         <Route path={`/addUser`} component={AddUser} />
                         <Route path={`/updateUser`} component={UpdateUser} />
-                        <Route path={`/removeUser`} component={RemoveInstance} />
+                        <Route path={`/removeUser`} component={RemoveUser} />
                         
                         
                         <Route render={PageNotFound} />

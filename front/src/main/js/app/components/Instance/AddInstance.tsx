@@ -9,7 +9,7 @@ import ForbiddenMeesage from "../common/ForbiddenMeesage";
 import InstanceInfoValidator from "../../utils/InstanceInfoValidator";
 
 export default class AddInstance extends React.Component<{}, {
-    id: string, host: string, port: number, database: string, type: string, login: string, password: string, 
+    id: string, host: string, port: number, database: string, type: string, login: string, password: string,
     sendingData: boolean, gotResult: boolean, messages: Array<JSX.Element> | null, errors: Array<JSX.Element> | null
 }> {
     constructor(props: any) {
@@ -81,7 +81,7 @@ export default class AddInstance extends React.Component<{}, {
         const requestURL = `http://127.0.0.1:8080/database_monitoring/rest/create/instance/`;
         const { id, host, port, database, type, login, password } = this.state;
         const postBody = {
-            id, host, port, database, type, user:{login:login, password:password}
+            id, host, port, database, type, user: { login: login, password: password }
         }
         this.setState({ sendingData: true, gotResult: false, errors: null, messages: null });
         await fetch(requestURL, {
@@ -109,14 +109,12 @@ export default class AddInstance extends React.Component<{}, {
                 const successFlag = json['success'] as boolean;
                 if (successFlag) {
                     this.setState(this.getInitState());
-                    this.setState({ sendingData: false, gotResult: true, messages: [<LoadingSuccessMessage key={'successMessageBox'} />] });
-                } else {
-                    const messageList = MessageComponentFactory(json);
-                    const errorsList = ErrorComponentFactory(json);
-                    this.setState({
-                        sendingData: false, gotResult: true, messages: messageList, errors: errorsList
-                    });
                 }
+                const messageList = MessageComponentFactory(json);
+                const errorsList = ErrorComponentFactory(json);
+                this.setState({
+                    sendingData: false, gotResult: true, messages: messageList, errors: errorsList
+                });
             })
             .catch((error) => {
                 console.debug(`Exception in request: ${error}`);

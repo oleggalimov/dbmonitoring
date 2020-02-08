@@ -280,7 +280,7 @@ export default class UpdateInstance extends React.Component<{}, {
                                 <FormGroup>
                                     <Label for="dbUserPassword"><b>DATABASE USER PASSWORD: </b></Label>
                                     <Input onChange={this.instanceFormChangeHandler} autoComplete="on" type="text" name="dbUserPasswordIdentifier"
-                                        id="dbUserPass" placeholder="Reenter database user password here..." value={this.state.password} />
+                                        id="dbUserPass" placeholder="Enter database user password here..." value={this.state.password} />
                                 </FormGroup>
                             </Col>
                         </Row>

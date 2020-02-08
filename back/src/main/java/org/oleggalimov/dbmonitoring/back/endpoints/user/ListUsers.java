@@ -23,11 +23,9 @@ public class ListUsers {
         this.responseBuilder = responseBuilder;
         this.userService = service;
     }
-
-    @Secured("ROLE_ADMIN")
     @GetMapping("/list/user/all")
     @LogHttpEvent(eventType = RequestMethod.GET, message = "/list/user/all")
-
+    @Secured("USER_ADMIN")
     public String listUsers() throws JsonProcessingException {
         try {
             RestResponseBody body = new RestResponseBody();

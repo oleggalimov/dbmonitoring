@@ -10,6 +10,7 @@ import org.oleggalimov.dbmonitoring.back.enumerations.Messages;
 import org.oleggalimov.dbmonitoring.back.services.UserService;
 import org.oleggalimov.dbmonitoring.back.validators.StringValidator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -27,10 +28,9 @@ public class GetUser {
         this.responseBuilder = responseBuilder;
         this.userService = service;
     }
-
-
     @GetMapping("list/user/{login}")
     @LogHttpEvent(eventType = RequestMethod.GET, message = " list/user/{login}")
+    @Secured("USER_ADMIN")
     public String getUser(@PathVariable String login) throws JsonProcessingException {
         try {
             if (StringValidator.isEmpty(login)) {

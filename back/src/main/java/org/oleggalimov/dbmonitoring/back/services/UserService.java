@@ -33,9 +33,7 @@ public class UserService {
     }
 
     public MonitoringSystemUser saveUser(MonitoringSystemUser monitoringSystemUser) throws Exception {
-        if (userRepository.findByEmail(monitoringSystemUser.getEMail()) != null) {
-            throw new Exception("User with such e-mail already exists");
-        } else if (userRepository.findByLogin(monitoringSystemUser.getLogin()) != null) {
+        if (userRepository.findByLogin(monitoringSystemUser.getLogin()) != null) {
             throw new Exception("User with such login already exists");
         } else {
             return userRepository.save(monitoringSystemUser);

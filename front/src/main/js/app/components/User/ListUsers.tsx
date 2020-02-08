@@ -1,11 +1,10 @@
 import React = require("react");
-import Switch from '@material-ui/core/Switch';
 import { Container, Row, Spinner } from "reactstrap";
 import ErrorComponentFactory from "../../utils/ErrorComponentFactory";
-import InstanceComponentFactory from "../../utils/InstanceComponentFactory";
 import MessageComponentFactory from "../../utils/MessageComponentFactory";
-import LoadingErrorMessage from "../common/LoadingErrorMessage";
 import UserComponentFactory from "../../utils/UserComponentFactory";
+import LoadingErrorMessage from "../common/LoadingErrorMessage";
+import ForbiddenMeesage from "../common/ForbiddenMeesage";
 
 
 export default class ListUsers extends React.Component<
@@ -36,13 +35,20 @@ export default class ListUsers extends React.Component<
         requestURL = `http://127.0.0.1:8080/database_monitoring/rest/list/user/all`;
         await fetch(requestURL)
             .then((response) => {
-                if (response.status == 200) {
-                    return response.json();
-                } else {
-                    throw Error(`Response status: ${response.status}`);
-                }
+                if (response.status == 403) {
+                    this.setState({ loading: false, messages: [<ForbiddenMeesage key={'forbiddenMessageBox'} />] });
+                    return null;
+                } else
+                    if (response.status == 200) {
+                        return response.json();
+                    } else {
+                        throw Error(`Response status: ${response.status}`);
+                    }
             })
             .then((json) => {
+                if (json == null) {
+                    return;
+                }
                 this.setState({ loading: false });
                 const successFlag = json['success'] as boolean;
                 if (successFlag) {
@@ -50,13 +56,12 @@ export default class ListUsers extends React.Component<
                     this.setState({
                         usersList: usersList
                     });
-                } else {
-                    const messageList = MessageComponentFactory(json);
-                    const errorsList = ErrorComponentFactory(json);
-                    this.setState({
-                        messages: messageList, errors: errorsList
-                    });
                 }
+                const messageList = MessageComponentFactory(json);
+                const errorsList = ErrorComponentFactory(json);
+                this.setState({
+                    messages: messageList, errors: errorsList
+                });
             })
             .catch((error) => {
                 console.debug(`${error}`);
