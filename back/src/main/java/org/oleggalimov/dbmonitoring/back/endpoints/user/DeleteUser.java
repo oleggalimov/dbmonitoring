@@ -27,7 +27,6 @@ public class DeleteUser {
     @CrossOrigin(origins = "*")
     @DeleteMapping("delete/user/{login}")
     @LogHttpEvent(eventType = RequestMethod.DELETE, message = "delete/user/{login}")
-    @Secured(value = {"USER_ADMIN"})
     public String deleteUser(@PathVariable String login) throws JsonProcessingException {
         try {
             if (StringValidator.isEmpty(login)) {

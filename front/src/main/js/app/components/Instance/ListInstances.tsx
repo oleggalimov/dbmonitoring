@@ -8,7 +8,7 @@ import LoadingErrorMessage from "../common/LoadingErrorMessage";
 
 
 export default class ListInstance extends React.Component<
-    { loading: boolean },
+    {},
     {
         loading: boolean,
         instances: Array<JSX.Element> | null,
@@ -37,7 +37,7 @@ export default class ListInstance extends React.Component<
         this.loadInstances(switcher);
     }
 
-    async loadInstances(loadStatuses:boolean=false) {
+    async loadInstances(loadStatuses: boolean = false) {
         const contextRoot = location.origin + location.pathname;
         let requestURL: string;
         this.setState({ loading: true });
@@ -84,10 +84,10 @@ export default class ListInstance extends React.Component<
     render() {
         return (
             this.state.loading ?
-                <div className="d-flex justify-content-center"><Spinner type="grow"  color="primary" style={{ width: '8rem', height: '8rem' }} /> </div> :
+                <div className="d-flex justify-content-center"><Spinner type="grow" color="primary" style={{ width: '8rem', height: '8rem' }} /> </div> :
                 <div>
                     <Container fluid={true}>
-                        Загружать статусы <Switch  color="primary" checked={this.state.loadStatuses} onChange={this.handleSwitch} />
+                        Загружать статусы <Switch color="primary" checked={this.state.loadStatuses} onChange={this.handleSwitch} />
                         <Row>{this.state.instances}</Row>
                     </Container>
                     <Container>

@@ -8,12 +8,13 @@ import ForbiddenMeesage from "../common/ForbiddenMeesage";
 
 
 export default class ListUsers extends React.Component<
-    { loading: boolean },
+    { token: string },
     {
         loading: boolean,
         usersList: Array<JSX.Element> | null,
         messages: Array<JSX.Element> | null,
-        errors: Array<JSX.Element> | null
+        errors: Array<JSX.Element> | null,
+        token:string
     }
     > {
     constructor(props: any) {
@@ -22,7 +23,8 @@ export default class ListUsers extends React.Component<
             loading: true,
             usersList: null,
             messages: null,
-            errors: null
+            errors: null,
+            token: props.token
         }
 
     }
@@ -33,9 +35,18 @@ export default class ListUsers extends React.Component<
         this.setState({ loading: true });
         // requestURL = `${contextRoot}rest/check/instance/all`;
         requestURL = `http://127.0.0.1:8080/database_monitoring/rest/list/user/all`;
-        await fetch(requestURL)
+        await fetch(
+            requestURL, {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Authorisation': `Base ${this.state.token}`
+            },
+        }
+        )
             .then((response) => {
-                if (response.status == 403) {
+                if (response.status == 403 || response.status == 401) {
                     this.setState({ loading: false, messages: [<ForbiddenMeesage key={'forbiddenMessageBox'} />] });
                     return null;
                 } else

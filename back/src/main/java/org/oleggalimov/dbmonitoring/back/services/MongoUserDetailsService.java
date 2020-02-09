@@ -1,6 +1,7 @@
 package org.oleggalimov.dbmonitoring.back.services;
 
 import org.oleggalimov.dbmonitoring.back.entities.MonitoringSystemUser;
+import org.oleggalimov.dbmonitoring.back.enumerations.UserStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -30,9 +31,17 @@ public class MongoUserDetailsService implements UserDetailsService {
         if (monitoringSystemUser != null && !monitoringSystemUser.getRoles().isEmpty()) {
             List<GrantedAuthority> authorities = new ArrayList<>();
             monitoringSystemUser.getRoles().forEach(role -> {
-                authorities.add(new SimpleGrantedAuthority(role.name()));
+                authorities.add(new SimpleGrantedAuthority("ROLE_"+role.name()));
             });
-            return new User(monitoringSystemUser.getLogin(), monitoringSystemUser.getPassword(), authorities);
+            return new User(
+                    monitoringSystemUser.getLogin(),
+                    monitoringSystemUser.getPassword(),
+                    true,
+                    true,
+                    true,
+                    monitoringSystemUser.getStatus()==UserStatus.ACTIVE,
+                    authorities
+            );
         } else {
             throw new UsernameNotFoundException("User not found");
         }

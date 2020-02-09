@@ -112,7 +112,7 @@ export default class AddUser extends React.Component<{}, {
             },
             body: JSON.stringify(userInfo)
         }).then((response) => {
-            if (response.status == 403) {
+            if (response.status == 403 || response.status == 401)  {
                 this.setState({ sendingData: false, gotResult: true, messages: [<ForbiddenMeesage key={'forbiddenMessageBox'} />] });
                 return null;
             }

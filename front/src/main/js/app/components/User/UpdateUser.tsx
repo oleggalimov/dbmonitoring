@@ -107,7 +107,7 @@ export default class UpdateUser extends React.Component<{}, {
         this.setState({ loading: true, errors: null, messages: null });
         await fetch(requestURL)
             .then((response) => {
-                if (response.status == 403) {
+                if (response.status == 403 || response.status == 401)  {
                     this.setState({ loading: false, messages: [<ForbiddenMeesage key={'forbiddenMessageBox'} />] });
                     return null;
                 } else if (response.status == 200) {
@@ -201,7 +201,7 @@ export default class UpdateUser extends React.Component<{}, {
             },
             body: JSON.stringify(userInfo)
         }).then((response) => {
-            if (response.status == 403) {
+            if (response.status == 403 || response.status == 401)  {
                 this.setState({ loading: false, messages: [<ForbiddenMeesage key={'forbiddenMessageBox'} />] });
                 return null;
             }

@@ -28,7 +28,6 @@ public class UpdateUser {
     @CrossOrigin(origins = "*")
     @PutMapping(value = "update/user")
     @LogHttpEvent(eventType = RequestMethod.PUT, message = "update/user")
-    @Secured("USER_ADMIN")
     public String updateUser(@RequestBody MonitoringSystemUser monitoringSystemUser) throws JsonProcessingException {
         try {
             List<Error> validationErrors = UserValidator.validate(monitoringSystemUser);

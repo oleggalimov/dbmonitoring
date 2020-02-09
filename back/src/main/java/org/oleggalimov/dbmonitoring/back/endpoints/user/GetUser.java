@@ -30,7 +30,6 @@ public class GetUser {
     }
     @GetMapping("list/user/{login}")
     @LogHttpEvent(eventType = RequestMethod.GET, message = " list/user/{login}")
-    @Secured("USER_ADMIN")
     public String getUser(@PathVariable String login) throws JsonProcessingException {
         try {
             if (StringValidator.isEmpty(login)) {

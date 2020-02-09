@@ -1,6 +1,5 @@
 package org.oleggalimov.dbmonitoring.back.configuration.security;
 
-import org.oleggalimov.dbmonitoring.back.enumerations.Role;
 import org.oleggalimov.dbmonitoring.back.services.MongoUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -32,18 +31,6 @@ public class SecurityConf extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        final String[] userAdminUrls = new String[]{
-                "/create/user/**",
-                "/delete/user/**",
-                "/list/user/**",
-                "/update/user/**"
-        };
-        final String[] instanceAdminUrls = new String [] {
-                "/create/instance/**",
-                "/delete/instance/**",
-                "/update/instance/**"
-        };
-        final String loginProcessIngUrl = "/login";
 
         http
                 .csrf().disable()
@@ -51,6 +38,8 @@ public class SecurityConf extends WebSecurityConfigurerAdapter {
                 .antMatchers("/").permitAll()
                 .antMatchers("/login").permitAll()
                 .antMatchers("/signup").permitAll()
+                .and()
+                .httpBasic()
 //                .antMatchers(userAdminUrls).hasAuthority(Role.USER_ADMIN.name())
 //                .antMatchers(instanceAdminUrls).hasAuthority(Role.ADMIN.name())
 //                .loginProcessingUrl(loginProcessIngUrl)

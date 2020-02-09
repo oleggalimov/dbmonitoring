@@ -29,7 +29,6 @@ public class CreateUser {
     @CrossOrigin(origins = "*")
     @PostMapping(value = "create/user", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @LogHttpEvent(eventType = RequestMethod.POST, message = "create/user")
-    @Secured("USER_ADMIN")
     public String createUser(@RequestBody MonitoringSystemUser monitoringSystemUser) throws JsonProcessingException {
         try {
             List<Error> validationErrors = UserValidator.validate(monitoringSystemUser);

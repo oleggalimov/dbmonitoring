@@ -3,11 +3,12 @@ import { NavLink } from 'react-router-dom';
 import { Button, Collapse, Nav, Navbar, NavbarBrand, UncontrolledDropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 
 
-export default class Footer extends React.Component<{ contextRoot: String }, { contextPath: String }> {
-  constructor(props) {
+export default class Footer extends React.Component<{ contextRoot: String, basicToken:string }, { contextPath: String, token:string }> {
+  constructor(props: Readonly<{ contextRoot: String; basicToken: string; }>) {
     super(props);
     this.state = {
-      contextPath: props.contextRoot
+      contextPath: props.contextRoot,
+      token:props.basicToken
     }
   }
 
@@ -67,7 +68,12 @@ export default class Footer extends React.Component<{ contextRoot: String }, { c
                 <NavLink to={`metircs`} style={{ color: "DIMGRAY" }}>View metrics</NavLink>
               </Button>
             </Nav>
-            <Button color="primary"> <NavLink to={`/login`} style={{ color: "WHITE" }}> Sign in </NavLink></Button>
+            {
+              this.state.token=="" ? <Button color="primary"> <NavLink to={`/login`} style={{ color: "WHITE" }} > Sign in </NavLink></Button>
+              :
+              <Button color="secondary"> <NavLink to={`/`} style={{ color: "WHITE" }} > Sign out </NavLink></Button>
+            }
+            
           </Collapse>
         </Navbar>
       </div >

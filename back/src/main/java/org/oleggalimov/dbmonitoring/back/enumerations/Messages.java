@@ -22,7 +22,11 @@ public enum Messages {
     USER_IS_NOT_DELETED(new Message("U_W_03", "Delete user error", "User was not deleted", MessageType.WARNING)),
     USER_IS_NOT_UPDATED(new Message("U_W_04", "Update instance error", "User was not updated", MessageType.WARNING)),
 
-    INFLUX_NO_DATA_RETURNED(new Message("I_W_01", "Read points error", "Result set is null", MessageType.WARNING));
+    INFLUX_NO_DATA_RETURNED(new Message("I_W_01", "Read points error", "Result set is null", MessageType.WARNING)),
+
+    AUTH_EMPTY_DATA(new Message("A_W_01", "Authorisation error", "Login or password is empty", MessageType.WARNING)),
+    AUTH_LOGIN_ERROR(new Message("A_W_02", "Authorisation error", "No such user or wrong password", MessageType.WARNING)),
+    AUTH_ACC_LOCKED(new Message("A_W_03", "Authorisation error", "Account is locked", MessageType.WARNING));
 
     private Message messageObject;
 

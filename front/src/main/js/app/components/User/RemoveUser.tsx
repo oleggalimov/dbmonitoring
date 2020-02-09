@@ -44,7 +44,7 @@ export default class RemoveUser extends React.Component<{}, {
             }
         })
             .then((response) => {
-                if (response.status == 403) {
+                if (response.status == 403 || response.status == 401)  {
                     this.setState({ loading: false, messages: [<ForbiddenMeesage key={'forbiddenMessageBox'} />] });
                     return null;
                 } else if (response.status == 200) {

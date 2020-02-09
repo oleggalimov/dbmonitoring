@@ -25,7 +25,7 @@ public class ListUsers {
     }
     @GetMapping("/list/user/all")
     @LogHttpEvent(eventType = RequestMethod.GET, message = "/list/user/all")
-    @Secured("USER_ADMIN")
+    @Secured(value={"ROLE_USER_ADMIN"})
     public String listUsers() throws JsonProcessingException {
         try {
             RestResponseBody body = new RestResponseBody();
