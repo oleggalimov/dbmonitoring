@@ -1,19 +1,25 @@
 import * as React from 'react';
+import { connect } from 'react-redux';
 import { NavLink } from 'react-router-dom';
-import { Button, Collapse, Nav, Navbar, NavbarBrand, UncontrolledDropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
+import { Button, Collapse, DropdownItem, DropdownMenu, DropdownToggle, Nav, Navbar, NavbarBrand, UncontrolledDropdown } from 'reactstrap';
 
 
-export default class Footer extends React.Component<{ contextRoot: String, basicToken:string }, { contextPath: String, token:string }> {
-  constructor(props: Readonly<{ contextRoot: String; basicToken: string; }>) {
+class Footer extends React.Component<Props, {}> {
+  constructor(props: any) {
     super(props);
-    this.state = {
-      contextPath: props.contextRoot,
-      token:props.basicToken
-    }
   }
 
 
   render() {
+    let loginButton: JSX.Element;
+    const token = this.props.propsToken;
+    if (token == null || token == "" || token == undefined) {
+      loginButton = <> Anonimus &nbsp;<Button color="primary"> <NavLink to={`/login`} style={{ color: "WHITE" }} > Sign in </NavLink></Button> </>;
+    } else {
+      loginButton = <>{this.props.propsUserName}  &nbsp; <Button color="secondary"> <NavLink to={`logout`} style={{ color: "WHITE" }} > Sign out </NavLink></Button></>;
+    }
+
+
     return (
       <div>
         <Navbar color="light" light expand="md">
@@ -69,14 +75,28 @@ export default class Footer extends React.Component<{ contextRoot: String, basic
               </Button>
             </Nav>
             {
-              this.state.token=="" ? <Button color="primary"> <NavLink to={`/login`} style={{ color: "WHITE" }} > Sign in </NavLink></Button>
-              :
-              <Button color="secondary"> <NavLink to={`/`} style={{ color: "WHITE" }} > Sign out </NavLink></Button>
+              loginButton
             }
-            
           </Collapse>
         </Navbar>
       </div >
     );
   }
 }
+
+
+const mapStateToProps = (state: any) => ({
+  propsToken: state.token,
+  propsUserName: state.userName,
+  contextPath: ""
+});
+
+
+
+interface Props {
+  propsToken: string,
+  propsUserName: string,
+  contextRoot: string
+}
+
+export default connect(mapStateToProps)(Footer);

@@ -1,11 +1,10 @@
 import 'bootstrap/dist/css/bootstrap.css';
 import * as React from 'react';
 import * as ReactDom from 'react-dom';
+import { Provider } from 'react-redux';
 import { HashRouter, Route, Switch } from 'react-router-dom';
-import Footer from './components/common/Footer';
-import ForbiddenMeesage from './components/common/ForbiddenMeesage';
-import PageNotFound from './components/common/PageNotFound';
 import LoginForm from './components/common/LoginForm';
+import PageNotFound from './components/common/PageNotFound';
 import Start from './components/common/Start';
 import AddInstance from './components/Instance/AddInstance';
 import ListInstances from './components/Instance/ListInstances';
@@ -15,13 +14,14 @@ import AddUser from './components/User/AddUser';
 import ListUsers from './components/User/ListUsers';
 import RemoveUser from './components/User/RemoveUser';
 import UpdateUser from './components/User/UpdateUser';
-import BasicAuthTokenCreator from './utils/BasicAuthTokenCreator';
 import ConfigStore from './utils/ConfigStore';
-import ErrorComponentFactory from './utils/ErrorComponentFactory';
-import MessageComponentFactory from './utils/MessageComponentFactory';
-import { Provider } from 'react-redux';
+import Footer from './components/common/Footer';
+import LogOut from './components/common/LogOut';
 
 const mainStore = ConfigStore();
+mainStore.subscribe(()=>{
+    console.log(mainStore.getState());
+})
 
 class App extends React.Component<{}, { basicToken: string, userLogin: string, userPassword: string }>  {
     constructor(props: any) {
@@ -55,10 +55,10 @@ class App extends React.Component<{}, { basicToken: string, userLogin: string, u
                 <HashRouter>
                     <Provider store={mainStore}>
                         <div>
-                            <Footer contextRoot={context} basicToken={this.state.basicToken} />
+                            <Footer />
                             <br />
                             <Switch>
-                                <Route path="/" component={() => <Start userName={this.state.basicToken == "" ? "" : ""} />} exact={true} />
+                                <Route path="/" component={Start} exact={true} />
                                 <Route path={`/listInstance`} component={ListInstances} />
                                 <Route path={`/addInstance`} component={AddInstance} />
                                 <Route path={`/updateInstance`} component={UpdateInstance} />
@@ -68,17 +68,17 @@ class App extends React.Component<{}, { basicToken: string, userLogin: string, u
                                 <Route path={`/updateUser`} component={UpdateUser} />
                                 <Route path={`/removeUser`} component={RemoveUser} />
                                 <Route path={`/login`} component={LoginForm} />
+                                <Route path={`/logout`} component={LogOut} />
                                 <Route render={PageNotFound} />
                             </Switch>
                         </div>
                     </Provider>
                 </HashRouter>
-
-
             </>
         );
     }
 }
+
 
 ReactDom.render(
     <App />,
