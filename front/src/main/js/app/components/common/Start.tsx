@@ -1,10 +1,8 @@
 import React = require("react");
 import { connect } from "react-redux";
-import { NavItem, Nav } from "reactstrap";
-import Container from "reactstrap/lib/Container";
 import { bindActionCreators, Dispatch } from "redux";
 import SET_TOKEN_STRING from "../../actions/SetToken";
-import { NavLink } from "react-router-dom";
+import Authorisation from "./Authorisation";
 
 class Start extends React.Component<Props, State> {
     constructor(props: any) {
@@ -17,23 +15,7 @@ class Start extends React.Component<Props, State> {
     render() {
         let container: JSX.Element;
         const token = this.state.stateToken;
-        if (token == "" || token == null || token == undefined) {
-            container = <Container>
-                <h1>
-                    You are not authorized. Please <NavLink to={`login`} > sign in </NavLink>
-                </h1>
-
-            </Container>
-        } else {
-            container = <Container>
-                <h1>
-                    Welcome, {this.state.stateUserName}
-                </h1>
-
-            </Container>
-        }
-
-        return (container);
+        return <Authorisation token = {this.state.stateToken} userName={this.state.stateUserName}/>
     }
 }
 

@@ -3,7 +3,9 @@ import * as React from 'react';
 import * as ReactDom from 'react-dom';
 import { Provider } from 'react-redux';
 import { HashRouter, Route, Switch } from 'react-router-dom';
+import Footer from './components/common/Footer';
 import LoginForm from './components/common/LoginForm';
+import LogOut from './components/common/LogOut';
 import PageNotFound from './components/common/PageNotFound';
 import Start from './components/common/Start';
 import AddInstance from './components/Instance/AddInstance';
@@ -15,22 +17,17 @@ import ListUsers from './components/User/ListUsers';
 import RemoveUser from './components/User/RemoveUser';
 import UpdateUser from './components/User/UpdateUser';
 import ConfigStore from './utils/ConfigStore';
-import Footer from './components/common/Footer';
-import LogOut from './components/common/LogOut';
 
 const mainStore = ConfigStore();
 mainStore.subscribe(()=>{
     console.log(mainStore.getState());
-})
+});
 
-class App extends React.Component<{}, { basicToken: string, userLogin: string, userPassword: string }>  {
+
+
+class App extends React.Component {
     constructor(props: any) {
         super(props);
-        this.state = {
-            basicToken: "",
-            userLogin: "",
-            userPassword: ""
-        }
     }
 
 
@@ -53,7 +50,7 @@ class App extends React.Component<{}, { basicToken: string, userLogin: string, u
         return (
             <>
                 <HashRouter>
-                    <Provider store={mainStore}>
+                    <Provider store={mainStore} >
                         <div>
                             <Footer />
                             <br />
@@ -63,7 +60,7 @@ class App extends React.Component<{}, { basicToken: string, userLogin: string, u
                                 <Route path={`/addInstance`} component={AddInstance} />
                                 <Route path={`/updateInstance`} component={UpdateInstance} />
                                 <Route path={`/removeInstance`} component={RemoveInstance} />
-                                <Route path={`/listUser`} component={() => <ListUsers token={this.state.basicToken} />} />
+                                <Route path={`/listUser`} component={() => <ListUsers />} />
                                 <Route path={`/addUser`} component={AddUser} />
                                 <Route path={`/updateUser`} component={UpdateUser} />
                                 <Route path={`/removeUser`} component={RemoveUser} />

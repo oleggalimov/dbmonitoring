@@ -95,8 +95,7 @@ const mapStateToProps = (state: any) => ({
 
 interface Props {
   propsToken: string,
-  propsUserName: string,
-  contextRoot: string
+  propsUserName: string
 }
 
 export default connect(mapStateToProps)(Footer);
