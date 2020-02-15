@@ -24,7 +24,8 @@ public class DeleteUser {
         this.responseBuilder = responseBuilder;
         this.userService = service;
     }
-    @CrossOrigin(origins = "*")
+    @Secured(value = {"ROLE_USER_ADMIN"})
+    @CrossOrigin(value = {"http://localhost:9000"})
     @DeleteMapping("delete/user/{login}")
     @LogHttpEvent(eventType = RequestMethod.DELETE, message = "delete/user/{login}")
     public String deleteUser(@PathVariable String login) throws JsonProcessingException {

@@ -36,8 +36,12 @@ public class ResponseBuilder implements CommonResponseBuilder {
         msg = String.valueOf(ex.getCause());
         if (msg.equals("null")) {
             msg = String.valueOf(ex.getMessage());
+            if (msg.equals("null")) {
+                msg = "Internal server error";
+            }
         }
         List<Error> errorList = new ArrayList<>();
+
         if (msg.length() > 255) {
             errorList.add(new Error(ErrorCode.REST_EXCEPTION.name(), "Critical error", "Full message available in log files"));
         } else {

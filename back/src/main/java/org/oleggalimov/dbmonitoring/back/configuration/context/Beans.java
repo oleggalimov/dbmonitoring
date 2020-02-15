@@ -55,7 +55,7 @@ public class Beans {
     public MonitoringSystemUser getDefaultSystemUser(@Autowired BCryptPasswordEncoder passwordEncoder) {
         String password = passwordEncoder.encode("passw0rd");
         return new MonitoringSystemUser(
-                "Admin", "noreply@domain.com", EnumSet.allOf(Role.class), "John", "Doe", "987", password, UserStatus.ACTIVE
+                "Admin", "noreply@domain.com", EnumSet.allOf(Role.class), "John", "Doe", "0", password, UserStatus.ACTIVE
         );
     }
 

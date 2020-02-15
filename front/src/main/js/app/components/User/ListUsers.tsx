@@ -27,18 +27,13 @@ class ListUsers extends React.Component<Props, State>  {
         }
 
     }
-
     abortController = new AbortController();
-
-
     componentDidMount() {
         this.loadInstances();
     }
-
     componentWillUnmount() {
         this.abortController.abort();
     }
-
     async loadInstances(loadStatuses: boolean = false) {
         const token = this.state.stateToken;
         if (token == "" || token == null || token == undefined) {
@@ -48,18 +43,17 @@ class ListUsers extends React.Component<Props, State>  {
         let requestURL: string;
         this.setState({ loading: true });
         // requestURL = `${contextRoot}rest/check/instance/all`;
-        requestURL = `${contextRoot}rest/list/user/all`;
+        requestURL = `http://localhost:8080/database_monitoring/rest/list/user/all`;
         const headers = new Headers();
-        headers.append('Accept','application/json');
-        headers.append('Content-Type','application/json');
-        headers.append('Authorization',`Basic ${this.state.stateToken}`);
+        headers.append('Accept', 'application/json');
+        headers.append('Content-Type', 'application/json');
+        headers.append('Authorization', `Basic ${this.state.stateToken}`);
         
         console.log (JSON.stringify(headers));
         await fetch(
             requestURL, {
             signal: this.abortController.signal,
             method: 'GET',
-            mode: 'no-cors', // no-cors, cors, *same-origin
             headers:headers
 
         }

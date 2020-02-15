@@ -124,7 +124,12 @@ public class DataBaseInstance implements Cloneable {
     }
 
     @Override
-    public DataBaseInstance clone() throws CloneNotSupportedException {
-        return (DataBaseInstance) super.clone();
+    public DataBaseInstance clone() {
+        try {
+            return (DataBaseInstance) super.clone();
+        } catch (CloneNotSupportedException e) {
+            e.printStackTrace();
+            return new DataBaseInstance(id, host, port, database, user, type);
+        }
     }
 }

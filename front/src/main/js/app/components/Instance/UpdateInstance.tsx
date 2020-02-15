@@ -54,9 +54,6 @@ export default class UpdateInstance extends React.Component<{}, {
     instanceFormChangeHandler = (event: any) => {
         const fieldId = event.target.id;
         const fieldValue = event.target.value;
-        if (fieldId != "instancePort" && (fieldValue as string).length < 0) {
-            return;
-        }
         switch (fieldId) {
             case "instanceHost": this.setState({ host: fieldValue });
                 break;

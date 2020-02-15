@@ -11,6 +11,7 @@ import org.oleggalimov.dbmonitoring.back.services.UserService;
 import org.oleggalimov.dbmonitoring.back.validators.StringValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -28,6 +29,9 @@ public class GetUser {
         this.responseBuilder = responseBuilder;
         this.userService = service;
     }
+
+    @Secured(value = {"ROLE_USER_ADMIN"})
+    @CrossOrigin(value = {"http://localhost:9000"})
     @GetMapping("list/user/{login}")
     @LogHttpEvent(eventType = RequestMethod.GET, message = " list/user/{login}")
     public String getUser(@PathVariable String login) throws JsonProcessingException {

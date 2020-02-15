@@ -8,6 +8,7 @@ import org.oleggalimov.dbmonitoring.back.dto.Error;
 import org.oleggalimov.dbmonitoring.back.enumerations.Messages;
 import org.oleggalimov.dbmonitoring.back.validators.DatabaseInstanceValidator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collections;
@@ -26,7 +27,8 @@ public class UpdateInstance {
         this.instanceSet = instanceSet;
         this.responseBuilder = builder;
     }
-    @CrossOrigin(origins = "*")
+    @Secured(value = {"ROLE_ADMIN"})
+    @CrossOrigin(value = {"http://localhost:9000"})
     @PutMapping(value = "update/instance")
     @LogHttpEvent(eventType = RequestMethod.PUT, message = "update/instance")
     public String updateInstance(@RequestBody DataBaseInstance requestInstance) throws JsonProcessingException {

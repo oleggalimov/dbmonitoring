@@ -8,6 +8,7 @@ import BasicAuthTokenCreator from "../../utils/BasicAuthTokenCreator";
 import ErrorComponentFactory from "../../utils/ErrorComponentFactory";
 import MessageComponentFactory from "../../utils/MessageComponentFactory";
 import ForbiddenMeesage from "./ForbiddenMeesage";
+import LoadingErrorMessage from "./LoadingErrorMessage";
 
 
 class LoginForm extends React.Component<Props, StateProps> {
@@ -94,7 +95,7 @@ class LoginForm extends React.Component<Props, StateProps> {
                 if (error.name == 'AbortError') {
                     return;
                 };
-                this.setState({ loading: false });
+            this.setState({ loading: false,errors: [<LoadingErrorMessage key={'errorMessageBox'}/>]});
             });
     }
 
@@ -119,7 +120,7 @@ class LoginForm extends React.Component<Props, StateProps> {
                             <Label for="password" className="mr-sm-2">Password</Label>
                             <Input type="password" id="userPassword" autoComplete="true" />
                         </FormGroup>
-                        {this.state.loading ? <Button color="success" disabled>Sign in</Button>
+                        {this.state.loading ? <Button color="success" disabled>Login...</Button>
                             :
                             <Button color="success" onClick={this.logIn}>Sign in</Button>
                         }

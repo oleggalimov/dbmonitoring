@@ -4,24 +4,29 @@ import ErrorComponentFactory from "../../utils/ErrorComponentFactory";
 import MessageComponentFactory from "../../utils/MessageComponentFactory";
 import ForbiddenMeesage from "../common/ForbiddenMeesage";
 import LoadingErrorMessage from "../common/LoadingErrorMessage";
+import { connect } from "react-redux";
+import Authorisation from "../common/Authorisation";
 
 
-export default class RemoveUser extends React.Component<{}, {
-    loading: boolean, userLogin: string, messages: Array<JSX.Element> | null, errors: Array<JSX.Element> | null
-}> {
+class RemoveUser extends React.Component<Props, State> {
     constructor(props: any) {
         super(props);
-        this.state = this.getInitState();
-
+        this.state = this.getInitState(props.propsToken);
     }
 
-    getInitState() {
+    getInitState(token: string | null) {
         return {
+            stateToken: token,
             loading: false,
             userLogin: "",
             messages: null,
             errors: null
         }
+    }
+
+    abortController = new AbortController();
+    componentWillUnmount() {
+        this.abortController.abort();
     }
 
     fieldChangeHandler = (event: any) => {
@@ -36,15 +41,17 @@ export default class RemoveUser extends React.Component<{}, {
         // const requestURL = `${contextRoot}rest/create/user`;
         const requestURL = `http://127.0.0.1:8080/database_monitoring/rest/delete/user/${this.state.userLogin}`;
         this.setState({ loading: true, errors: null, messages: null });
+        const headers = new Headers();
+        headers.append('Accept', 'application/json');
+        headers.append('Content-Type', 'application/json');
+        headers.append('Authorization', `Basic ${this.state.stateToken}`);
         await fetch(requestURL, {
+            signal: this.abortController.signal,
             method: 'DELETE',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            }
+            headers: headers
         })
             .then((response) => {
-                if (response.status == 403 || response.status == 401)  {
+                if (response.status == 403 || response.status == 401) {
                     this.setState({ loading: false, messages: [<ForbiddenMeesage key={'forbiddenMessageBox'} />] });
                     return null;
                 } else if (response.status == 200) {
@@ -67,59 +74,86 @@ export default class RemoveUser extends React.Component<{}, {
 
             })
             .catch((error) => {
-                console.debug(`Exception: ${error}`);
+                console.debug(`Exception on request to ${requestURL}: ${error}`);
+                if (error.name == 'AbortError') {
+                    return;
+                }
                 this.setState({ loading: false, errors: [<LoadingErrorMessage key={'errorMessageBox'} />] });
             });
     }
 
     render() {
-        if (this.state.loading) {
-            return <>
-                <Container>
-                    <Row>
-                        <Col className="row justify-content-center" >
-                            <Spinner color="primary" type="grow" style={{ width: '8rem', height: '8rem' }} />
-                        </Col>
-                    </Row>
-                </Container>
-            </>
+        let container: JSX.Element;
+        const token = this.state.stateToken;
+        if (token == "" || token == null || token == undefined) {
+            container = <Authorisation />
         } else {
-            return <>
-                <Container>
-                    <Form onKeyPress={event => {
-                        if (event.key === "Enter") {
-                            this.loadUserInfo();
-                        }
-                    }}>
-                        <Row form>
-                            <Col>
-                                <FormGroup>
-                                    <Label for="instanceId"><b>USER LOGIN FOR DELETE: </b></Label>
-                                    <Input onChange={this.fieldChangeHandler} type="text" id="userLogin" placeholder="Input user login here..." />
-                                </FormGroup>
+            if (this.state.loading) {
+                container =  <>
+                    <Container>
+                        <Row>
+                            <Col className="row justify-content-center" >
+                                <Spinner color="primary" type="grow" style={{ width: '8rem', height: '8rem' }} />
                             </Col>
                         </Row>
-                        {this.state.userLogin == "" ?
-                            <Row>
-                                <Col className="row justify-content-end" >
-                                    <Button onClick={this.loadUserInfo} color="success" disabled>Delete</Button>&nbsp;
-                            </Col>
+                    </Container>
+                </>
+            } else {
+                container = <>
+                    <Container>
+                        <Form onKeyPress={event => {
+                            if (event.key === "Enter") {
+                                this.loadUserInfo();
+                            }
+                        }}>
+                            <Row form>
+                                <Col>
+                                    <FormGroup>
+                                        <Label for="instanceId"><b>USER LOGIN FOR DELETE: </b></Label>
+                                        <Input onChange={this.fieldChangeHandler} type="text" id="userLogin" placeholder="Input user login here..." />
+                                    </FormGroup>
+                                </Col>
                             </Row>
-                            :
-                            <Row>
-                                <Col className="row justify-content-end" >
-                                    <Button onClick={this.loadUserInfo} color="success">Delete</Button>&nbsp;
+                            {this.state.userLogin == "" ?
+                                <Row>
+                                    <Col className="row justify-content-end" >
+                                        <Button onClick={this.loadUserInfo} color="success" disabled>Delete</Button>&nbsp;
                             </Col>
-                            </Row>
-                        }
-                    </Form>
-                </Container>
-                <br />
-                <Container>
-                    {this.state.messages}
-                    {this.state.errors}
-                </Container>
-            </>
+                                </Row>
+                                :
+                                <Row>
+                                    <Col className="row justify-content-end" >
+                                        <Button onClick={this.loadUserInfo} color="success">Delete</Button>&nbsp;
+                            </Col>
+                                </Row>
+                            }
+                        </Form>
+                    </Container>
+                    <br />
+                    <Container>
+                        {this.state.messages}
+                        {this.state.errors}
+                    </Container>
+                </>
+            }
         }
+        return container;
     }
 }
+
+const mapStateToProps = (state: any) => ({
+    propsToken: state.token
+});
+
+
+interface Props extends State {
+    token: string
+}
+interface State {
+    stateToken: string | null,
+    loading: boolean,
+    userLogin: string,
+    messages: Array<JSX.Element> | null,
+    errors: Array<JSX.Element> | null
+}
+export default connect(mapStateToProps)(RemoveUser);

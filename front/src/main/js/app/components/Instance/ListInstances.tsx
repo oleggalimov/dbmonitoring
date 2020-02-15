@@ -10,6 +10,7 @@ import SET_TOKEN_STRING from "../../actions/SetToken";
 import SET_USER_NAME from "../../actions/SetUserName";
 import { connect } from "react-redux";
 import Authorisation from "../common/Authorisation";
+import ForbiddenMeesage from "../common/ForbiddenMeesage";
 
 
 class ListInstance extends React.Component<Props, State> {
@@ -38,8 +39,8 @@ class ListInstance extends React.Component<Props, State> {
     handleSwitch = () => {
         const switcher = !this.state.loadStatuses;
         this.setState({
-            errors:null,
-            messages:null,
+            errors: null,
+            messages: null,
             loadStatuses: switcher
         });
         this.loadInstances(switcher);
@@ -52,28 +53,40 @@ class ListInstance extends React.Component<Props, State> {
         }
         const contextRoot = location.origin + location.pathname;
         let requestURL: string;
-        this.setState({ loading: true });
+        this.setState({ loading: true, errors:null, messages:null,instances:null });
         if (loadStatuses) {
-            requestURL = `${contextRoot}rest/check/instance/all`;
-            // requestURL = `http://localhost:8080/database_monitoring/rest/check/instance/all`;
+            // requestURL = `${contextRoot}rest/check/instance/all`;
+            requestURL = `http://localhost:8080/database_monitoring/rest/check/instance/all`;
         } else {
-            requestURL = `${contextRoot}rest/list/instance/all`;
-            // requestURL = `http://localhost:8080/database_monitoring/rest/list/instance/all`;
+            // requestURL = `${contextRoot}rest/list/instance/all`;
+            requestURL = `http://localhost:8080/database_monitoring/rest/list/instance/all`;
         }
         const headers = new Headers();
-        headers.append('Accept','application/json');
-        headers.append('Content-Type','application/json');
-        headers.append('Authorization',`Basic ${this.state.stateToken}`);
+        headers.append('Accept', 'application/json');
+        headers.append('Content-Type', 'application/json');
+        headers.append('Authorization', `Basic ${this.state.stateToken}`);
 
-        await fetch(requestURL, { signal: this.controller.signal, method: 'GET', headers: headers })
+        await fetch(
+            requestURL, { 
+            signal: this.controller.signal, 
+            method: 'GET', 
+            headers: headers 
+        })
             .then((response) => {
-                if (response.status == 200) {
-                    return response.json();
-                } else {
-                    throw Error(`Response status: ${response.status}`);
-                }
+                if (response.status == 403 || response.status == 401) {
+                    this.setState({ loading: false, messages: [<ForbiddenMeesage key={'forbiddenMessageBox'} />] });
+                    return null;
+                } else
+                    if (response.status == 200) {
+                        return response.json();
+                    } else {
+                        throw Error(`Response status: ${response.status}`);
+                    }
             })
             .then((json) => {
+                if (json == null) {
+                    return;
+                }
                 this.setState({ loading: false });
                 const successFlag = json['success'] as boolean;
                 if (successFlag) {
@@ -91,7 +104,7 @@ class ListInstance extends React.Component<Props, State> {
             })
             .catch((error) => {
                 console.debug(`Exception on request to rest/list/instance/all: ${error}`);
-                if (error.name == 'AbortError') { // обработать ошибку от вызова abort()
+                if (error.name == 'AbortError') { 
                     return;
                 }
                 this.setState({ loading: false, errors: [<LoadingErrorMessage key={'errorMessageBox'} />] });

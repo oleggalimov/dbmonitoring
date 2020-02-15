@@ -20,7 +20,7 @@ public enum Messages {
     USER_IS_NOT_ADDED(new Message("U_W_01", "Add user error", "User was not added", MessageType.WARNING)),
     USER_IS_ABSENT(new Message("U_W_02", "Read user error", "No user was found in database", MessageType.WARNING)),
     USER_IS_NOT_DELETED(new Message("U_W_03", "Delete user error", "User was not deleted", MessageType.WARNING)),
-    USER_IS_NOT_UPDATED(new Message("U_W_04", "Update instance error", "User was not updated", MessageType.WARNING)),
+    USER_IS_NOT_UPDATED(new Message("U_W_04", "Update user error", "User was not updated", MessageType.WARNING)),
 
     INFLUX_NO_DATA_RETURNED(new Message("I_W_01", "Read points error", "Result set is null", MessageType.WARNING)),
 

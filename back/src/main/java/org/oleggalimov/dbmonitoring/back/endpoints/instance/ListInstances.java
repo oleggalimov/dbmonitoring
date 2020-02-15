@@ -8,6 +8,7 @@ import org.oleggalimov.dbmonitoring.back.dto.RestResponseBody;
 import org.oleggalimov.dbmonitoring.back.enumerations.BodyItemKey;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -27,7 +28,9 @@ public class ListInstances {
 
     @GetMapping("list/instance/all")
     @LogHttpEvent(eventType = RequestMethod.GET, message = "list/instance/all")
-    @Secured(value = {"ROLE_USER"})
+
+    @Secured(value = {"ROLE_USER", "ROLE_USER_ADMIN", "ROLE_ADMIN"})
+    @CrossOrigin(value = {"http://localhost:9000"})
     public String listInstances() throws JsonProcessingException {
         try {
             RestResponseBody body = new RestResponseBody();

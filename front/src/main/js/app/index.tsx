@@ -60,7 +60,7 @@ class App extends React.Component {
                                 <Route path={`/addInstance`} component={AddInstance} />
                                 <Route path={`/updateInstance`} component={UpdateInstance} />
                                 <Route path={`/removeInstance`} component={RemoveInstance} />
-                                <Route path={`/listUser`} component={() => <ListUsers />} />
+                                <Route path={`/listUser`} component={ListUsers} />} />
                                 <Route path={`/addUser`} component={AddUser} />
                                 <Route path={`/updateUser`} component={UpdateUser} />
                                 <Route path={`/removeUser`} component={RemoveUser} />

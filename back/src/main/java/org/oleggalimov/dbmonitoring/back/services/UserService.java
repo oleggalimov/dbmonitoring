@@ -48,10 +48,7 @@ public class UserService {
 
     public boolean updateUser(MonitoringSystemUser monitoringSystemUser) {
         MonitoringSystemUser oldMonitoringSystemUser;
-        oldMonitoringSystemUser = userRepository.findByEmail(monitoringSystemUser.getEMail());
-        if (oldMonitoringSystemUser == null) {
-            oldMonitoringSystemUser = userRepository.findByLogin(monitoringSystemUser.getLogin());
-        }
+        oldMonitoringSystemUser = userRepository.findByLogin(monitoringSystemUser.getLogin());
         if (oldMonitoringSystemUser != null) {
             userRepository.delete(oldMonitoringSystemUser);
             userRepository.save(monitoringSystemUser);

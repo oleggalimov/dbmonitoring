@@ -8,6 +8,7 @@ import org.oleggalimov.dbmonitoring.back.enumerations.Errors;
 import org.oleggalimov.dbmonitoring.back.enumerations.Messages;
 import org.oleggalimov.dbmonitoring.back.validators.StringValidator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collections;
@@ -23,7 +24,8 @@ public class DeleteInstance {
         this.instanceSet = instanceSet;
         this.responseBuilder = builder;
     }
-    @CrossOrigin(origins = "*")
+    @Secured(value = {"ROLE_ADMIN"})
+    @CrossOrigin(value = {"http://localhost:9000"})
     @DeleteMapping("delete/instance/{id}")
     @LogHttpEvent(eventType = RequestMethod.DELETE, message = " delete/instance/{id}")
     public String deleteInstance(@PathVariable String id) throws JsonProcessingException {
