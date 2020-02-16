@@ -21,6 +21,7 @@ import org.oleggalimov.dbmonitoring.back.entities.MonitoringSystemUser;
 import org.oleggalimov.dbmonitoring.back.enumerations.UserStatus;
 import org.oleggalimov.dbmonitoring.back.services.UserService;
 import org.springframework.http.MediaType;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.util.ResourceUtils;
@@ -43,6 +44,8 @@ class UpdateMonitoringSystemUserControllersTest {
 
     @Mock
     UserService userService;
+    @Mock
+    BCryptPasswordEncoder byPasswordEncoder;
 
     @InjectMocks
     private UpdateUser updateUser;
@@ -62,6 +65,7 @@ class UpdateMonitoringSystemUserControllersTest {
     void updateUserTest() throws Exception {
         String body = "{\"login\":\"login\",\"roles\":null,\"firstName\":\"firstname\",\"lastName\":\"lastName\",\"personNumber\":\"personNumber\",\"password\":\"q12345678\",\"status\":\"ACTIVE\",\"email\":\"qq@qq.ru\"}";
         Mockito.when(userService.updateUser(Mockito.any(MonitoringSystemUser.class))).thenReturn(true);
+        Mockito.when(byPasswordEncoder.encode(Mockito.anyString())).thenReturn("encryptedPassword");
         String result = mockMvc.
                 perform(put("/update/user")
                         .contentType(MediaType.APPLICATION_JSON_UTF8)
@@ -89,6 +93,7 @@ class UpdateMonitoringSystemUserControllersTest {
     void updateUserTestWithNotUpdatedResult() throws Exception {
         String body = "{\"login\":\"login\",\"roles\":null,\"firstName\":\"firstname\",\"lastName\":\"lastName\",\"personNumber\":\"personNumber\",\"password\":\"q12345678\",\"status\":\"ACTIVE\",\"email\":\"qq@qq.ru\"}";
         Mockito.when(userService.updateUser(Mockito.any(MonitoringSystemUser.class))).thenReturn(false);
+        Mockito.when(byPasswordEncoder.encode(Mockito.anyString())).thenReturn("encryptedPassword");
         String result = mockMvc.
                 perform(put("/update/user")
                         .contentType(MediaType.APPLICATION_JSON_UTF8)
@@ -100,7 +105,7 @@ class UpdateMonitoringSystemUserControllersTest {
                 .andExpect(jsonPath("$.body").isEmpty())
                 .andExpect(jsonPath("$.errors").isEmpty())
                 .andExpect(jsonPath("$.messages[0].code").value("U_W_04"))
-                .andExpect(jsonPath("$.messages[0].title").value("Update instance error"))
+                .andExpect(jsonPath("$.messages[0].title").value("Update user error"))
                 .andExpect(jsonPath("$.messages[0].message").value("User was not updated"))
                 .andExpect(jsonPath("$.messages[0].type").value("WARNING"))
                 .andReturn()

@@ -52,7 +52,9 @@ public class CheckInstances {
     public String checkInstances() throws JsonProcessingException {
         try {
             if (instanceSet.size()==0) {
-                return responseBuilder.buildRestResponse(true, null, null, null);
+                RestResponseBody body = new RestResponseBody();
+                body.setItem(BodyItemKey.INSTANCES.toString(), instanceSet);
+                return responseBuilder.buildRestResponse(true, body, null, null);
             }
             Set<DataBaseInstance> resultSet = Collections.synchronizedSet(new HashSet<>());
             ExecutorService service = Executors.newFixedThreadPool(instanceSet.size());

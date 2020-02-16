@@ -103,7 +103,7 @@ class ListInstance extends React.Component<Props, State> {
                 }
             })
             .catch((error) => {
-                console.debug(`Exception on request to rest/list/instance/all: ${error}`);
+                console.debug(`Exception on request to ${requestURL}: ${error}`);
                 if (error.name == 'AbortError') { 
                     return;
                 }

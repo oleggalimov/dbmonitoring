@@ -93,7 +93,7 @@ class AddInstance extends React.Component<Props, State> {
             headers: headers,
             body: JSON.stringify(postBody)
         }).then((response) => {
-            if (response.status == 403) {
+            if (response.status == 403 || response.status == 401) {
                 this.setState({ sendingData: false, gotResult: true, messages: [<ForbiddenMeesage key={'forbiddenMessageBox'} />] });
                 return null;
             }
@@ -118,7 +118,7 @@ class AddInstance extends React.Component<Props, State> {
                 });
             })
             .catch((error) => {
-                console.debug(`Exception on request to rest/list/instance/all: ${error}`);
+                console.debug(`Exception on request to ${requestURL}: ${error}`);
                 if (error.name == 'AbortError') {
                     return;
                 }

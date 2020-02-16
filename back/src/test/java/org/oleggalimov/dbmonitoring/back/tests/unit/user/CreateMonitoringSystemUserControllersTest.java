@@ -21,6 +21,7 @@ import org.oleggalimov.dbmonitoring.back.entities.MonitoringSystemUser;
 import org.oleggalimov.dbmonitoring.back.enumerations.UserStatus;
 import org.oleggalimov.dbmonitoring.back.services.UserService;
 import org.springframework.http.MediaType;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.util.ResourceUtils;
@@ -43,6 +44,8 @@ class CreateMonitoringSystemUserControllersTest {
 
     @Mock
     UserService userService;
+    @Mock
+    BCryptPasswordEncoder byPasswordEncoder;
 
     @InjectMocks
     private CreateUser createUser;
@@ -63,6 +66,7 @@ class CreateMonitoringSystemUserControllersTest {
     void createUserTest() throws Exception {
         String body = "{\"login\":\"login\",\"roles\":null,\"firstName\":\"firstname\",\"lastName\":\"lastName\",\"personNumber\":\"personNumber\",\"password\":\"q12345678\",\"status\":\"ACTIVE\",\"email\":\"qq@qq.ru\"}";
         Mockito.when(userService.saveUser(Mockito.any(MonitoringSystemUser.class))).thenReturn(monitoringSystemUser);
+        Mockito.when(byPasswordEncoder.encode(Mockito.anyString())).thenReturn("encryptedPassword");
         String result = mockMvc.
                 perform(post("/create/user")
                         .contentType(MediaType.APPLICATION_JSON_UTF8)
@@ -90,6 +94,7 @@ class CreateMonitoringSystemUserControllersTest {
     void createUserTestWithNotAddedResult() throws Exception {
         String body = "{\"login\":\"login\",\"roles\":null,\"firstName\":\"firstname\",\"lastName\":\"lastName\",\"personNumber\":\"personNumber\",\"password\":\"q12345678\",\"status\":\"ACTIVE\",\"email\":\"qq@qq.ru\"}";
         Mockito.when(userService.saveUser(Mockito.any(MonitoringSystemUser.class))).thenReturn(null);
+        Mockito.when(byPasswordEncoder.encode(Mockito.anyString())).thenReturn("encryptedPassword");
         String result = mockMvc.
                 perform(post("/create/user")
                         .contentType(MediaType.APPLICATION_JSON_UTF8)

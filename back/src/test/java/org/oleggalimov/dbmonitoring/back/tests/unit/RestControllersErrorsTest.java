@@ -151,7 +151,7 @@ class RestControllersErrorsTest {
                 .andExpect(jsonPath("$.messages").isEmpty())
                 .andExpect(jsonPath("$.errors[0].code").value("REST_EXCEPTION"))
                 .andExpect(jsonPath("$.errors[0].title").value("Critical error"))
-                .andExpect(jsonPath("$.errors[0].message").value("null"))
+                .andExpect(jsonPath("$.errors[0].message").value("Internal server error"))
                 .andReturn()
                 .getResponse()
                 .getContentAsString();
@@ -173,7 +173,7 @@ class RestControllersErrorsTest {
                 .andExpect(jsonPath("$.messages").isEmpty())
                 .andExpect(jsonPath("$.errors[0].code").value("REST_EXCEPTION"))
                 .andExpect(jsonPath("$.errors[0].title").value("Critical error"))
-                .andExpect(jsonPath("$.errors[0].message").value("null"))
+                .andExpect(jsonPath("$.errors[0].message").value("Internal server error"))
                 .andReturn()
                 .getResponse()
                 .getContentAsString();
@@ -247,7 +247,7 @@ class RestControllersErrorsTest {
                 .andExpect(jsonPath("$.messages").isEmpty())
                 .andExpect(jsonPath("$.errors[0].code").value("REST_EXCEPTION"))
                 .andExpect(jsonPath("$.errors[0].title").value("Critical error"))
-                .andExpect(jsonPath("$.errors[0].message").value("null"))
+                .andExpect(jsonPath("$.errors[0].message").value("Internal server error"))
                 .andReturn()
                 .getResponse()
                 .getContentAsString();
@@ -269,7 +269,7 @@ class RestControllersErrorsTest {
                 .andExpect(jsonPath("$.messages").isEmpty())
                 .andExpect(jsonPath("$.errors[0].code").value("REST_EXCEPTION"))
                 .andExpect(jsonPath("$.errors[0].title").value("Critical error"))
-                .andExpect(jsonPath("$.errors[0].message").value("null"))
+                .andExpect(jsonPath("$.errors[0].message").value("Internal server error"))
                 .andReturn()
                 .getResponse()
                 .getContentAsString();
@@ -289,7 +289,7 @@ class RestControllersErrorsTest {
                 .andExpect(jsonPath("$.messages").isEmpty())
                 .andExpect(jsonPath("$.errors[0].code").value("REST_EXCEPTION"))
                 .andExpect(jsonPath("$.errors[0].title").value("Critical error"))
-                .andExpect(jsonPath("$.errors[0].message").value("null"))
+                .andExpect(jsonPath("$.errors[0].message").value("Internal server error"))
                 .andReturn()
                 .getResponse()
                 .getContentAsString();
@@ -310,7 +310,7 @@ class RestControllersErrorsTest {
                 .andExpect(jsonPath("$.messages").isEmpty())
                 .andExpect(jsonPath("$.errors[0].code").value("REST_EXCEPTION"))
                 .andExpect(jsonPath("$.errors[0].title").value("Critical error"))
-                .andExpect(jsonPath("$.errors[0].message").value("null"))
+                .andExpect(jsonPath("$.errors[0].message").value("Internal server error"))
                 .andReturn()
                 .getResponse()
                 .getContentAsString();
@@ -335,7 +335,7 @@ class RestControllersErrorsTest {
                 .andExpect(jsonPath("$.messages").isEmpty())
                 .andExpect(jsonPath("$.errors[0].code").value("REST_EXCEPTION"))
                 .andExpect(jsonPath("$.errors[0].title").value("Critical error"))
-                .andExpect(jsonPath("$.errors[0].message").value("null"))
+                .andExpect(jsonPath("$.errors[0].message").value("Internal server error"))
                 .andReturn()
                 .getResponse()
                 .getContentAsString();
