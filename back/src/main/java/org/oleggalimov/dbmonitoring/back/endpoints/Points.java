@@ -28,8 +28,8 @@ public class Points {
         this.influxDB = influxDB;
         this.responseBuilder = responseBuilder;
     }
-    @Secured(value = {"ROLE_ADMIN, ROLE_USER"})
-    @CrossOrigin(value = {"http://localhost:9000"})
+    @Secured(value = {"ROLE_ADMIN", "ROLE_USER"})
+    @CrossOrigin(value = {"*"})
 
     @PostMapping("/points")
     public String getPoints(@RequestBody PointsRequest request) throws JsonProcessingException {

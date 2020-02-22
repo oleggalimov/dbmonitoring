@@ -1,22 +1,22 @@
 package org.oleggalimov.dbmonitoring.back.configuration.security;
 
-import org.oleggalimov.dbmonitoring.back.services.MongoUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(securedEnabled = true)
 public class SecurityConf extends WebSecurityConfigurerAdapter {
-    private MongoUserDetailsService mongoUserDetailsService;
+    private UserDetailsService mongoUserDetailsService;
     private BCryptPasswordEncoder passwordEncoder;
 
     @Autowired
-    public SecurityConf(MongoUserDetailsService detailsService, BCryptPasswordEncoder encoder) {
+    public SecurityConf(UserDetailsService detailsService, BCryptPasswordEncoder encoder) {
         this.mongoUserDetailsService = detailsService;
         this.passwordEncoder = encoder;
     }
