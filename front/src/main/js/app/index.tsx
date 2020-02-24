@@ -17,7 +17,7 @@ import ListUsers from './components/User/ListUsers';
 import RemoveUser from './components/User/RemoveUser';
 import UpdateUser from './components/User/UpdateUser';
 import ConfigStore from './utils/ConfigStore';
-import SystemMetrics from './components/charts/oracle/SystemMetrics';
+import Metrics from './components/metrics/MetricsContainer';
 
 const mainStore = ConfigStore();
 mainStore.subscribe(()=>{
@@ -65,7 +65,7 @@ class App extends React.Component {
                                 <Route path={`/addUser`} component={AddUser} />
                                 <Route path={`/updateUser`} component={UpdateUser} />
                                 <Route path={`/removeUser`} component={RemoveUser} />
-                                <Route path={`/metircs`} component={SystemMetrics} />
+                                <Route path={`/metircs`} component={Metrics} />
                                 <Route path={`/login`} component={LoginForm} />
                                 <Route path={`/logout`} component={LogOut} />
                                 <Route render={PageNotFound} />
