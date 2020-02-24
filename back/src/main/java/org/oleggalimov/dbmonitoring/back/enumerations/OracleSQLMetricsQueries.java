@@ -13,8 +13,8 @@ public enum OracleSQLMetricsQueries {
     WAIT_EVENT(
             "SELECT n.wait_class wait_class, n.name wait_name, m.wait_count cnt, Round(10 * m.time_waited / Nullif(m.wait_count, 0), 3) avgms "
                     + "FROM   v$eventmetric m, v$event_name n WHERE  m.event_id = n.event_id AND n.name = 'enq: HW - contention'"),
-    SYSTEM("SELECT metric_name, value, metric_unit FROM   v$sysmetric WHERE  group_id = 2"),
-
+    RELATIVE_SYSTEM("SELECT metric_name, value, metric_unit FROM   v$sysmetric WHERE  group_id = 2 AND metric_unit LIKE '%!%%' ESCAPE '!'"),
+    ABSOLUTE_SYSTEM_CUSTOM("SELECT metric_name, value, metric_unit FROM   v$sysmetric WHERE  group_id = 2 AND metric_name in ('Physical Reads Per Sec', 'Physical Writes Per Sec', 'Logons Per Sec', 'Open Cursors Per Sec', 'User Commits Per Sec', 'User Rollbacks Per Sec', 'Redo Writes Per Sec', 'Physical Read Total IO Requests Per Sec', 'Executions Per Sec')"),
     TABLESPACE("SELECT tablespace_name, total_space, free_space, perc_used, percextend_used, max_size_mb, free_space_extend "
             + "FROM   (SELECT t1.tablespace_name, "
             + "               Round(used_space / 1024 / 1024) total_space, "
