@@ -1,20 +1,19 @@
 import React = require("react");
 import { Container, Label } from "reactstrap";
-import { CartesianGrid, Line, LineChart, Tooltip, XAxis, YAxis } from "recharts";
+import { CartesianGrid, LineChart, Tooltip, XAxis, YAxis } from "recharts";
+import * as Uuidv4 from 'uuid/v4';
 import { PointParser } from "../../Interfaces/PointsParser";
 import ErrorComponentFactory from "../../utils/ErrorComponentFactory";
 import MessageComponentFactory from "../../utils/MessageComponentFactory";
 import PointParserFactory from "../../utils/points/PointParserFactory";
+import OracleSystemMetrics from "../charts/oracle/OracleSystemMetrics";
 import Authorisation from "../common/Authorisation";
-import ForbiddenMeesage from "../common/ForbiddenMeesage";
 import LoadingErrorMessage from "../common/LoadingErrorMessage";
-import * as Uuidv4 from 'uuid/v4';
 import MsgCard from "../common/MsgCard";
 
 export default class OracleMetrics extends React.Component<Props, State> {
     constructor(props: any) {
         super(props);
-        console.debug(props);
         this.state = this.getDefaultState(props.propsToken, props.propsInstanceId, props.propsTimePeriod);
     }
 
@@ -35,9 +34,9 @@ export default class OracleMetrics extends React.Component<Props, State> {
 
     componentDidMount() {
         this.loadMetrics("SYSTEM");
-        this.loadMetrics("TABLESPACE");
-        this.loadMetrics("WAIT_CLASS");
-        this.loadMetrics("WAIT_EVENT");
+        // this.loadMetrics("TABLESPACE");
+        // this.loadMetrics("WAIT_CLASS");
+        // this.loadMetrics("WAIT_EVENT");
     }
 
     loadMetrics = async (metricsType: string) => {
@@ -129,13 +128,29 @@ export default class OracleMetrics extends React.Component<Props, State> {
                         console.debug(`Can't get parser for metrics type: ${metricsType}!.`);
                         return null;
                     }
-                    const parsedPoints = parser.parse();
+                    const parsedPoints: Array<any> | null = parser.parse();
                     if (parsedPoints != null) {
                         switch (metricsType) {
-                            case "SYSTEM": this.setState({ systemMetrics: parsedPoints });
-                            case "TABLESPACE": this.setState({ tableSpaceMetrics: parsedPoints });
-                            case "WAIT_CLASS": this.setState({ waitClassMetrics: parsedPoints });
-                            case "WAIT_EVENT": this.setState({ waitEventsMetrics: parsedPoints });
+                            case "SYSTEM": {
+                                console.debug(`Setting metrics: ${metricsType}.`);
+                                this.setState({ systemMetrics: parsedPoints });
+                                break;
+                            }
+                            case "TABLESPACE": {
+                                console.debug(`Setting metrics: ${metricsType}.`);
+                                this.setState({ tableSpaceMetrics: parsedPoints });
+                                break;
+                            }
+                            case "WAIT_CLASS": {
+                                console.debug(`Setting metrics: ${metricsType}.`);
+                                this.setState({ waitClassMetrics: parsedPoints });
+                                break;
+                            }
+                            case "WAIT_EVENT": {
+                                console.debug(`Setting metrics: ${metricsType}.`);
+                                this.setState({ waitEventsMetrics: parsedPoints });
+                                break;
+                            }
                         }
                     }
                 }
@@ -188,41 +203,20 @@ export default class OracleMetrics extends React.Component<Props, State> {
         }
 
         else {
-            const instanceID = this.state.instanceID;
-            const points = this.state.errors;
-            if (points == null) {
-                charts = <>
-                    <Container>
-                        No data...
-                    </Container>
-                    <br />
-                    <Container>
-                        {this.state.messages}
-                        {this.state.errors}
-                    </Container>
-                </>
-            } else {
-                charts = <>
-                    <Container>
-                        <Label><b>System metrics</b></Label>
-                        <LineChart width={600} height={300} data={points} margin={{ top: 5, right: 20, bottom: 5, left: 0 }}>
-
-                            <CartesianGrid stroke="#ccc" strokeDasharray="5 5" />
-                            <XAxis dataKey="name" />
-                            <YAxis />
-                            <Tooltip />
-                        </LineChart>
-                    </Container>
-                    <br />
-                    <Container>
-                        {this.state.messages}
-                        {this.state.errors}
-                    </Container>
-                </>
-            }
-
+            return <>
+                <Container>
+                    {this.state.systemMetrics == null ?
+                        "No system metrics data..." :
+                        <OracleSystemMetrics points = {this.state.systemMetrics} />
+                    }
+                </Container>
+                <br />
+                <Container>
+                    {this.state.messages}
+                    {this.state.errors}
+                </Container>
+            </>
         }
-        return (charts);
     }
 }
 

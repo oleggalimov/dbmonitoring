@@ -35,8 +35,8 @@ export class OraclePointParser implements PointParser {
                     );
     
                 });
-                const result = Array.from(points.values());
-                return result;
+                const resultArray = Array.from(points.values());
+                return resultArray;
             } else {
                 return null;
             }
