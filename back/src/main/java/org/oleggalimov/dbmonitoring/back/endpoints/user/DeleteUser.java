@@ -5,12 +5,14 @@ import org.oleggalimov.dbmonitoring.back.annotations.LogHttpEvent;
 import org.oleggalimov.dbmonitoring.back.builders.ResponseBuilder;
 import org.oleggalimov.dbmonitoring.back.entities.MonitoringSystemUser;
 import org.oleggalimov.dbmonitoring.back.enumerations.Messages;
-import org.oleggalimov.dbmonitoring.back.enumerations.Role;
 import org.oleggalimov.dbmonitoring.back.services.UserService;
 import org.oleggalimov.dbmonitoring.back.validators.StringValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Collections;
 
@@ -24,8 +26,8 @@ public class DeleteUser {
         this.responseBuilder = responseBuilder;
         this.userService = service;
     }
+
     @Secured(value = {"ROLE_USER_ADMIN"})
-    @CrossOrigin(value = {"http://localhost:9000"})
     @DeleteMapping("delete/user/{login}")
     @LogHttpEvent(eventType = RequestMethod.DELETE, message = "delete/user/{login}")
     public String deleteUser(@PathVariable String login) throws JsonProcessingException {

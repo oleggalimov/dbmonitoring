@@ -12,7 +12,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Collections;
 import java.util.List;
@@ -32,7 +35,6 @@ public class CreateUser {
     @Autowired
 
     @Secured(value = {"ROLE_USER_ADMIN"})
-    @CrossOrigin(value = {"http://localhost:9000"})
     @PostMapping(value = "create/user", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @LogHttpEvent(eventType = RequestMethod.POST, message = "create/user")
     public String createUser(@RequestBody MonitoringSystemUser monitoringSystemUser) throws JsonProcessingException {

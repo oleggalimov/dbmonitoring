@@ -1,12 +1,11 @@
 import React = require("react");
-import { Container, Label } from "reactstrap";
-import { CartesianGrid, LineChart, Tooltip, XAxis, YAxis } from "recharts";
+import { Container, Label, Spinner } from "reactstrap";
 import * as Uuidv4 from 'uuid/v4';
 import { PointParser } from "../../Interfaces/PointsParser";
 import ErrorComponentFactory from "../../utils/ErrorComponentFactory";
 import MessageComponentFactory from "../../utils/MessageComponentFactory";
 import PointParserFactory from "../../utils/points/PointParserFactory";
-import OracleSystemMetrics from "../charts/oracle/OracleSystemMetrics";
+import OracleCharts from "../charts/oracle/OracleCharts";
 import Authorisation from "../common/Authorisation";
 import LoadingErrorMessage from "../common/LoadingErrorMessage";
 import MsgCard from "../common/MsgCard";
@@ -18,25 +17,32 @@ export default class OracleMetrics extends React.Component<Props, State> {
     }
 
     getDefaultState = (stateToken: string | null, stateInstanceId: string | null, stateTimePeriod: string | null) => {
-        return {
+        const result = {
             stateToken: stateToken,
             instanceID: stateInstanceId,
             timePeriod: stateTimePeriod,
-            systemMetrics: null,
+            systemMetrics_absolute: null,
+            systemMetrics_relative: null,
             tableSpaceMetrics: null,
             waitEventsMetrics: null,
             waitClassMetrics: null,
+            systemMetrics_absolute_loading_error: false,
+            systemMetrics_relative_loading_error: false,
+            tableSpaceMetrics_loading_error: false,
+            waitEventsMetrics_loading_error: false,
+            waitClassMetrics_loading_error: false,
             messages: null,
             errors: null
         }
-
+        return result;
     }
 
     componentDidMount() {
-        this.loadMetrics("SYSTEM");
-        // this.loadMetrics("TABLESPACE");
-        // this.loadMetrics("WAIT_CLASS");
-        // this.loadMetrics("WAIT_EVENT");
+        this.loadMetrics("ABSOLUTE_SYSTEM_CUSTOM");
+        this.loadMetrics("RELATIVE_SYSTEM");
+        this.loadMetrics("TABLESPACE");
+        this.loadMetrics("WAIT_CLASS");
+        this.loadMetrics("WAIT_EVENT");
     }
 
     loadMetrics = async (metricsType: string) => {
@@ -49,41 +55,29 @@ export default class OracleMetrics extends React.Component<Props, State> {
             return null;
         }
         const contextRoot = location.origin + location.pathname;
-        // const requestURL = 'http://127.0.0.1:8887/statusList.json';
-        // const requestURL = `${contextRoot}rest/create/user`;
-        let requestURL: string;
-
-        const headers = new Headers();
-        // headers.append('Accept', 'application/json');
-        // headers.append('Content-Type', 'application/json');
-        // headers.append('Authorization', `Basic ${this.state.stateToken}`);
-        switch (metricsType) {
-            case "SYSTEM": requestURL = `http://127.0.0.1:8887/System.json`;
-                break;
-            case "TABLESPACE": requestURL = `http://127.0.0.1:8887/TableSpace.json`;
-                break;
-            case "WAIT_CLASS": requestURL = `http://127.0.0.1:8887/WaitClass.json`;
-                break;
-            case "WAIT_EVENT": requestURL = `http://127.0.0.1:8887/WaitEvent.json`;
-                break;
-            default: requestURL = `http://127.0.0.1:8887/`;
+        const requestURL = `${contextRoot}rest/points`;
+        const body = {
+            instanceId: this.state.instanceID,
+            databaseInstanceType: "ORACLE",
+            measurement: metricsType,
+            timePeriod: this.state.timePeriod
         }
+        const headers = new Headers();
+        headers.append('Accept', 'application/json');
+        headers.append('Content-Type', 'application/json');
+        headers.append('Authorization', `Basic ${this.state.stateToken}`);
         await fetch(
             requestURL,
             {
                 signal: this.abortController.signal,
-                method: 'GET',
+                method: 'POST',
                 headers: headers,
-                // body: JSON.stringify({})
+                body: JSON.stringify(body)
             }
         )
             .then((response) => {
                 if (response.status == 403 || response.status == 401) {
-                    const newMessages = this.addJSXToArray(
-                        this.state.messages,
-                        <MsgCard title={`Loading ${metricsType} metrics warning`} cardType={"warning"} message={"You have no permission for this operation. Please sign in or contact your administrator!"} key={Uuidv4()} />
-                    );
-                    this.setState({ messages: newMessages });
+                    this.setPointsOrError(null, metricsType, <MsgCard title={`Loading ${metricsType} metrics warning`} cardType={"warning"} message={"You have no permission for this operation. Please sign in or contact your administrator!"} key={Uuidv4()} />);
                     return null;
                 } else if (response.status == 200) {
                     return response.json();
@@ -93,16 +87,10 @@ export default class OracleMetrics extends React.Component<Props, State> {
             })
             .then((json) => {
                 if (json == null) {
-                    console.debug(`Null json body was recieved from ${requestURL}`);
+                    console.debug(`Null json body was recieved from ${requestURL} with request body: ${JSON.stringify(body)}`);
                     return null;
                 }
                 const successFlag = json.success as boolean;
-                const messageList = MessageComponentFactory(json);
-                const errorsList = ErrorComponentFactory(json);
-                this.setState({
-                    errors: this.addJSXElementsToArray(this.state.errors, errorsList),
-                    messages: this.addJSXElementsToArray(this.state.messages, messageList),
-                });
                 if (successFlag) {
                     const points = json.body.POINTS[0];
                     if (points == undefined) {
@@ -114,45 +102,28 @@ export default class OracleMetrics extends React.Component<Props, State> {
                         return null;
                     }
                     const series = points.results[0];
-                    if (series == null || series == undefined) {
-                        console.debug(`No data in series:  ${series}.`);
-                        const newMessages = this.addJSXToArray(
-                            this.state.messages,
-                            <MsgCard title={`Loading ${metricsType} metrics warning`} cardType={"warning"} message={"No data series in responce!"} key={Uuidv4()} />
-                        );
-                        this.setState({ messages: newMessages });
-                        return null;
+                    const error = series.error;
+                    if (error != undefined) {
+                        this.setPointsOrError(null,metricsType,<MsgCard cardType="warning" title="Request metrics error" message={error} key={Uuidv4()} />);
+                        return;
                     }
+                    if (series.series == null || series.series == undefined) {
+                        console.debug(`No data in series:  ${JSON.stringify(series)}.`);
+                        this.setPointsOrError(null,metricsType,<MsgCard title={`Loading ${metricsType} metrics warning`} cardType={"warning"} message={"No data series in responce!"} key={Uuidv4()} />);
+                        return;
+                    }
+                    
                     const parser: PointParser | null = PointParserFactory.getParser(series, "ORACLE");
                     if (parser == null) {
                         console.debug(`Can't get parser for metrics type: ${metricsType}!.`);
                         return null;
                     }
                     const parsedPoints: Array<any> | null = parser.parse();
-                    if (parsedPoints != null) {
-                        switch (metricsType) {
-                            case "SYSTEM": {
-                                console.debug(`Setting metrics: ${metricsType}.`);
-                                this.setState({ systemMetrics: parsedPoints });
-                                break;
-                            }
-                            case "TABLESPACE": {
-                                console.debug(`Setting metrics: ${metricsType}.`);
-                                this.setState({ tableSpaceMetrics: parsedPoints });
-                                break;
-                            }
-                            case "WAIT_CLASS": {
-                                console.debug(`Setting metrics: ${metricsType}.`);
-                                this.setState({ waitClassMetrics: parsedPoints });
-                                break;
-                            }
-                            case "WAIT_EVENT": {
-                                console.debug(`Setting metrics: ${metricsType}.`);
-                                this.setState({ waitEventsMetrics: parsedPoints });
-                                break;
-                            }
-                        }
-                    }
+                    this.setPointsOrError(parsedPoints, metricsType, null);
+
+                } else {
+                    const errorsList = ErrorComponentFactory(json);
+                    this.setPointsOrErrorsList(null, metricsType, errorsList);
                 }
             })
             .catch((error) => {
@@ -160,11 +131,7 @@ export default class OracleMetrics extends React.Component<Props, State> {
                 if (error.name == 'AbortError') {
                     return null;
                 };
-                const newMessages = this.addJSXToArray(
-                    this.state.messages,
-                    <LoadingErrorMessage key={'errorMessageBox'} />
-                );
-                this.setState({ messages: newMessages });
+                this.setPointsOrError(null, metricsType, <LoadingErrorMessage additionalMessage={`Can't get : ${body.measurement}`} key={Uuidv4()} />);
             });
     }
 
@@ -183,6 +150,67 @@ export default class OracleMetrics extends React.Component<Props, State> {
         return result;
     };
 
+    setPointsOrError = (points: Array<any> | null, metricsType: string | null, error: JSX.Element | null) => {
+        const arrayArg = error == null ? null : [error];
+        this.setPointsOrErrorsList(points, metricsType, arrayArg)
+    }
+
+    setPointsOrErrorsList = (points: Array<any> | null, metricsType: string | null, errorsList: Array<JSX.Element> | null) => {
+        switch (metricsType) {
+            case "ABSOLUTE_SYSTEM_CUSTOM": {
+                console.debug(`Setting metrics: ${metricsType}.`);
+                points != null ?
+                    this.setState({ systemMetrics_absolute: points }) :
+                    this.setState({
+                        systemMetrics_absolute_loading_error: true,
+                        systemMetrics_absolute: errorsList
+                    })
+                break;
+            }
+            case "RELATIVE_SYSTEM": {
+                console.debug(`Setting metrics: ${metricsType}.`);
+                points != null ?
+                    this.setState({ systemMetrics_relative: points }) :
+                    this.setState({
+                        systemMetrics_relative_loading_error: true,
+                        systemMetrics_relative: errorsList
+                    })
+                break;
+            }
+            case "TABLESPACE": {
+                console.debug(`Setting metrics: ${metricsType}.`);
+                points != null ?
+                    this.setState({ tableSpaceMetrics: points }) :
+                    this.setState({
+                        tableSpaceMetrics_loading_error: true,
+                        tableSpaceMetrics: errorsList
+                    })
+                break;
+            }
+            case "WAIT_CLASS": {
+                console.debug(`Setting metrics: ${metricsType}.`);
+                points != null ?
+                    this.setState({ waitClassMetrics: points }) :
+                    this.setState({
+                        waitClassMetrics_loading_error: true,
+                        waitClassMetrics: errorsList
+                    })
+                break;
+            }
+            case "WAIT_EVENT": {
+                console.debug(`Setting metrics: ${metricsType}.`);
+                points != null ?
+                    this.setState({ waitEventsMetrics: points }) :
+                    this.setState({
+                        waitEventsMetrics_loading_error: true,
+                        waitEventsMetrics: errorsList
+                    })
+                break;
+            }
+            default: return;
+        }
+    }
+
     abortController = new AbortController();
 
     componentWillUnmount() {
@@ -191,30 +219,91 @@ export default class OracleMetrics extends React.Component<Props, State> {
 
 
     render() {
-        // const token = this.state.stateToken;
-        const token = 1;
-        let charts;
-        if (/*token == "" ||*/ token == null || token == undefined) {
-            charts = <Authorisation />
+        const token = this.state.stateToken;
+        if (token == "" || token == null || token == undefined) {
+            return <Authorisation />
         } else if (this.state.instanceID == null || this.state.timePeriod == null) {
             return (
                 <div>Instance id or time period is undefined!</div>
             );
         }
-
         else {
             return <>
                 <Container>
-                    {this.state.systemMetrics == null ?
-                        "No system metrics data..." :
-                        <OracleSystemMetrics points = {this.state.systemMetrics} />
+                    <Label><b>Absolute system metrics</b></Label>
+                    {this.state.systemMetrics_absolute == null ?
+                        <div className="d-flex justify-content-center">
+                            <Spinner type="grow" color="primary" style={{ width: '8rem', height: '8rem' }} />
+                        </div>
+                        : ""
+                    }
+                    {this.state.systemMetrics_absolute != null && this.state.systemMetrics_absolute_loading_error == false ?
+                        <OracleCharts points={this.state.systemMetrics_absolute} /> :
+                        this.state.systemMetrics_absolute
                     }
                 </Container>
                 <br />
                 <Container>
-                    {this.state.messages}
-                    {this.state.errors}
+                    <Label><b>Relative system metrics</b></Label>
+                    {this.state.systemMetrics_relative == null ?
+                        <div className="d-flex justify-content-center">
+                            <Spinner type="grow" color="primary" style={{ width: '8rem', height: '8rem' }} />
+                        </div>
+                        : ""
+                    }
+                    {this.state.systemMetrics_relative != null && this.state.systemMetrics_relative_loading_error == false ?
+                        <OracleCharts points={this.state.systemMetrics_relative} /> :
+                        this.state.systemMetrics_relative
+                    }
                 </Container>
+                <br />
+                <Container>
+                    <Label><b>Tablespace</b></Label>
+                    {this.state.tableSpaceMetrics == null ?
+                        <div className="d-flex justify-content-center">
+                            <Spinner type="grow" color="primary" style={{ width: '8rem', height: '8rem' }} />
+                        </div>
+                        : ""
+                    }
+                    {this.state.tableSpaceMetrics != null && this.state.tableSpaceMetrics_loading_error == false ?
+                        <OracleCharts points={this.state.tableSpaceMetrics} /> :
+                        this.state.tableSpaceMetrics
+                    }
+                </Container>
+                <br />
+                <Container>
+                    <Label><b>Wait classes</b></Label>
+                    {this.state.waitClassMetrics == null ?
+                        <div className="d-flex justify-content-center">
+                            <Spinner type="grow" color="primary" style={{ width: '8rem', height: '8rem' }} />
+                        </div>
+                        : ""
+                    }
+                    {this.state.waitClassMetrics != null && this.state.waitClassMetrics_loading_error == false ?
+                        <OracleCharts points={this.state.waitClassMetrics} /> :
+                        this.state.waitClassMetrics
+                    }
+                </Container>
+                <br />
+                <Container>
+                    <Label><b>Wait events</b></Label>
+                    {this.state.waitEventsMetrics == null ?
+                        <div className="d-flex justify-content-center">
+                            <Spinner type="grow" color="primary" style={{ width: '8rem', height: '8rem' }} />
+                        </div>
+                        : ""
+                    }
+                    {this.state.waitEventsMetrics != null && this.state.waitEventsMetrics_loading_error == false ?
+                        <OracleCharts points={this.state.waitEventsMetrics} /> :
+                        this.state.waitEventsMetrics
+                    }
+                </Container>
+                <br />
+                <Container>
+                    {this.state.messages == null ? "" : this.state.messages.map((msg) => msg)}
+                    {this.state.errors == null ? "" : this.state.errors.map((msg) => msg)}
+                </Container>
+                <br />
             </>
         }
     }
@@ -229,10 +318,16 @@ interface State {
     stateToken: string | null,
     instanceID: string | null,
     timePeriod: string | null,
-    systemMetrics: Array<any> | null,
+    systemMetrics_absolute: Array<any> | null,
+    systemMetrics_relative: Array<any> | null,
     tableSpaceMetrics: Array<any> | null,
     waitEventsMetrics: Array<any> | null,
     waitClassMetrics: Array<any> | null,
+    systemMetrics_absolute_loading_error: boolean,
+    systemMetrics_relative_loading_error: boolean,
+    tableSpaceMetrics_loading_error: boolean,
+    waitEventsMetrics_loading_error: boolean,
+    waitClassMetrics_loading_error: boolean,
     messages: Array<JSX.Element> | null,
     errors: Array<JSX.Element> | null
 }

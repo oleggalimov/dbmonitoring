@@ -13,7 +13,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -48,10 +47,9 @@ public class CheckInstances {
     @LogHttpEvent(eventType = RequestMethod.GET, message = "check/instance/all")
 
     @Secured(value = {"ROLE_USER", "ROLE_USER_ADMIN", "ROLE_ADMIN"})
-    @CrossOrigin(value = {"http://localhost:9000"})
     public String checkInstances() throws JsonProcessingException {
         try {
-            if (instanceSet.size()==0) {
+            if (instanceSet.size() == 0) {
                 RestResponseBody body = new RestResponseBody();
                 body.setItem(BodyItemKey.INSTANCES.toString(), instanceSet);
                 return responseBuilder.buildRestResponse(true, body, null, null);
@@ -68,24 +66,21 @@ public class CheckInstances {
                     resultSet.add(temp);
                     continue;
                 }
-                service.submit(new Runnable() {
-                    @Override
-                    public void run() {
-                        DataBaseInstance temp = instance.clone();
-                        try (Connection connection = dataSource.getConnection()) {
-                            boolean result = connection.prepareStatement(query).execute();
-                            if (result) {
-                                temp.setStatus("OK");
+                service.submit(() -> {
+                    DataBaseInstance temp = instance.clone();
+                    try (Connection connection = dataSource.getConnection()) {
+                        boolean result = connection.prepareStatement(query).execute();
+                        if (result) {
+                            temp.setStatus("OK");
 
-                            } else {
-                                temp.setStatus("FAIL");
-                            }
-                            resultSet.add(temp);
-                        } catch (SQLException e) {
-                            LOGGER.error("Error on status check for instance: {}, error: {}", instance, e.getMessage());
-                            temp.setStatus(e.getMessage());
-                            resultSet.add(temp);
+                        } else {
+                            temp.setStatus("FAIL");
                         }
+                        resultSet.add(temp);
+                    } catch (SQLException e) {
+                        LOGGER.error("Error on status check for instance: {}, error: {}", instance, e.getMessage());
+                        temp.setStatus(e.getMessage());
+                        resultSet.add(temp);
                     }
                 });
 

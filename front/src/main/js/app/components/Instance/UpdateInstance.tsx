@@ -80,9 +80,7 @@ class UpdateInstance extends React.Component<Props, State> {
 
     loadInstanceInfo = async () => {
         const contextRoot = location.origin + location.pathname;
-        // const requestURL = 'http://127.0.0.1:8887/statusList.json';
-        // const requestURL = `${contextRoot}rest/create/user`;
-        const requestURL = `http://127.0.0.1:8080/database_monitoring/rest/list/instance/${this.state.instanceID}`;
+        const requestURL = `${contextRoot}rest/list/instance/${this.state.instanceID}`;
         this.setState({ loading: true, errors: null, messages: null });
         const headers = new Headers();
         headers.append('Accept', 'application/json');
@@ -143,9 +141,7 @@ class UpdateInstance extends React.Component<Props, State> {
         }
 
         const contextRoot = location.origin + location.pathname;
-        // const requestURL = 'http://127.0.0.1:8887/statusList.json';
-        // const requestURL = `${contextRoot}rest/create/user`;
-        const requestURL = `http://127.0.0.1:8080/database_monitoring/rest/update/instance`;
+        const requestURL = `${contextRoot}rest/update/instance`;
         const { id, host, port, database, type, login, password } = this.state;
         const postBody = {
             id, host, port, database, type, user: { login: login, password: password }

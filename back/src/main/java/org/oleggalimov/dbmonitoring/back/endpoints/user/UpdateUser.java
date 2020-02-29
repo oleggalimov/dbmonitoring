@@ -11,7 +11,6 @@ import org.oleggalimov.dbmonitoring.back.validators.UserValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -34,7 +33,6 @@ public class UpdateUser {
     }
 
     @Secured(value = {"ROLE_USER_ADMIN"})
-    @CrossOrigin(value = {"http://localhost:9000"})
     @PutMapping(value = "update/user")
     @LogHttpEvent(eventType = RequestMethod.PUT, message = "update/user")
     public String updateUser(@RequestBody MonitoringSystemUser monitoringSystemUser) throws JsonProcessingException {

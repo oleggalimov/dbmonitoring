@@ -23,8 +23,9 @@ public class OracleResultSetProcessor implements ResultSetProcessor {
             OracleSQLMetricsQueries metricsType = OracleSQLMetricsQueries.valueOf(measurement);
             List<Point> temp = null;
             switch (metricsType) {
-                case SYSTEM:
-                    temp = parseSysMetrics(resultSet);
+                case ABSOLUTE_SYSTEM_CUSTOM:
+                case RELATIVE_SYSTEM:
+                    temp = parseSysMetrics(resultSet,metricsType);
                     break;
                 case WAIT_EVENT:
                     temp = parseWaitEventsMetrics(resultSet);
@@ -49,12 +50,12 @@ public class OracleResultSetProcessor implements ResultSetProcessor {
         return Pair.of(instanceId, points);
     }
 
-    private List<Point> parseSysMetrics(ResultSet resultSet) throws SQLException {
+    private List<Point> parseSysMetrics(ResultSet resultSet, OracleSQLMetricsQueries type) throws SQLException {
         List<Point> points = new ArrayList<>();
         while (resultSet.next()) {
             String METRIC_NAME = resultSet.getString("METRIC_NAME").replace(" ", "_");
             float VALUE = resultSet.getFloat("VALUE");
-            Point.Builder point = Point.measurement(OracleSQLMetricsQueries.SYSTEM.name());
+            Point.Builder point = Point.measurement(type.name());
             point.time(System.currentTimeMillis(), TimeUnit.MILLISECONDS);
             point.tag("metric_name", METRIC_NAME);
             point.addField("value", VALUE);

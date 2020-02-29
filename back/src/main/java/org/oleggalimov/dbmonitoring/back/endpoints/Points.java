@@ -11,7 +11,6 @@ import org.oleggalimov.dbmonitoring.back.enumerations.Messages;
 import org.oleggalimov.dbmonitoring.back.utils.InfluxQueryBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -28,13 +27,12 @@ public class Points {
         this.influxDB = influxDB;
         this.responseBuilder = responseBuilder;
     }
-    @Secured(value = {"ROLE_ADMIN", "ROLE_USER"})
-    @CrossOrigin(value = {"*"})
 
+    @Secured(value = {"ROLE_ADMIN", "ROLE_USER"})
     @PostMapping("/points")
     public String getPoints(@RequestBody PointsRequest request) throws JsonProcessingException {
         StringBuilder stringBuilder = new StringBuilder();
-        QueryResult queryResult=null;
+        QueryResult queryResult = null;
         try {
             switch (request.getDatabaseInstanceType()) {
                 case MSSQL:

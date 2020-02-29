@@ -45,9 +45,7 @@ class LoginForm extends React.Component<Props, StateProps> {
 
     logIn = async () => {
         const contextRoot = location.origin + location.pathname;
-        // const requestURL = 'http://127.0.0.1:8887/statusList.json';
-        // // const requestURL = `${contextRoot}rest/create/user`;
-        const requestURL = `http://127.0.0.1:8080/database_monitoring/rest/login`;
+        const requestURL = `${contextRoot}rest/login`;
         this.setState({ loading: true, errors: null, messages: null });
         const { username, password } = this.state;
         const postBody = {

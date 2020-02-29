@@ -10,7 +10,6 @@ import org.oleggalimov.dbmonitoring.back.enumerations.Errors;
 import org.oleggalimov.dbmonitoring.back.validators.StringValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -33,7 +32,6 @@ public class GetInstance {
     }
 
     @Secured(value = {"ROLE_USER", "ROLE_USER_ADMIN", "ROLE_ADMIN"})
-    @CrossOrigin(value = {"http://localhost:9000"})
     @GetMapping("list/instance/{id}")
     @LogHttpEvent(eventType = RequestMethod.GET, message = " list/instance/{id}")
     public String getInstance(@PathVariable String id) throws JsonProcessingException {

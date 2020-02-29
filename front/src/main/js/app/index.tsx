@@ -17,12 +17,12 @@ import ListUsers from './components/User/ListUsers';
 import RemoveUser from './components/User/RemoveUser';
 import UpdateUser from './components/User/UpdateUser';
 import ConfigStore from './utils/ConfigStore';
-import Metrics from './components/metrics/MetricsContainer';
+import MetricsContainer from './components/metrics/MetricsContainer';
 
 const mainStore = ConfigStore();
-mainStore.subscribe(()=>{
-    console.log(mainStore.getState());
-});
+// mainStore.subscribe(()=>{
+//     console.debug(mainStore.getState());
+// });
 
 
 
@@ -65,7 +65,7 @@ class App extends React.Component {
                                 <Route path={`/addUser`} component={AddUser} />
                                 <Route path={`/updateUser`} component={UpdateUser} />
                                 <Route path={`/removeUser`} component={RemoveUser} />
-                                <Route path={`/metircs`} component={Metrics} />
+                                <Route path={`/metircs`} component={MetricsContainer} />
                                 <Route path={`/login`} component={LoginForm} />
                                 <Route path={`/logout`} component={LogOut} />
                                 <Route render={PageNotFound} />

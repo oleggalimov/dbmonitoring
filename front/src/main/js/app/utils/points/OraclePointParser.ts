@@ -1,5 +1,6 @@
 import { PointParser } from "../../Interfaces/PointsParser";
 import { SeriesElement } from "../../Interfaces/SeriesElement";
+import MsgCard from "../../components/common/MsgCard";
 
 export class OraclePointParser implements PointParser {
     series?: any;
@@ -12,7 +13,7 @@ export class OraclePointParser implements PointParser {
         if (this.series == null) {
             return null;
         }
-        const seriesArray: Array<SeriesElement> = this.series["series"];
+        const seriesArray: Array<SeriesElement> = this.series.series;
         try {
             if (seriesArray.length > 0) {
                 const points = new Map<number, any>();

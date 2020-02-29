@@ -100,9 +100,7 @@ class UpdateUser extends React.Component<Props, State> {
             return;
         }
         const contextRoot = location.origin + location.pathname;
-        // const requestURL = 'http://127.0.0.1:8887/statusList.json';
-        // const requestURL = `${contextRoot}rest/create/user`;
-        const requestURL = `http://127.0.0.1:8080/database_monitoring/rest/list/user/${this.state.login}`;
+        const requestURL = `${contextRoot}rest/list/user/${this.state.login}`;
         this.setState({ loading: true, errors: null, messages: null });
         const headers = new Headers();
         headers.append('Accept', 'application/json');
@@ -178,9 +176,7 @@ class UpdateUser extends React.Component<Props, State> {
         }
 
         const contextRoot = location.origin + location.pathname;
-        // const requestURL = 'http://127.0.0.1:8887/statusList.json';
-        // const requestURL = `${contextRoot}rest/create/user`;
-        const requestURL = `http://127.0.0.1:8080/database_monitoring/rest/update/user`;
+        const requestURL = `${contextRoot}rest/update/user`;
         const roles: Array<string> = new Array();
         if (this.state.userRole) {
             roles.push("USER");

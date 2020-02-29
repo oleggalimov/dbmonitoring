@@ -11,7 +11,7 @@ public class InfluxQueryBuilder {
     public static Query getOracleMetricsQuery(PointsRequest request) {
         StringBuilder queryStringBuilder = new StringBuilder()
                 .append("SELECT mean(\"value\") AS \"mean_value\" FROM \"")
-                .append(request.getDataBaseId())
+                .append(request.getInstanceId())
                 .append("\".\"autogen\".\"")
                 .append(request.getMeasurement())
                 .append("\" WHERE time > ")
@@ -19,7 +19,7 @@ public class InfluxQueryBuilder {
                 .append(" AND time < now()")
                 .append(" GROUP BY time(1m), \"metric_name\" FILL(null)");
         LOGGER.debug("Prepared query for Oracle metrics: {}", queryStringBuilder.toString());
-        return new Query(queryStringBuilder.toString(), request.getDataBaseId());
+        return new Query(queryStringBuilder.toString(), request.getInstanceId());
     }
 
     public static Query getPostgresMetricsQuery(PointsRequest request) {
@@ -33,7 +33,7 @@ public class InfluxQueryBuilder {
                 .append(" mean(\"tup_inserted\") AS \"mean_tup_inserted\", mean(\"tup_returned\") AS \"mean_tup_returned\",")
                 .append(" mean(\"tup_updated\") AS \"mean_tup_updated\", mean(\"xact_commit\") AS \"mean_xact_commit\",")
                 .append(" mean(\"xact_rollback\") AS \"mean_xact_rollback\" FROM \"")
-                .append(request.getDataBaseId())
+                .append(request.getInstanceId())
                 .append("\".\"autogen\".\"")
                 .append(request.getMeasurement())
                 .append("\" WHERE time > ")
@@ -41,6 +41,6 @@ public class InfluxQueryBuilder {
                 .append(" AND time < now()")
                 .append(" GROUP BY time(1m), \"metric_name\" FILL(null)");
         LOGGER.debug("Prepared query for Postgres metrics: {}", queryStringBuilder.toString());
-        return new Query(queryStringBuilder.toString(), request.getDataBaseId());
+        return new Query(queryStringBuilder.toString(), request.getInstanceId());
     }
 }

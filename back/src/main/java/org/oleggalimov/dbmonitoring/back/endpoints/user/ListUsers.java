@@ -8,7 +8,6 @@ import org.oleggalimov.dbmonitoring.back.enumerations.BodyItemKey;
 import org.oleggalimov.dbmonitoring.back.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -24,10 +23,10 @@ public class ListUsers {
         this.responseBuilder = responseBuilder;
         this.userService = service;
     }
+
     @GetMapping("/list/user/all")
     @LogHttpEvent(eventType = RequestMethod.GET, message = "/list/user/all")
     @Secured(value = {"ROLE_USER_ADMIN"})
-    @CrossOrigin(value = {"http://localhost:9000"})
     public String listUsers() throws JsonProcessingException {
         try {
             RestResponseBody body = new RestResponseBody();

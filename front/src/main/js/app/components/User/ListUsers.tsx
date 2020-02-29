@@ -42,8 +42,7 @@ class ListUsers extends React.Component<Props, State>  {
         const contextRoot = location.origin + location.pathname;
         let requestURL: string;
         this.setState({ loading: true });
-        // requestURL = `${contextRoot}rest/check/instance/all`;
-        requestURL = `http://localhost:8080/database_monitoring/rest/list/user/all`;
+        requestURL = `${contextRoot}rest/list/user/all`;
         const headers = new Headers();
         headers.append('Accept', 'application/json');
         headers.append('Content-Type', 'application/json');

@@ -75,9 +75,7 @@ class AddInstance extends React.Component<Props, State> {
         }
 
         const contextRoot = location.origin + location.pathname;
-        // const requestURL = 'http://127.0.0.1:8887/statusList.json';
-        // const requestURL = `${contextRoot}rest/create/user`;
-        const requestURL = `http://127.0.0.1:8080/database_monitoring/rest/create/instance/`;
+        const requestURL = `${contextRoot}rest/create/instance/`;
         const { id, host, port, database, type, login, password } = this.state;
         const postBody = {
             id, host, port, database, type, user: { login: login, password: password }

@@ -55,11 +55,9 @@ class ListInstance extends React.Component<Props, State> {
         let requestURL: string;
         this.setState({ loading: true, errors:null, messages:null,instances:null });
         if (loadStatuses) {
-            // requestURL = `${contextRoot}rest/check/instance/all`;
-            requestURL = `http://localhost:8080/database_monitoring/rest/check/instance/all`;
+            requestURL = `${contextRoot}rest/check/instance/all`;
         } else {
-            // requestURL = `${contextRoot}rest/list/instance/all`;
-            requestURL = `http://localhost:8080/database_monitoring/rest/list/instance/all`;
+            requestURL = `${contextRoot}rest/list/instance/all`;
         }
         const headers = new Headers();
         headers.append('Accept', 'application/json');

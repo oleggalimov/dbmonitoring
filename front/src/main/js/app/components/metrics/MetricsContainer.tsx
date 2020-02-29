@@ -1,10 +1,10 @@
 import React = require("react");
-import { connect } from "react-redux";
 import { Button, Container, Form, FormGroup, Input, Label } from "reactstrap";
 import InstanceType from "../../enumerations/InstanceType";
 import TimePeriod from "../../enumerations/TimePeriod";
 import Authorisation from "../common/Authorisation";
 import OracleMetrics from "./OracleMetrics";
+import { connect } from "react-redux";
 
 class MetricsContainer extends React.Component<Props, State> {
     constructor(props: any) {
@@ -41,6 +41,7 @@ class MetricsContainer extends React.Component<Props, State> {
                 loading:false
             });
         }
+        
         switch (targetId) {
             case "instanceId": {
                 this.setState({
@@ -74,10 +75,11 @@ class MetricsContainer extends React.Component<Props, State> {
             return;
         }
         this.setState({ loading: true });
+        console.debug(`Mounting component for type: ${type} with instance id: ${this.state.instanceID},  and period: ${period}`);
         switch (type) {
             case "ORACLE": {
                 this.setState({
-                    metricsComponent: <OracleMetrics propsToken={this.state.stateToken} propsInstanceId={this.state.instanceType} propsTimePeriod={period}/>
+                    metricsComponent: <OracleMetrics propsToken={this.state.stateToken} propsInstanceId={this.state.instanceID} propsTimePeriod={period}/>
                 });
                 break;
             }
@@ -94,10 +96,9 @@ class MetricsContainer extends React.Component<Props, State> {
 
 
     render() {
-        // const token = this.state.stateToken;
-        const token = 1;
+        const token = this.state.stateToken;
         let component;
-        if (/*token == "" ||*/ token == null || token == undefined) {
+        if (token == "" ||  token == null || token == undefined) {
             component = <Authorisation />
         } else {
             const loadButtonDisabled = (
@@ -149,11 +150,11 @@ class MetricsContainer extends React.Component<Props, State> {
     }
 }
 
-const mapStateToProps = (state: any) => ({
-    propsToken: state.stateToken
-});
-
-
+const mapStateToProps = (state: any) => {
+    return {
+        propsToken: state.token
+    }
+};
 
 interface Props  {
     propsToken: string

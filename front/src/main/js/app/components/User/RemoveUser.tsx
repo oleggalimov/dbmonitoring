@@ -37,9 +37,7 @@ class RemoveUser extends React.Component<Props, State> {
 
     loadUserInfo = async () => {
         const contextRoot = location.origin + location.pathname;
-        // const requestURL = 'http://127.0.0.1:8887/statusList.json';
-        // const requestURL = `${contextRoot}rest/create/user`;
-        const requestURL = `http://127.0.0.1:8080/database_monitoring/rest/delete/user/${this.state.userLogin}`;
+        const requestURL = `${contextRoot}rest/delete/user/${this.state.userLogin}`;
         this.setState({ loading: true, errors: null, messages: null });
         const headers = new Headers();
         headers.append('Accept', 'application/json');

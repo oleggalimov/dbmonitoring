@@ -99,9 +99,8 @@ class AddUser extends React.Component<Props, State> {
             password: userPassword
         }
 
-        // const contextRoot = location.origin + location.pathname;
-        // // const requestURL = `${contextRoot}rest/create/user`;
-        const requestURL = `http://127.0.0.1:8080/database_monitoring/rest/create/user/`;
+        const contextRoot = location.origin + location.pathname;
+        const requestURL = `${contextRoot}rest/create/user`;
 
         this.setState({ sendingData: true, gotResult: false, errors: null, messages: null });
         const headers = new Headers();

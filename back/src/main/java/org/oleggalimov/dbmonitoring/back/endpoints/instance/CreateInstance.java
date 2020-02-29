@@ -10,7 +10,10 @@ import org.oleggalimov.dbmonitoring.back.validators.DatabaseInstanceValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.security.access.annotation.Secured;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Collections;
 import java.util.List;
@@ -26,8 +29,8 @@ public class CreateInstance {
         this.instanceSet = instanceSet;
         this.responseBuilder = builder;
     }
+
     @Secured(value = {"ROLE_ADMIN"})
-    @CrossOrigin(value = {"http://localhost:9000"})
     @PostMapping(value = "create/instance", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @LogHttpEvent(eventType = RequestMethod.POST, message = " create/instance")
     public String createInstance(@RequestBody DataBaseInstance instance) throws JsonProcessingException {

@@ -13,12 +13,12 @@ public class PointsRequest {
     public PointsRequest() {
     }
 
-    public String getDataBaseId() {
+    public String getInstanceId() {
         return instanceId;
     }
 
-    public void setDataBaseId(String dataBaseId) {
-        this.instanceId = dataBaseId;
+    public void setInstanceId(String instanceId) {
+        this.instanceId = instanceId;
     }
 
     public DatabaseInstanceType getDatabaseInstanceType() {
