@@ -1,0 +1,10 @@
+FROM alpine
+LABEL maintainer="o.d.galimov@yandex.ru"
+RUN apk update
+RUN apk add openjdk8
+RUN apk add --no-cache bash
+ADD https://download.jboss.org/wildfly/19.0.0.Final/wildfly-19.0.0.Final.tar.gz  /tmp
+RUN tar xf /tmp/wildfly-19.0.0.Final.tar.gz -C /opt/
+COPY /ear/target/dbmonitoring.ear /opt/wildfly-19.0.0.Final/standalone/deployments
+RUN ./opt/wildfly-19.0.0.Final/bin/add-user.sh -u 'admin' -p 'passw0rd!'
+ENTRYPOINT  ["/opt/wildfly-19.0.0.Final/bin/standalone.sh", "-b", "0.0.0.0", "-bmanagement", "0.0.0.0"]

@@ -1,0 +1,23 @@
+version: "3"
+services:
+  mongo:
+    image: mongo
+    container_name: mongoUsers
+    ports:
+    - "27017:27017"
+  influx:
+    image: influxdb
+    container_name: influxMetrics
+    ports:
+    - "8086:8086"
+  dbmonitoring:
+    depends_on:
+      - mongo
+      - influx
+    build:
+      dockerfile: DBMonitoring
+      context: .
+    ports:
+      - "9990:9990"
+      - "8080:8080"
+
