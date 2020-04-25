@@ -20,4 +20,5 @@ services:
     ports:
       - "9990:9990"
       - "8080:8080"
+    container_name: dbmonitoring
 
