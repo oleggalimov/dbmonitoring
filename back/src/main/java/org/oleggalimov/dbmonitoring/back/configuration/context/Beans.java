@@ -18,8 +18,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.annotation.PropertySources;
+import org.springframework.core.env.Environment;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.jndi.JndiTemplate;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -35,7 +37,8 @@ import java.util.concurrent.TimeUnit;
 
 @Configuration
 @PropertySources({
-        @PropertySource("classpath:influx.properties")
+        @PropertySource("classpath:influx.properties"),
+        @PropertySource("classpath:application.properties")
 })
 public class Beans {
     private Logger LOGGER = LoggerFactory.getLogger(Beans.class);
@@ -60,24 +63,33 @@ public class Beans {
     }
 
     @Bean
-    public MongoClient mongoClient() {
+    @Profile("local")
+    public MongoClient mongoClient(@Autowired Environment environment) {
+        LOGGER.debug("Loading local configuration for MongoDB");
         return MongoClients.create("mongodb://localhost");
     }
 
     @Bean
+    @Profile("docker")
+    public MongoClient dockerMongoClient(@Autowired Environment environment) {
+        LOGGER.debug("Loading docker configuration for MongoDB");
+        return MongoClients.create("mongodb://mongo");
+    }
+
+    @Bean
     public MongoTemplate mongoTemplate(@Autowired MongoClient client, @Autowired MonitoringSystemUser defaultSystemUser, @Autowired Map<String, String> jndi) {
-        MongoTemplate myDatabase = new MongoTemplate(client, "mydatabase");
+        MongoTemplate dbMonitoringUsers = new MongoTemplate(client, "DBMonitoringUsers");
         boolean dropCollection = true;
         String key = "java:/dbmonitoring/dropuserdb";
         if (!jndi.isEmpty() && jndi.containsKey(key)) {
             dropCollection = Boolean.parseBoolean(jndi.get(key));
         }
         if (dropCollection) {
-            LOGGER.debug("Сбрасываем коллекцию Users");
-            myDatabase.dropCollection("Users");
-            myDatabase.save(defaultSystemUser);
+            LOGGER.debug("drop collection Users");
+            dbMonitoringUsers.dropCollection("Users");
+            dbMonitoringUsers.save(defaultSystemUser);
         }
-        return myDatabase;
+        return dbMonitoringUsers;
     }
 
     //security
@@ -121,6 +133,7 @@ public class Beans {
     //influxDB
 
     @Bean
+    @Profile("local")
     InfluxDB getInfluxDBInstance(
             @Value("${connection.url}") String connectURl,
             @Value("${connection.username}") String user,
@@ -133,4 +146,17 @@ public class Beans {
         return influxBean;
     }
 
+    @Bean
+    @Profile("docker")
+    InfluxDB getDockerInfluxDBInstance(
+            @Value("${docker.connection.url}") String connectURl,
+            @Value("${connection.username}") String user,
+            @Value("${connection.password}") String pass,
+            @Value("${batching.byCount}") int batchByCount,
+            @Value("${batching.byTimeInMs}") int batchByTime
+    ) {
+        InfluxDB influxBean = InfluxDBFactory.connect(connectURl, user, pass);
+        influxBean.enableBatch(batchByCount, batchByTime, TimeUnit.MILLISECONDS);
+        return influxBean;
+    }
 }
