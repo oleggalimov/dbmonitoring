@@ -1,6 +1,5 @@
 package org.oleggalimov.dbmonitoring.back.schedule.tasks;
 
-import oracle.jdbc.pool.OracleDataSource;
 import org.influxdb.dto.Point;
 import org.oleggalimov.dbmonitoring.back.dto.DataBaseInstance;
 import org.oleggalimov.dbmonitoring.back.processors.AbstractResultSetProcessorFactory;
@@ -23,9 +22,9 @@ public class PostgresDatabaseRequestTask extends AbstractDatabaseRequestTask {
     }
 
     @Override
-    public Pair<String, List<Point>> call() throws Exception {
+    public Pair<String, List<Point>> call() {
         ResultSetProcessor processor = AbstractResultSetProcessorFactory.getProcessor(instance.getType());
-        if (processor == null) {
+        if (processor==null) {
             LOGGER.error("Can't get ResultSetProcessor for instance: {}", instance);
             return null;
         }

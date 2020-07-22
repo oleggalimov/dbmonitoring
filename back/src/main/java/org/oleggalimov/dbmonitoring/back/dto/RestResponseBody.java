@@ -2,24 +2,19 @@ package org.oleggalimov.dbmonitoring.back.dto;
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.util.HashMap;
 import java.util.Map;
 
+@NoArgsConstructor
+@AllArgsConstructor
+@Setter
 public class RestResponseBody {
 
     private Map<String, Object> items = new HashMap<>();
-
-    public RestResponseBody() {
-    }
-
-    public RestResponseBody(HashMap<String, Object> items) {
-        this.items = items;
-    }
-
-    public void setItems(HashMap<String, Object> items) {
-        this.items = items;
-    }
 
     @JsonAnySetter
     public void setItem(String key, Object item) {
@@ -27,7 +22,7 @@ public class RestResponseBody {
     }
 
     @JsonAnyGetter
-    public Map getItems() {
+    public Map<String, Object> getItems() {
         return items;
     }
 }

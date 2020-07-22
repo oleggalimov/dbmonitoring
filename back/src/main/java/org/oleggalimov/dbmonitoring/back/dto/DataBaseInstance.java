@@ -1,7 +1,11 @@
 package org.oleggalimov.dbmonitoring.back.dto;
 
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.oleggalimov.dbmonitoring.back.enumerations.DatabaseInstanceType;
 
+@Data
+@NoArgsConstructor
 public class DataBaseInstance implements Cloneable {
 
     private String id;
@@ -12,8 +16,6 @@ public class DataBaseInstance implements Cloneable {
     private DatabaseInstanceType type;
     private String status;
 
-    public DataBaseInstance() {
-    }
 
     public DataBaseInstance(String id, String host, Integer port, String database, DataBaseUser user, DatabaseInstanceType type) {
         this.id = id;
@@ -24,69 +26,12 @@ public class DataBaseInstance implements Cloneable {
         this.type = type;
     }
 
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getHost() {
-        return host;
-    }
-
-    public void setHost(String host) {
-        this.host = host;
-    }
-
-    public Integer getPort() {
-        return port;
-    }
-
-    public void setPort(Integer port) {
-        this.port = port;
-    }
-
-
-    public void setUser(DataBaseUser user) {
-        this.user = user;
-    }
-
-    public DataBaseUser getUser() {
-        return user;
-    }
-
-    public DatabaseInstanceType getType() {
-        return type;
-    }
-
-    public void setType(DatabaseInstanceType type) {
-        this.type = type;
-    }
-
-    public String getDatabase() {
-        return database;
-    }
-
-    public void setDatabase(String database) {
-        this.database = database;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
     public boolean equals(Object obj) {
-        if (obj == null) {
+        if (obj==null) {
             return false;
         } else if (!(obj instanceof DataBaseInstance)) {
             return false;
-        } else if (this.id == null) {
+        } else if (this.id==null) {
             return false;
         } else {
             DataBaseInstance otherInstance = (DataBaseInstance) obj;
@@ -94,33 +39,6 @@ public class DataBaseInstance implements Cloneable {
             return this.id.equals(otherInstanceId);
         }
 
-    }
-
-    public boolean deepEquals(DataBaseInstance otherInstance) {
-        if (!this.id.equals(otherInstance.getId())) {
-            return false;
-        } else if (!this.host.equalsIgnoreCase(otherInstance.getHost())) {
-            return false;
-        } else if (!this.port.equals(otherInstance.getPort())) {
-            return false;
-        } else if (this.type != otherInstance.type) {
-            return false;
-        } else if (!this.database.equalsIgnoreCase(otherInstance.getDatabase())) {
-            return false;
-        } else return this.user.equals(otherInstance.getUser());
-    }
-
-    @Override
-    public String toString() {
-        return "DataBaseInstance{" +
-                "id='" + id + '\'' +
-                ", host='" + host + '\'' +
-                ", port=" + port +
-                ", database='" + database + '\'' +
-                ", user=" + user +
-                ", type=" + type +
-                ", status='" + status + '\'' +
-                '}';
     }
 
     @Override

@@ -23,15 +23,15 @@ public class OracleDatabaseRequestTask extends AbstractDatabaseRequestTask {
     }
 
     @Override
-    public Pair<String, List<Point>> call() throws Exception {
+    public Pair<String, List<Point>> call() {
         ResultSetProcessor processor = AbstractResultSetProcessorFactory.getProcessor(instance.getType());
-        if (processor == null) {
+        if (processor==null) {
             LOGGER.error("Can't get ResultSetProcessor for instance: {}", instance);
             return null;
         }
         String instanceId = instance.getId();
         OracleDataSource oracleDataSource = (OracleDataSource) AbstractDataSourceFactory.buildDataSource(instance);
-        if (oracleDataSource == null) {
+        if (oracleDataSource==null) {
             LOGGER.error("Exception in OracleDatabaseRequestTask: data source is null");
             return null;
         }

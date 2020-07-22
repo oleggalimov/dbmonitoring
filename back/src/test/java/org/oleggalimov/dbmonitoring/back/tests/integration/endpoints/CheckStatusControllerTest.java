@@ -32,6 +32,6 @@ class CheckStatusControllerTest {
         mockMvc
                 .perform(get("/status"))
                 .andExpect(status().isOk())
-                .andExpect(content().string("Back is Ok!"));
+                .andExpect(content().string("Back is Ok! ActiveProfiles: []"));
     }
 }
