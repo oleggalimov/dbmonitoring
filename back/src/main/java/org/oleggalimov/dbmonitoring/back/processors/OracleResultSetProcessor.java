@@ -1,7 +1,7 @@
 package org.oleggalimov.dbmonitoring.back.processors;
 
 import org.influxdb.dto.Point;
-import org.oleggalimov.dbmonitoring.back.enumerations.OracleSQLMetricsQueries;
+import org.oleggalimov.dbmonitoring.back.enumerations.oracle.OracleMetricsSQLQueries;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.util.Pair;
@@ -20,7 +20,7 @@ public class OracleResultSetProcessor implements ResultSetProcessor {
     public Pair<String, List<Point>> transformResult(ResultSet resultSet, String instanceId, String measurement) {
         List<Point> points = new ArrayList<>();
         try {
-            OracleSQLMetricsQueries metricsType = OracleSQLMetricsQueries.valueOf(measurement);
+            OracleMetricsSQLQueries metricsType = OracleMetricsSQLQueries.valueOf(measurement);
             List<Point> temp = null;
             switch (metricsType) {
                 case ABSOLUTE_SYSTEM_CUSTOM:
@@ -50,7 +50,7 @@ public class OracleResultSetProcessor implements ResultSetProcessor {
         return Pair.of(instanceId, points);
     }
 
-    private List<Point> parseSysMetrics(ResultSet resultSet, OracleSQLMetricsQueries type) throws SQLException {
+    private List<Point> parseSysMetrics(ResultSet resultSet, OracleMetricsSQLQueries type) throws SQLException {
         List<Point> points = new ArrayList<>();
         while (resultSet.next()) {
             String METRIC_NAME = resultSet.getString("METRIC_NAME").replace(" ", "_");
@@ -72,7 +72,7 @@ public class OracleResultSetProcessor implements ResultSetProcessor {
             float CNT = resultSet.getFloat("CNT");
             float AVGMS = resultSet.getFloat("AVGMS");
 
-            Point.Builder point = Point.measurement(OracleSQLMetricsQueries.WAIT_EVENT.name());
+            Point.Builder point = Point.measurement(OracleMetricsSQLQueries.WAIT_EVENT.name());
             point.time(System.currentTimeMillis(), TimeUnit.MILLISECONDS);
             point.tag("className", WAIT_CLASS);
             point.tag("metric_name", WAIT_NAME);
@@ -88,7 +88,7 @@ public class OracleResultSetProcessor implements ResultSetProcessor {
         while (resultSet.next()) {
             String WAIT_CLASS = resultSet.getString("WAIT_CLASS").replace(" ", "_");
             float VALUE = resultSet.getFloat("VALUE");
-            Point.Builder point = Point.measurement(OracleSQLMetricsQueries.WAIT_CLASS.name());
+            Point.Builder point = Point.measurement(OracleMetricsSQLQueries.WAIT_CLASS.name());
             point.time(System.currentTimeMillis(), TimeUnit.MILLISECONDS);
             point.tag("metric_name", WAIT_CLASS);
             point.addField("value", VALUE);
@@ -103,7 +103,7 @@ public class OracleResultSetProcessor implements ResultSetProcessor {
             String TABLESPACE_NAME = resultSet.getString("TABLESPACE_NAME").replace(" ", "_");
             Float PERC_USED = resultSet.getFloat("PERC_USED");
 
-            Point.Builder point = Point.measurement(OracleSQLMetricsQueries.TABLESPACE.name());
+            Point.Builder point = Point.measurement(OracleMetricsSQLQueries.TABLESPACE.name());
             point.time(System.currentTimeMillis(), TimeUnit.MILLISECONDS);
             point.tag("metric_name", TABLESPACE_NAME);
             point.addField("value", PERC_USED);

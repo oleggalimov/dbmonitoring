@@ -1,6 +1,6 @@
-package org.oleggalimov.dbmonitoring.back.enumerations;
+package org.oleggalimov.dbmonitoring.back.enumerations.oracle;
 //TODO: код с душком, переделать на процедуры или вынести в конфигурацию.
-public enum OracleSQLMetricsQueries {
+public enum OracleMetricsSQLQueries {
     WAIT_CLASS(
             "SELECT n.wait_class, Round(m.time_waited / m.intsize_csec, 3) VALUE "
                     + "FROM   v$waitclassmetric m, v$system_wait_class n WHERE  m.wait_class_id = n.wait_class_id AND n.wait_class != 'Idle' "
@@ -41,10 +41,9 @@ public enum OracleSQLMetricsQueries {
             + "                        FROM   dba_data_files i) "
             + "                GROUP  BY tablespace_name) t3 "
             + "        WHERE  t1.tablespace_name = t2.tablespace_name(+) AND t1.tablespace_name = t3.tablespace_name(+))");
-
     private String query;
 
-    OracleSQLMetricsQueries(String query) {
+    OracleMetricsSQLQueries(String query) {
         this.query = query;
     }
 

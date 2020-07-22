@@ -21,8 +21,13 @@ public enum Errors {
     DB_INSTANCE_VALIDATION_EMPTY_HOST(new Error("DBI_03", "Database instance info is invalid", "Host is empty")),
     DB_INSTANCE_VALIDATION_EMPTY_SID(new Error("DBI_04", "Database instance info is invalid", "SID is empty")),
     DB_INSTANCE_VALIDATION_EMPTY_PORT(new Error("DBI_05", "Database instance info is invalid", "Port is empty")),
-    DB_INSTANCE_VALIDATION_EMPTY_TYPE(new Error("DBI_06", "Database instance info is invalid", "Type is empty"));
+    DB_INSTANCE_VALIDATION_EMPTY_TYPE(new Error("DBI_06", "Database instance info is invalid", "Type is empty")),
 
+    AWR_INSTANCE_NOT_FOUND(new Error("AWR_01", "No such instance", "Instance is not found")),
+    AWR_WRONG_INSTANCE_TYPE(new Error("AWR_02", "Wrong type", "AWR supported only with Oracle!")),
+    AWR_CONNECT_ERROR(new Error("AWR_03", "Connection error", "Can't connect to instance")),
+    AWR_NOT_FOUND(new Error("AWR_03", "No AWR report", "Awr for period is not found!")),
+    AWR_NO_DATA(new Error("AWR_03", "No AWR report", "Can't select data for AWR"));
     private Error error;
 
     Errors(Error err) {

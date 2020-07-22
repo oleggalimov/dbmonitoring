@@ -4,7 +4,7 @@ package org.oleggalimov.dbmonitoring.back.schedule.tasks;
 import oracle.jdbc.pool.OracleDataSource;
 import org.influxdb.dto.Point;
 import org.oleggalimov.dbmonitoring.back.dto.DataBaseInstance;
-import org.oleggalimov.dbmonitoring.back.enumerations.OracleSQLMetricsQueries;
+import org.oleggalimov.dbmonitoring.back.enumerations.oracle.OracleMetricsSQLQueries;
 import org.oleggalimov.dbmonitoring.back.processors.AbstractResultSetProcessorFactory;
 import org.oleggalimov.dbmonitoring.back.processors.ResultSetProcessor;
 import org.oleggalimov.dbmonitoring.back.utils.AbstractDataSourceFactory;
@@ -37,7 +37,7 @@ public class OracleDatabaseRequestTask extends AbstractDatabaseRequestTask {
         }
         try (Connection connection = oracleDataSource.getConnection()) {
             List<Point> pointList = new ArrayList<>();
-            for (OracleSQLMetricsQueries query : OracleSQLMetricsQueries.values()) {
+            for (OracleMetricsSQLQueries query : OracleMetricsSQLQueries.values()) {
                 List<Point> tempPointsList = getPoints(connection, query, processor);
                 if (!tempPointsList.isEmpty()) {
                     pointList.addAll(tempPointsList);
@@ -50,7 +50,7 @@ public class OracleDatabaseRequestTask extends AbstractDatabaseRequestTask {
         }
     }
 
-    private List<Point> getPoints(Connection connection, OracleSQLMetricsQueries queryType, ResultSetProcessor processor) throws SQLException {
+    private List<Point> getPoints(Connection connection, OracleMetricsSQLQueries queryType, ResultSetProcessor processor) throws SQLException {
         LOGGER.debug("Executing request for {} metrics", queryType.name());
         ResultSet resultSet = connection.prepareStatement(queryType.getQuery()).executeQuery();
         return processor.transformResult(resultSet, instance.getId(), queryType.name()).getSecond();

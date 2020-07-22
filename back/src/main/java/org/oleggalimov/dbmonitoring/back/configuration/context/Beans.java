@@ -48,8 +48,8 @@ public class Beans {
     public CopyOnWriteArraySet<DataBaseInstance> instanceHashSet() {
         CopyOnWriteArraySet<DataBaseInstance> instances = new CopyOnWriteArraySet<>();
         instances.add(
-                new DataBaseInstance("test", "host", 1520, "testDataBase",
-                        new DataBaseUser("login", "password"), DatabaseInstanceType.ORACLE));
+                new DataBaseInstance("test", "localhost", 1521, "ORCLCDB",
+                        new DataBaseUser("MONITOR", "MONITOR_123"), DatabaseInstanceType.ORACLE));
         return instances;
     }
 
